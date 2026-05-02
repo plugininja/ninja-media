@@ -1,0 +1,110 @@
+@use "./variable" as *;
+
+@mixin generate-color-utilities($property, $prefix) {
+    @each $name, $value in $colors {
+        .#{$prefix}-#{$name} {
+            #{$property}: $value;
+        }
+    }
+}
+
+@mixin generate-hover-bg-utilities {
+    @each $name, $value in $colors {
+        .hover-#{$name} {
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: $value !important;
+            }
+        }
+    }
+}
+
+@mixin generate-hover-text-utilities {
+    @each $name, $value in $colors {
+        .hover-text-#{$name} {
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: $value !important;
+            }
+        }
+    }
+}
+
+@mixin generate-all-color-utilities {
+    @include generate-color-utilities(color, "text");
+    @include generate-color-utilities(background-color, "bg");
+    @include generate-color-utilities(border-color, "border");
+}
+
+@mixin generate-rounded-utilities {
+    @each $name, $value in $rounded {
+        .rounded-#{$name} {
+            border-radius: $value;
+        }
+    }
+}
+
+@mixin generate-font-size-utilities {
+    @each $name, $value in $font-sizes {
+        .text-#{$name} {
+            font-size: $value;
+        }
+    }
+}
+
+@mixin generate-font-weight-utilities {
+    @each $name, $value in $font-weights {
+        .font-#{$name} {
+            font-weight: $value;
+        }
+    }
+}
+
+@mixin generate-all-utilities {
+    @include generate-all-color-utilities;
+    @include generate-rounded-utilities;
+    @include generate-font-size-utilities;
+    @include generate-font-weight-utilities;
+}
+
+@mixin transition(
+    $property: all,
+    $duration: 0.3s,
+    $timing-function: ease,
+    $delay: 0s
+) {
+    transition: $property $duration $timing-function $delay;
+}
+
+@mixin no-focus-style {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+}
+
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == sm {
+        @media (max-width: $breakpoint-sm) {
+            @content;
+        }
+    } @else if $breakpoint == md {
+        @media (max-width: $breakpoint-md) {
+            @content;
+        }
+    } @else if $breakpoint == lg {
+        @media (max-width: $breakpoint-lg) {
+            @content;
+        }
+    } @else {
+        @media (max-width: $breakpoint) {
+            @content;
+        }
+    }
+}

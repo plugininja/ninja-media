@@ -1,0 +1,101 @@
+@use "../utilities/variable" as *;
+@use "../utilities/mixin" as *;
+
+.pnpnm-top-level-wrapper {
+    .pn-dropdown {
+        position: relative;
+
+        &__trigger {
+            color: $black;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+
+        &__trigger-arrow {
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+
+            &--active {
+                transform: rotate(180deg);
+            }
+        }
+
+        &__content {
+            position: absolute;
+            min-width: 5rem;
+            background: $white;
+            padding: 0.25rem;
+            border: 1px solid $light;
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+            transition: 300ms;
+            z-index: 999;
+
+            &--active {
+                opacity: 1;
+                transform: translateY(0);
+                visibility: visible;
+            }
+
+            &--full {
+                width: 100%;
+            }
+
+            &--shadow {
+                box-shadow:
+                    0 4px 6px -1px #6c7f9e1a,
+                    0 2px 4px -1px #6c7f9e4d;
+            }
+        }
+
+        &__menu-label {
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        &__menu-separator {
+            height: 1px;
+            background-color: $light;
+            margin: 0.25rem -0.25rem;
+        }
+
+        &__menu-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.5rem;
+            border-radius: 0.125rem;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 400;
+            color: $descgray;
+            @include transition;
+
+            &--active {
+                color: $black;
+            }
+
+            &--activeBg {
+                &:hover,
+                &.pn-dropdown__menu-item--active {
+                    background-color: $light;
+                }
+            }
+
+            &-icon {
+                width: 1.25rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}

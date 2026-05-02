@@ -1,0 +1,190 @@
+@use "../utilities/variable" as *;
+@use "../utilities/mixin" as *;
+@use "sass:map";
+
+$button-sizes: (
+    microsmall: (
+        height: 24px,
+        font-size: 10px,
+        font-weight: 400,
+        padding: 0 6px,
+    ),
+    supersmall: (
+        height: 28px,
+        font-size: 11px,
+        font-weight: 400,
+        padding: 0 8px,
+    ),
+    extrasmall: (
+        height: 32px,
+        font-size: 12px,
+        font-weight: 400,
+        padding: 0 10px,
+    ),
+    small: (
+        height: 36px,
+        font-size: 14px,
+        font-weight: 400,
+        padding: 0 12px,
+    ),
+    medium: (
+        height: 40px,
+        font-size: 15px,
+        font-weight: 400,
+        padding: 0 14px,
+    ),
+    large: (
+        height: 44px,
+        font-size: 18px,
+        font-weight: 500,
+        padding: 0 16px,
+    ),
+    extralarge: (
+        height: 48px,
+        font-size: 20px,
+        font-weight: 500,
+        padding: 0 20px,
+    ),
+);
+
+.pnpnm-top-level-wrapper {
+    .pn-button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        font-family: $primary-font;
+        transition: all 0.3s ease;
+        text-decoration: none;
+
+        @each $size, $props in $button-sizes {
+            &.pn-button--#{$size} {
+                height: map.get($props, height);
+                font-size: map.get($props, font-size);
+                font-weight: map.get($props, font-weight);
+                padding: map.get($props, padding);
+            }
+        }
+
+        &.pn-button--default {
+            color: $black;
+            background-color: transparent;
+
+            &:hover {
+                background-color: $light;
+            }
+            &:focus {
+                background-color: $light;
+            }
+        }
+
+        &.pn-button--primary {
+            color: white;
+            background-color: $primary;
+
+            &:hover {
+                background-color: $hover;
+            }
+            &:focus {
+                background-color: $primary;
+            }
+        }
+
+        &.pn-button--secondary {
+            color: $black;
+            background-color: $secondary;
+
+            &:hover {
+                background-color: $light;
+            }
+            &:focus {
+                background-color: $secondary;
+            }
+        }
+
+        &.pn-button--light {
+            color: $black;
+            background-color: $extralight;
+
+            &:hover {
+                background-color: $light;
+            }
+            &:focus {
+                background-color: $light;
+            }
+        }
+
+        &.pn-button--outlined {
+            color: $black;
+            background-color: $white;
+            border: 1px solid $light;
+
+            &:hover {
+                background-color: $extralight;
+            }
+            &:focus {
+                background-color: $extralight;
+            }
+        }
+
+        &.pn-button--warning {
+            color: $warning;
+            background-color: hsl(from $warning h s l / 15%);
+
+            &:hover {
+                background-color: $warninglight;
+            }
+            &:focus {
+                background-color: hsl(from $warning h s l / 15%);
+            }
+        }
+
+        &.pn-button--error {
+            color: $error;
+            background-color: hsl(from $error h s l / 15%);
+            
+            &:hover {
+                background-color: $errorlight;
+            }
+            &:focus {
+                background-color: hsl(from $error h s l / 15%);
+            }
+        }
+
+        &.pn-button--link {
+            color: $black;
+            background: none;
+            padding: 0;
+            height: auto;
+            font-weight: 400;
+            border: none;
+            text-decoration: none;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            &:focus {
+                background-color: transparent;
+            }
+
+            &:after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background-color: currentColor;
+            }
+        }
+
+        &.pn-button--disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+@use "../utilities/variable" as *;
+
+.pnpnm-theme-preview {
+    &--active {
+        outline: 2px solid $primary;
+    }
+
+    &__icon {
+        width: 100%;
+
+        svg {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    }
+}
+ 

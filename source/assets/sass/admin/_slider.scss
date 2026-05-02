@@ -1,0 +1,175 @@
+@use "../utilities/variable" as *;
+@use "../utilities/mixin" as *;
+
+.pnpnm-top-level-wrapper {
+    .pn-slider {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        height: 40px;
+
+        .pn-select-trigger {
+            height: 38px !important;
+        }
+
+        &--small {
+            height: 36px;
+
+            .pn-slider-input-container {
+                height: 36px;
+            }
+
+            .pn-select-trigger {
+                height: 34px !important;
+            }
+        }
+
+        &--disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        &__track-container {
+            &--disabled {
+                opacity: 0.5;
+                pointer-events: none;
+            }
+
+            &-wrapper {
+                position: relative;
+                width: 15rem;
+                height: 0.3rem;
+                background: #d3d3d3;
+                border-radius: 4px;
+                cursor: pointer;
+                user-select: none;
+
+                &-track {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 4px;
+                }
+
+                &-track-fill {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    background: $primary;
+                    border-radius: 4px;
+                }
+
+                &-thumb {
+                    position: absolute;
+                    top: 50%;
+                    width: 0.8rem;
+                    height: 0.8rem;
+                    background: $primary;
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    cursor: grab;
+
+                    &--active {
+                        cursor: grabbing;
+                    }
+                }
+
+                &-tooltip {
+                    position: absolute;
+                    top: -40px;
+                    left: 0;
+                    transform: translateX(-50%);
+                    background: $primary;
+                    color: white;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    white-space: nowrap;
+                    z-index: 10;
+                    font-size: 12px;
+                    min-width: 35px;
+                    text-align: center;
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        bottom: -6px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        border-width: 6px 6px 0 6px;
+                        border-style: solid;
+                        border-color: $primary transparent transparent
+                            transparent;
+                    }
+                }
+            }
+        }
+
+        &-marks {
+            position: relative;
+            margin-top: 0.5rem;
+        }
+
+        &-mark {
+            position: absolute;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+            &--active {
+                font-weight: bold;
+            }
+
+            &--passed {
+                color: $primary;
+            }
+
+            &:hover {
+                transition: all 0.2s ease;
+                color: $primary;
+                font-weight: bold;
+            }
+        }
+
+        &-input-container {
+            display: flex;
+            align-items: center;
+            background-color: $white;
+            border: 1px solid $secondary;
+            border-radius: 4px;
+            height: 40px;
+            padding: 0 0 0 0.6rem;
+
+            &--no-unit {
+                padding: 0.2rem 0.6rem;
+            }
+        }
+
+        &-input-box {
+            width: 4.1rem;
+            border: none !important;
+            padding: 0 !important;
+            color: $black;
+            background-color: $white !important;
+
+            &:focus {
+                @include no-focus-style;
+            }
+
+            &::-webkit-inner-spin-button,
+            &::-webkit-outer-spin-button {
+                opacity: 1;
+            }
+        }
+
+        .pn-slider-input-box {
+            color-scheme: light;
+        }
+
+        &-input-divider {
+            width: 1px;
+            height: 2rem;
+            background-color: $secondary;
+            margin: 0 0 0 0.5rem;
+        }
+    }
+}

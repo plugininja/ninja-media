@@ -1,0 +1,33 @@
+.pn-settings-field-disabled {
+    position: relative;
+    opacity: 0.5;
+
+    &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+}
+
+.pn-blink {
+    animation: pn-blink 0.25s ease-in-out infinite alternate;
+}
+
+@keyframes pn-blink {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

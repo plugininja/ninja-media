@@ -1,0 +1,134 @@
+@use "../utilities/variable" as *;
+@use "../utilities/mixin" as *;
+
+.pn-context-menu-content {
+    z-index: 999999;
+    min-width: 13rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid $light;
+    background-color: $white;
+    color: $black;
+    padding: 0.25rem;
+    box-shadow:
+        0 4px 6px -1px #6c7f9e1a,
+        0 2px 4px -1px #6c7f9e4d;
+    animation:
+        pn-fade-in 0.2s ease-out,
+        pn-zoom-in 0.2s ease-out;
+
+    &:empty {
+        display: none;
+    }
+
+    .pn-context-menu-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 0.5rem;
+        border-radius: 0.125rem;
+        cursor: pointer;
+        user-select: none;
+        outline: none;
+        font-size: 14px;
+        font-weight: 400;
+
+        &:hover,
+        &:focus {
+            background-color: $light;
+            color: $black;
+        }
+
+        &.destructive {
+            color: $error;
+
+            &:hover,
+            &:focus {
+                background-color: $errorextralight;
+                color: $error;
+            }
+        }
+
+        &.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    }
+
+    .pn-context-menu-separator {
+        height: 1px;
+        background-color: $light;
+        margin: 0.25rem -0.25rem;
+    }
+
+    .pn-context-menu-sub {
+        display: contents;
+
+        &-trigger {
+            display: flex;
+            align-items: center;
+            padding: 0.375rem 0.5rem;
+            font-size: 14px;
+            font-weight: 400;
+            border-radius: 0.125rem;
+            cursor: default;
+            user-select: none;
+            outline: none;
+            gap: 0.5rem;
+
+            &:hover,
+            &:focus {
+                background-color: $light;
+                color: $black;
+            }
+
+            &.disabled {
+                pointer-events: none;
+                opacity: 0.5;
+            }
+
+            .pn-icon {
+                margin-left: auto;
+                pointer-events: none;
+            }
+        }
+
+        &-content {
+            margin-left: 10px;
+            z-index: 50;
+            min-width: 13rem;
+            overflow: hidden;
+            border-radius: 0.375rem;
+            border: 1px solid $light;
+            background-color: $white;
+            color: $black;
+            padding: 0.25rem;
+            box-shadow:
+                0 4px 6px -1px #6c7f9e1a,
+                0 2px 4px -1px #6c7f9e4d;
+            animation:
+                pn-fade-in 0.2s ease-out,
+                pn-zoom-in 0.2s ease-out;
+        }
+    }
+}
+
+@keyframes pn-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pn-zoom-in {
+    from {
+        transform: scale(0.95);
+    }
+    to {
+        transform: scale(1);
+    }
+}

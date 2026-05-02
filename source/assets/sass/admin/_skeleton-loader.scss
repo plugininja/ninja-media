@@ -1,0 +1,40 @@
+@use "../utilities/variable" as *;
+
+.pnpnm-top-level-wrapper {
+    .pnpnm-skeleton-loader {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        background-color: rgba(0, 0, 0, 0.05);
+
+        &--loading {
+            &::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                width: 150%;
+                transform: translateX(-150%);
+                pointer-events: none;
+                background: linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.25) 25%,
+                    rgba(255, 255, 255, 0.5) 50%,
+                    rgba(255, 255, 255, 0.25) 75%,
+                    rgba(255, 255, 255, 0) 100%
+                );
+                animation: pnpnm-skeleton-loading
+                    var(--pnpnm-skl-animation-speed) ease-in-out infinite;
+            }
+        }
+    }
+}
+
+@keyframes pnpnm-skeleton-loading {
+    0% {
+        transform: translateX(-150%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}

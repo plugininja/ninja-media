@@ -1,0 +1,103 @@
+@use "../utilities/variable" as *;
+
+.pn-checkbox {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+
+    &__input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &__box {
+        position: relative;
+        display: inline-block;
+        background-color: $white;
+        border: 1px solid $primary;
+        border-radius: inherit;
+        transition: background-color 180ms ease-in-out;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -65%) rotate(-45deg);
+            border-bottom: 2px solid $white;
+            border-left: 2px solid $white;
+            opacity: 0;
+
+            clip-path: inset(0 100% 0 0);
+            transition:
+                opacity 100ms ease-in-out 120ms,
+                clip-path 180ms ease-in-out 120ms;
+        }
+    }
+
+    &--extrasmall &__box {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+    &--extrasmall &__box::after {
+        width: 45%;
+        height: 22%;
+    }
+
+    &--small &__box {
+        width: 1rem;
+        height: 1rem;
+    }
+    &--small &__box::after {
+        width: 48%;
+        height: 24%;
+    }
+
+    &--medium &__box {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    &--medium &__box::after {
+        width: 52%;
+        height: 26%;
+    }
+
+    &--large &__box {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    &--large &__box::after {
+        width: 56%;
+        height: 28%;
+    }
+
+    &--extralarge &__box {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+    &--extralarge &__box::after {
+        width: 60%;
+        height: 30%;
+    }
+
+    &__input:checked + &__box {
+        background-color: $primary;
+
+        &::after {
+            opacity: 1;
+            clip-path: inset(0 0 0 0);
+        }
+    }
+
+    &__input:focus-visible + &__box {
+        outline: 2px solid $primary;
+        outline-offset: 2px;
+    }
+
+    &--disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+}

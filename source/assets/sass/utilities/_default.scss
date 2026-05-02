@@ -1,0 +1,32 @@
+@use "./variable" as *;
+
+html:has(.pnpnm-top-level-wrapper) {
+    width: 100%;
+    max-width: 100%;
+    font-size: 100%;
+}
+
+html:has(.pnpnm-top-level-wrapper),
+body:has(.pnpnm-top-level-wrapper) {
+    height: 100%;
+}
+
+.pnpnm-top-level-wrapper {
+    font-family: $primary-font;
+
+    * {
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+        margin: 0;
+        padding: 0;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+        font-family: inherit;
+    }
+}

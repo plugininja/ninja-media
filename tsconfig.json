@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Integrate Dropbox - TypeScript Compiler Options",
+  "_version": "2.0.0",
+  "exclude": [
+    "assets"
+  ],
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES6",
+    "typeRoots": [
+      "node_modules/@types",
+      "source/types"
+    ],
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./source/*"
+      ]
+    }
+  }
+}

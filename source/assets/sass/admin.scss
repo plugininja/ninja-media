@@ -1,0 +1,99 @@
+@use "./utilities/default" as *;
+@use "./utilities/variable" as *;
+@use "./utilities/utility" as *;
+@use "./admin/index" as *;
+
+.toplevel_page_ninja-media {
+    &.menu-top.wp-has-submenu {
+        // background-color: #000000;
+        // border-top: 1px solid #767676;
+        // border-bottom: 1px solid #767676;
+
+        &.wp-menu-open {
+            background-color: $primary !important;
+            // border-top: 1px solid #000;
+            // border-bottom: 1px solid #000;
+        }
+    }
+
+    .wp-menu-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            padding: 0 !important;
+            width: 18px;
+        }
+    }
+
+    ul {
+        li {
+            a.current {
+                color: #72aee6 !important;
+                box-shadow: inset 4px 0 0 0 currentColor;
+                transition: box-shadow 0.1s linear !important;
+            }
+        }
+    }
+
+    #wpcontent {
+        padding: 0 !important;
+    }
+
+    #wpbody-content {
+        padding-bottom: 0 !important;
+    }
+
+    #wpfooter {
+        display: none;
+    }
+
+    .pnpnm-drag-box {
+        position: absolute;
+        border: 1px dashed $primary;
+        background-color: $light;
+        pointer-events: none;
+        z-index: 9999;
+    }
+
+    .pnpnm-file-list-header {
+        padding: 20px;
+
+        &--active {
+            border-bottom: 1px solid $light;
+        }
+    }
+
+    .pnpnm-file-list-item {
+        padding: 10px 20px;
+        border-bottom: 1px solid $light;
+        transition: background-color 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $extralight;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .pnpnm-dynamic-card {
+        will-change: transform, opacity;
+    }
+
+    .pnpnm-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}

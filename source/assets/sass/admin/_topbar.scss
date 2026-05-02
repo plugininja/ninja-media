@@ -1,0 +1,9 @@
+@use "../utilities/variable" as *;
+
+.pn-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: $white;
+    border-bottom: 1px solid $light;
+}
