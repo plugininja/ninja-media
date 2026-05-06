@@ -1,9 +1,9 @@
 <?php
 
-namespace PluginInja\NM;
+namespace Pninja\NM;
 
-use PluginInja\NM\Utils\Helpers;
-use PluginInja\NM\Utils\Singleton;
+use Pninja\NM\Utils\Helpers;
+use Pninja\NM\Utils\Singleton;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
@@ -98,6 +98,10 @@ class Enqueue
 
     public function adminEnqueue(string $hook): void
     {
+        if (! $this->shouldLoadAdminAssets($hook)) {
+            return;
+        }
+
         wp_enqueue_media();
 
         $this->script('media-library', [], ['priority' => 5]);
@@ -111,6 +115,22 @@ class Enqueue
 
         wp_set_script_translations('pnpnm-media-library', 'ninja-media', PNPNM_PATH . 'languages');
         wp_set_script_translations('pnpnm-admin', 'ninja-media', PNPNM_PATH . 'languages');
+    }
+
+    private function shouldLoadAdminAssets(string $hook): bool
+    {
+        if ($hook === 'upload.php') {
+            return true;
+        }
+
+        if (false !== strpos($hook, PNPNM_SLUG)) {
+            return true;
+        }
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen detection from current admin URL.
+        $page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+
+        return $page !== '' && strpos($page, PNPNM_SLUG) === 0;
     }
 
     public function frontendEnqueue(): void

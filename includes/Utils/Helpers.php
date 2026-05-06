@@ -1,9 +1,7 @@
 <?php
 
-namespace PluginInja\NM\Utils;
+namespace Pninja\NM\Utils;
 
-use function in_array;
-use function intval;
 use function is_array;
 use function sprintf;
 
@@ -101,16 +99,13 @@ class Helpers
 
     public static function getSettings()
     {
-        $defaultSettings = get_option(PNPNM_OPTIONS_NAME, false);
+        $settings = get_option(PNPNM_OPTIONS_NAME, false);
 
-        if (! $defaultSettings) {
-
-            $defaultSettings = pnpnmGetDefaultSettings();
-
-            update_option(PNPNM_OPTIONS_NAME, $defaultSettings);
+        if (! $settings || ! is_array($settings)) {
+            return pnpnmGetDefaultSettings();
         }
 
-        return $defaultSettings;
+        return $settings;
     }
 
     public static function getSetting($key = null, $defaultValue = null)
@@ -142,6 +137,7 @@ class Helpers
     public static function updateSettings($data)
     {
         $data = self::sanitization($data);
+
         return update_option(PNPNM_OPTIONS_NAME, $data);
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace PluginInja\NM\Models;
+namespace Pninja\NM\Models;
 
-defined( 'ABSPATH' ) || exit( 'No direct script access allowed' );
+defined('ABSPATH') || exit('No direct script access allowed');
 
 use Exception;
 
@@ -26,9 +26,9 @@ use WP_Error;
  * - Security measures against cloning and serialization
  * - Consistent error reporting with WP_Error integration
  *
- * @package PluginInja\NM\Models
+ * @package Pninja\NM\Models
  * @since 1.0.0
- * @author PluginInja Team
+ * @author Pninja Team
  */
 abstract class BaseModel
 {
@@ -815,25 +815,25 @@ abstract class BaseModel
     }
 
     public const MIME_TYPE_MAP = [
-		'jpg'  => 'image/jpeg',
-		'jpeg' => 'image/jpeg',
-		'png'  => 'image/png',
-		'gif'  => 'image/gif',
-		'bmp'  => 'image/bmp',
-		'svg'  => 'image/svg+xml',
-		'pdf'  => 'application/pdf',
-		'doc'  => 'application/msword',
-		'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-		'xls'  => 'application/vnd.ms-excel',
-		'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-		'ppt'  => 'application/vnd.ms-powerpoint',
-		'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-		'txt'  => 'text/plain',
-		'zip'  => 'application/zip',
-		'rar'  => 'application/x-rar-compressed',
-		'video' => 'video/%',
-		'audio' => 'audio/%',
-	];
+        'jpg'   => 'image/jpeg',
+        'jpeg'  => 'image/jpeg',
+        'png'   => 'image/png',
+        'gif'   => 'image/gif',
+        'bmp'   => 'image/bmp',
+        'svg'   => 'image/svg+xml',
+        'pdf'   => 'application/pdf',
+        'doc'   => 'application/msword',
+        'docx'  => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'xls'   => 'application/vnd.ms-excel',
+        'xlsx'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'ppt'   => 'application/vnd.ms-powerpoint',
+        'pptx'  => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'txt'   => 'text/plain',
+        'zip'   => 'application/zip',
+        'rar'   => 'application/x-rar-compressed',
+        'video' => 'video/%',
+        'audio' => 'audio/%',
+    ];
 
     public static function formatAttachment(int $attachmentId): ?array
     {
@@ -843,22 +843,22 @@ abstract class BaseModel
             return null;
         }
 
-        $url      = wp_get_attachment_url($attachmentId) ?: '';
-        $filePath = get_attached_file($attachmentId);
-        $fileSize = $filePath && file_exists($filePath) ? filesize($filePath) : 0;
+        $url       = wp_get_attachment_url($attachmentId) ?: '';
+        $filePath  = get_attached_file($attachmentId);
+        $fileSize  = $filePath && file_exists($filePath) ? filesize($filePath) : 0;
         $extension = $url ? strtolower(pathinfo($url, PATHINFO_EXTENSION)) : '';
 
         $location = self::getAttachmentUsageLocations($attachmentId, $url);
 
         return [
-            'id'           => $attachmentId,
-            'name'         => $post->post_title ?: basename($filePath ?: ''),
-            'url'          => $url,
-            'extension'    => $extension,
-            'size'         => (int) $fileSize,
-            'createdAt'    => $post->post_date,
-            'updatedAt'    => $post->post_modified,
-            'location'     => $location,
+            'id'            => $attachmentId,
+            'name'          => $post->post_title ?: basename($filePath ?: ''),
+            'url'           => $url,
+            'extension'     => $extension,
+            'size'          => (int) $fileSize,
+            'createdAt'     => $post->post_date,
+            'updatedAt'     => $post->post_modified,
+            'location'      => $location,
             'isWatermarked' => metadata_exists('post', $attachmentId, '_pnpnm_watermarked')
                 && get_post_meta($attachmentId, '_pnpnm_watermarked', true) === '1',
         ];
@@ -869,12 +869,13 @@ abstract class BaseModel
         global $wpdb;
 
         $active_statuses = "'publish', 'draft', 'pending', 'private', 'future'";
-        $excluded_types = "'attachment', 'revision', 'nav_menu_item'";
+        $excluded_types  = "'attachment', 'revision', 'nav_menu_item'";
 
         $featured_ids = array_map('absint', get_posts([
             'post_type'        => 'any',
             'post_status'      => ['publish', 'draft', 'pending', 'private', 'future'],
-            'posts_per_page'   => -1,
+            'posts_per_page'   => 200,
+            'no_found_rows'    => true,
             'suppress_filters' => false,
             'meta_query'       => [[ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- required to find featured-image usage; no viable alternative.
                 'key'     => '_thumbnail_id',
@@ -887,7 +888,7 @@ abstract class BaseModel
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $active_statuses/$excluded_types are hardcoded string literals, not user input.
         $class_ids = array_map('absint', (array) $wpdb->get_col(
-            $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_status IN ({$active_statuses}) AND post_type  NOT IN ({$excluded_types}) AND post_content LIKE %s", '%wp-image-' . $attachmentId . '%' )
+            $wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_status IN ({$active_statuses}) AND post_type NOT IN ({$excluded_types}) AND post_content LIKE %s LIMIT 200", '%wp-image-' . $attachmentId . '%')
         ));
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 
@@ -901,7 +902,7 @@ abstract class BaseModel
         if ($search_val !== '') {
             // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $active_statuses/$excluded_types are hardcoded string literals, not user input.
             $path_ids = array_map('absint', (array) $wpdb->get_col(
-                $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_status IN ({$active_statuses}) AND post_type  NOT IN ({$excluded_types}) AND post_content LIKE %s", '%' . $wpdb->esc_like($search_val) . '%' )
+                $wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_status IN ({$active_statuses}) AND post_type NOT IN ({$excluded_types}) AND post_content LIKE %s LIMIT 200", '%' . $wpdb->esc_like($search_val) . '%')
             ));
             // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
         }

@@ -1,8 +1,6 @@
 <?php
 
-namespace PluginInja\NM\API\Controllers;
-
-use PluginInja\NM\API\BaseController;
+namespace Pninja\NM\API\Controllers;
 
 use function is_array;
 use function is_bool;
@@ -10,6 +8,7 @@ use function is_float;
 use function is_int;
 use function is_string;
 
+use Pninja\NM\API\BaseController;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -63,12 +62,14 @@ class Settings extends BaseController
             'permission_callback' => [$this, 'checkPermission'],
             'args'                => [
                 'operations' => [
-                    'required'    => true,
-                    'type'        => 'array',
-                    'description' => 'Array of operations to perform',
+                    'required'          => true,
+                    'type'              => 'array',
+                    'description'       => __('Array of operations to perform.', 'ninja-media'),
+                    'validate_callback' => function ($param) {
+                        return is_array($param);
+                    },
                 ],
             ],
-
         ]);
 
         // Reset to defaults
@@ -78,9 +79,17 @@ class Settings extends BaseController
             'permission_callback' => [$this, 'checkPermission'],
             'args'                => [
                 'keys' => [
-                    'required'    => false,
-                    'type'        => 'array',
-                    'description' => 'Specific keys to reset (empty = reset all)',
+                    'required'          => false,
+                    'type'              => 'array',
+                    'description'       => __('Specific keys to reset (empty = reset all).', 'ninja-media'),
+                    'items'             => [ 'type' => 'string' ],
+                    'sanitize_callback' => function ($param) {
+                        if (! is_array($param)) {
+                            return [];
+                        }
+
+                        return array_map('sanitize_key', $param);
+                    },
                 ],
             ],
         ]);
@@ -92,9 +101,12 @@ class Settings extends BaseController
             'permission_callback' => [$this, 'checkPermission'],
             'args'                => [
                 'settings' => [
-                    'required'    => true,
-                    'type'        => 'object',
-                    'description' => 'Settings to validate',
+                    'required'          => true,
+                    'type'              => 'object',
+                    'description'       => __('Settings to validate.', 'ninja-media'),
+                    'validate_callback' => function ($param) {
+                        return is_array($param);
+                    },
                 ],
             ],
         ]);
@@ -131,8 +143,19 @@ class Settings extends BaseController
             $defaults         = $this->getDefaultSettings();
             $current_settings = get_option(PNPNM_OPTIONS_NAME, $defaults);
 
+            if (!is_array($current_settings)) {
+                $current_settings = $defaults;
+            }
+
             if (!array_key_exists($key, $current_settings)) {
-                return $this->errorResponse("Setting key '{$key}' not found", self::HTTP_NOT_FOUND);
+                return $this->errorResponse(
+                    sprintf(
+                        /* translators: %s: setting key */
+                        esc_html__('Setting key "%s" not found.', 'ninja-media'),
+                        $key
+                    ),
+                    self::HTTP_NOT_FOUND
+                );
             }
 
             return $this->successResponse([
@@ -155,7 +178,7 @@ class Settings extends BaseController
             $new_settings = $request->get_param('settings');
 
             if (empty($new_settings) || !is_array($new_settings)) {
-                return $this->errorResponse('Settings parameter is required and must be an array', self::HTTP_BAD_REQUEST);
+                return $this->errorResponse(esc_html__('Settings parameter is required and must be an array.', 'ninja-media'), self::HTTP_BAD_REQUEST);
             }
 
             // Get current settings
@@ -174,13 +197,13 @@ class Settings extends BaseController
             // Check if update was successful or value was unchanged
             $verification = get_option(PNPNM_OPTIONS_NAME);
             if ($verification !== $updated_settings && !$result) {
-                return $this->errorResponse('Failed to update settings', self::HTTP_INTERNAL_SERVER_ERROR);
+                return $this->errorResponse(esc_html__('Failed to update settings.', 'ninja-media'), self::HTTP_INTERNAL_SERVER_ERROR);
             }
 
             return $this->successResponse([
                 'settings' => $updated_settings,
                 'updated'  => $diffKeys,
-            ], 'Settings updated successfully');
+            ], esc_html__('Settings updated successfully.', 'ninja-media'));
 
         } catch (\InvalidArgumentException $e) {
             return $this->errorResponse($e->getMessage(), self::HTTP_BAD_REQUEST);
@@ -481,7 +504,7 @@ class Settings extends BaseController
                 $this->isAssoc($original[$key])
             ) {
                 [$original[$key], $childDiff] = $this->deepMerge($original[$key], $value, $dotKey);
-                $diffKeys = array_merge($diffKeys, $childDiff);
+                $diffKeys                     = array_merge($diffKeys, $childDiff);
             } else {
                 if (!array_key_exists($key, $original) || $original[$key] !== $value) {
                     $diffKeys[] = $dotKey;

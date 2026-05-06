@@ -1,8 +1,8 @@
 <?php
 
-namespace PluginInja\NM;
+namespace Pninja\NM;
 
-use PluginInja\NM\Utils\Helpers;
+use Pninja\NM\Utils\Helpers;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 

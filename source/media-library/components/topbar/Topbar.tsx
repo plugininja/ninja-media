@@ -34,6 +34,7 @@ const Topbar = () => {
         allFiles,
         uncategorized,
         dynamicFolders,
+        unused,
         activeFolder,
         createFolder,
         renameFolder,
@@ -209,7 +210,7 @@ const Topbar = () => {
                 {isUnused && (
                     <Folder
                         name="Unused"
-                        count={30}
+                        count={unused}
                         active={menu === "unused"}
                         open={menu === "unused"}
                         onClick={() => handleMenu("unused")}

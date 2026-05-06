@@ -2,9 +2,8 @@
 
 // Models/FolderRelationship.php
 
-namespace PluginInja\NM\Models;
+namespace Pninja\NM\Models;
 
-use PluginInja\NM\Utils\Helpers;
 use WP_Error;
 
 defined('ABSPATH') || exit('No direct script access allowed');
@@ -67,7 +66,7 @@ class FolderRelationship extends BaseModel
     public function assignBatch(int $folderId, array $attachmentIds): array|WP_Error
     {
         if (empty($attachmentIds)) {
-            return $this->createValidationError('Attachment IDs cannot be empty.');
+            return $this->createValidationError(__('Attachment IDs cannot be empty.', 'ninja-media'));
         }
 
         $attachmentIds = array_map('intval', $attachmentIds);
@@ -78,16 +77,16 @@ class FolderRelationship extends BaseModel
             [$attachmentIds[0]],
             ARRAY_A
         );
-        
-        $this->deleteRecords( "folderId != %d AND attachmentId IN ({$placeholders})", [], false, array_merge([$folderId], $attachmentIds) );
+
+        $this->deleteRecords("folderId != %d AND attachmentId IN ({$placeholders})", [], false, array_merge([$folderId], $attachmentIds));
 
         if (empty($previousFolder)) {
-            $previousFolder = null;
+            $previousFolder                = null;
             $previousFolderAttachmentCount = 0;
         } else {
             $previousFolder['folderId'] = (int) $previousFolder['folderId'];
-        }   
-            
+        }
+
         $previousFolderAttachmentCount = $this->countRecords('folderId = %d', [$previousFolder['folderId']]);
 
         if ($this->database->last_error) {
@@ -110,8 +109,8 @@ class FolderRelationship extends BaseModel
 
         return [
             'assigned'          => $assigned,
-            'previousFolder' => [
-                'id' => $previousFolder ? (int) $previousFolder['folderId'] : null,
+            'previousFolder'    => [
+                'id'           => $previousFolder ? (int) $previousFolder['folderId'] : null,
                 'remaining'    => $previousFolderAttachmentCount ?? 0
             ],
         ];
@@ -267,14 +266,14 @@ class FolderRelationship extends BaseModel
 
     /**
      * Get paginated attachments for a specific folder.
-     * 
-     * @param int    $folderId  Folder ID to query
-     * @param int    $page      Page number (1-based)
-     * @param int    $perPage   Items per page
-     * @param string $orderBy   Column to order by (mapped in controller)
-     * @param string $order     Sort direction (ASC|DESC)
-     * @param bool   $countOnly If true, only return total count
-     * 
+     *
+     * @param int $folderId Folder ID to query
+     * @param int $page Page number (1-based)
+     * @param int $perPage Items per page
+     * @param string $orderBy Column to order by (mapped in controller)
+     * @param string $order Sort direction (ASC|DESC)
+     * @param bool $countOnly If true, only return total count
+     *
      * @return array{items?: array, total: int, page?: int, perPage?: int, totalPages?: int}
      */
     public function getPaginatedAttachments(int $folderId, int $page = 1, int $perPage = 20, string $orderBy = 'p.post_date', string $order = 'ASC', bool $countOnly = false): array
@@ -309,9 +308,9 @@ class FolderRelationship extends BaseModel
             return ['total' => $total];
         }
 
-        $orderDir = strtoupper($order) === 'ASC' ? 'ASC' : 'DESC';
-        $offset   = max(0, ($page - 1) * $perPage);
-        $items_key  = "folder_items:{$folderId}:{$page}:{$perPage}:{$orderBy}:{$order}:{$last_changed}";
+        $orderDir     = strtoupper($order) === 'ASC' ? 'ASC' : 'DESC';
+        $offset       = max(0, ($page - 1) * $perPage);
+        $items_key    = "folder_items:{$folderId}:{$page}:{$perPage}:{$orderBy}:{$order}:{$last_changed}";
         $cached_items = wp_cache_get($items_key, 'pnpnm');
 
         if ($cached_items !== false) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PluginInja\NM\Models;
+namespace Pninja\NM\Models;
 
 use WP_Error;
 
@@ -111,7 +111,7 @@ class Folder extends BaseModel
         }
 
         if (!$folder) {
-            return $this->createNotFoundError('Folder');
+            return $this->createNotFoundError(__('Folder', 'ninja-media'));
         }
 
         return $this->findMultipleRecords(
@@ -133,7 +133,7 @@ class Folder extends BaseModel
         }
 
         if (!$folder) {
-            return $this->createNotFoundError('Folder');
+            return $this->createNotFoundError(__('Folder', 'ninja-media'));
         }
 
         return $this->findMultipleRecords(
@@ -194,7 +194,7 @@ class Folder extends BaseModel
      */
     public function create(string $name, int $parentId = 0, ?string $color = null, ?string $icon = null, int $userId = 0): array|WP_Error
     {
-        $slug  = $this->generateUniqueSlug(sanitize_title($name));
+        $slug           = $this->generateUniqueSlug(sanitize_title($name));
         $positionResult = $this->resolveNestedSetPosition($parentId);
 
         if ($positionResult[0] instanceof WP_Error) {
@@ -239,7 +239,7 @@ class Folder extends BaseModel
         $update  = array_intersect_key($data, array_flip($allowed));
 
         if (empty($update)) {
-            return $this->createValidationError('No valid fields provided for update.');
+            return $this->createValidationError(__('No valid fields provided for update.', 'ninja-media'));
         }
 
         // Regenerate slug if name changed
@@ -273,7 +273,7 @@ class Folder extends BaseModel
         }
 
         if (!$folder) {
-            return $this->createNotFoundError('Folder');
+            return $this->createNotFoundError(__('Folder', 'ninja-media'));
         }
 
         // Prevent moving a folder into itself or one of its own descendants
@@ -283,11 +283,11 @@ class Folder extends BaseModel
         }
 
         if (in_array($newParentId, $subtreeIds, true)) {
-            return $this->createValidationError('Cannot move a folder into itself or one of its descendants.');
+            return $this->createValidationError(__('Cannot move a folder into itself or one of its descendants.', 'ninja-media'));
         }
 
         if (!$this->beginTransaction()) {
-            return $this->createDatabaseError('Could not start transaction.');
+            return $this->createDatabaseError(__('Could not start transaction.', 'ninja-media'));
         }
 
         try {
@@ -380,7 +380,7 @@ class Folder extends BaseModel
         }
 
         if (!$source) {
-            return $this->createNotFoundError('Folder');
+            return $this->createNotFoundError(__('Folder', 'ninja-media'));
         }
 
         // When copying to a non-root parent, verify it actually exists
@@ -412,7 +412,7 @@ class Folder extends BaseModel
         $source = $this->findById($sourceId);
 
         if (!$source || is_wp_error($source)) {
-            return $this->createNotFoundError('Folder');
+            return $this->createNotFoundError(__('Folder', 'ninja-media'));
         }
 
         // Create the copy at the new parent
@@ -478,7 +478,7 @@ class Folder extends BaseModel
         }
 
         if (!$folder) {
-            return $this->createNotFoundError('Folder');
+            return $this->createNotFoundError(__('Folder', 'ninja-media'));
         }
 
         $lft   = (int) $folder['lft'];
@@ -566,6 +566,7 @@ class Folder extends BaseModel
     {
         if ($parentId === 0) {
             $maxRgt = (int) ($this->database->get_var("SELECT MAX(rgt) FROM {$this->tableName}") ?? 0);
+
             return [$maxRgt + 1, $maxRgt + 2, 0];
         }
 
@@ -606,7 +607,7 @@ class Folder extends BaseModel
         }
 
         if (!$folder) {
-            return $this->createNotFoundError('Folder');
+            return $this->createNotFoundError(__('Folder', 'ninja-media'));
         }
 
         $ids = $this->database->get_col(

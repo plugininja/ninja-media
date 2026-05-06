@@ -8,6 +8,7 @@ const initialState: MediaState = {
     allFiles: 0,
     uncategorized: 0,
     dynamicFolders: {},
+    unused: 0,
     trash: 0,
     folders: {},
     expandedFolderIds: [],
@@ -67,6 +68,10 @@ export const mediaSlice = createSlice({
             action: PayloadAction<MediaState["dynamicFolders"]>,
         ) => {
             state.dynamicFolders = action.payload;
+        },
+
+        setUnused: (state, action: PayloadAction<MediaState["unused"]>) => {
+            state.unused = action.payload;
         },
 
         setTrash: (state, action: PayloadAction<MediaState["trash"]>) => {
@@ -221,6 +226,7 @@ export const {
     setAllFiles,
     setUncategorized,
     setDynamicFolders,
+    setUnused,
     setTrash,
     setFolders,
     setExpandedFolderIds,

@@ -1,11 +1,11 @@
 <?php
 
-namespace PluginInja\NM\API;
+namespace Pninja\NM\API;
 
-use PluginInja\NM\API\Controllers\Settings;
-use PluginInja\NM\API\Controllers\MediaLibrary;
-use PluginInja\NM\API\Controllers\ReplaceMedia;
-use PluginInja\NM\Utils\Singleton;
+use Pninja\NM\API\Controllers\MediaLibrary;
+use Pninja\NM\API\Controllers\ReplaceMedia;
+use Pninja\NM\API\Controllers\Settings;
+use Pninja\NM\Utils\Singleton;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 

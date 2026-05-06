@@ -1,6 +1,6 @@
 <?php
 
-namespace PluginInja\NM;
+namespace Pninja\NM;
 
 defined('ABSPATH') or exit('No direct script access allowed');
 
@@ -38,9 +38,9 @@ class Autoload
     private static function getAutoloadPaths()
     {
         return [
-            'PluginInja\\NM\\Models\\'                           => [PNPNM_MODELS],
-            'PluginInja\\NM\\'                                   => [PNPNM_INCLUDES],
-            'PluginInja\\NM\\App\\'                              => [PNPNM_APP],
+            'Pninja\\NM\\Models\\'                           => [PNPNM_MODELS],
+            'Pninja\\NM\\'                                   => [PNPNM_INCLUDES],
+            'Pninja\\NM\\App\\'                              => [PNPNM_APP],
         ];
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace PluginInja\NM;
+namespace Pninja\NM;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
-use PluginInja\NM\Models\Folder;
-use PluginInja\NM\Utils\Helpers;
-use PluginInja\NM\Utils\Singleton;
+use Pninja\NM\Models\Folder;
+use Pninja\NM\Utils\Helpers;
+use Pninja\NM\Utils\Singleton;
 
 class Admin
 {
@@ -15,14 +15,15 @@ class Admin
     private function doHooks()
     {
         add_action('admin_menu', [$this, 'adminMenu']);
-        
+
         $showFolders = Helpers::getSetting('general.folder.showFolders', false);
         if ($showFolders) {
-            add_action('admin_bar_menu', [$this, 'adminBarMenu'], 100);
+            add_action('admin_bar_menu', [$this, 'adminBarMenu'], 10);
         }
     }
 
-    private static function subMenuPages(): array {
+    private static function subMenuPages(): array
+    {
         return [
             [
                 'id'   => 'advanced_media_library_settings',
@@ -59,22 +60,23 @@ class Admin
         echo '<div id="pnpnm-admin" class="pnpnm-admin pnpnm-top-level-wrapper"></div>';
     }
 
-    private static function addMenuPage($menu, $slug) {
+    private static function addMenuPage($menu, $slug)
+    {
         add_menu_page(
             __('Ninja Media', 'ninja-media'),
             __('Ninja Media', 'ninja-media'),
             'manage_options',
             PNPNM_SLUG,
             [self::class, 'adminPage'],
-            PNPNM_ASSETS . '/images/logo.svg',
-            10
+            PNPNM_ASSETS . '/images/logo.svg'
         );
 
         self::addSubMenuPage($menu, $slug);
         remove_submenu_page(PNPNM_SLUG, PNPNM_SLUG);
     }
 
-    private static function addSubMenuPage($menu, $slug) {
+    private static function addSubMenuPage($menu, $slug)
+    {
         add_submenu_page(
             PNPNM_SLUG,
             $menu,

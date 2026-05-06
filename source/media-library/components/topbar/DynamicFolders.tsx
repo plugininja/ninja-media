@@ -54,7 +54,9 @@ const DynamicFolders = ({
             <div
                 className={clsx(
                     "pnpnm-dynamic-folders__wrapper",
-                    active && "pnpnm-dynamic-folders__wrapper--open",
+                    active &&
+                        Object.keys(folders || {}).length > 0 &&
+                        "pnpnm-dynamic-folders__wrapper--open",
                 )}
             >
                 <div

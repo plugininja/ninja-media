@@ -34,7 +34,7 @@ define('PNPNM_FONTS', PNPNM_INCLUDES . '/Fonts');
 /**
  * Plugin author information
  */
-define('PNPNM_AUTHOR', 'PluginInja');
+define('PNPNM_AUTHOR', 'Pninja');
 define('PNPNM_AUTHOR_URL', 'https://plugininja.com/');
 
 /**
@@ -59,7 +59,7 @@ define('PNPNM_SLUG', PNPNM_TEXTDOMAIN);
  * Plugin minimum requirements
  */
 define('PNPNM_PHP_VERSION', '7.4');
-define('PNPNM_WP_VERSION', '5.2');
+define('PNPNM_WP_VERSION', '6.4');
 
 /**
  * Plugin database

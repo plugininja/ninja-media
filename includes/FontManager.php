@@ -1,13 +1,13 @@
 <?php
 
-namespace PluginInja\NM;
+namespace Pninja\NM;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
 class FontManager
 {
-    private const UPLOAD_DIR = 'pnpnm-fonts';
-    private const MANIFEST   = '.manifest.json';
+    private const UPLOAD_DIR    = 'pnpnm-fonts';
+    private const MANIFEST      = '.manifest.json';
     private const ALLOWED_MIMES = [
         'ttf'   => 'font/ttf',
         'otf'   => 'font/otf',
@@ -60,6 +60,7 @@ class FontManager
     public static function getFontsUrl(): string
     {
         $upload = wp_upload_dir();
+
         return trailingslashit($upload['baseurl']) . self::UPLOAD_DIR . '/';
     }
 
@@ -77,6 +78,7 @@ class FontManager
         }
 
         $decoded = json_decode($raw, true);
+
         return is_array($decoded) ? $decoded : [];
     }
 
@@ -104,9 +106,13 @@ class FontManager
 
         $ext = strtolower(pathinfo(sanitize_file_name($file['name']), PATHINFO_EXTENSION));
         if (!array_key_exists($ext, self::ALLOWED_MIMES)) {
-            return new \WP_Error( 'invalid_file_type', sprintf(
-                /* translators: %s = comma-separated list of allowed extensions */
-                __('Invalid font file type. Allowed types: %s.', 'ninja-media'), implode(', ', array_keys(self::ALLOWED_MIMES)) )
+            return new \WP_Error(
+                'invalid_file_type',
+                sprintf(
+                    /* translators: %s = comma-separated list of allowed extensions */
+                    __('Invalid font file type. Allowed types: %s.', 'ninja-media'),
+                    implode(', ', array_keys(self::ALLOWED_MIMES))
+                )
             );
         }
 
@@ -124,11 +130,11 @@ class FontManager
 
         $tmpName = $file['tmp_name'] ?? '';
         if (empty($tmpName) || !is_uploaded_file($tmpName)) {
-            return new \WP_Error( 'invalid_upload', __('The font file must be sent via HTTP POST.', 'ninja-media') );
+            return new \WP_Error('invalid_upload', __('The font file must be sent via HTTP POST.', 'ninja-media'));
         }
 
         if (!self::hasValidMagicBytes($tmpName, $ext)) {
-            return new \WP_Error( 'invalid_font_content', __('The uploaded file does not appear to be a valid font file.', 'ninja-media') );
+            return new \WP_Error('invalid_font_content', __('The uploaded file does not appear to be a valid font file.', 'ninja-media'));
         }
 
         $fontsDir = self::getFontsDir();
@@ -143,9 +149,42 @@ class FontManager
             $counter++;
         }
 
-        // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- move_uploaded_file() is the PHP-standard secure function for HTTP uploads; WP_Filesystem has no equivalent that verifies a file originated from an HTTP POST.
-        if (!move_uploaded_file($tmpName, $destPath)) {
-            return new \WP_Error( 'upload_failed', __('Failed to save the font file. Please check server write permissions.', 'ninja-media') );
+
+        // Use WordPress's built-in upload handler for security and compatibility.
+        $upload_overrides = [
+            'test_form' => false,
+            'test_size' => true,
+            'mimes'     => [ $ext => self::ALLOWED_MIMES[$ext] ],
+        ];
+
+        $wp_upload = wp_handle_upload(
+            [
+                'name'     => sanitize_file_name($file['name']),
+                'type'     => $file['type'],
+                'tmp_name' => $tmpName,
+                'error'    => $file['error'],
+                'size'     => $file['size'],
+            ],
+            $upload_overrides
+        );
+
+        if (isset($wp_upload['error'])) {
+            return new \WP_Error('upload_failed', sprintf(
+                /* translators: %s: wp_handle_upload error string */
+                __('Failed to save the font file: %s', 'ninja-media'),
+                $wp_upload['error']
+            ));
+        }
+
+        // Move the uploaded file to the final destination (rename if needed) using WP_Filesystem.
+        $fs = self::fs();
+        if (! $fs->move($wp_upload['file'], $destPath, true)) {
+            // Clean up the temp file if move fails.
+            if (file_exists($wp_upload['file'])) {
+                wp_delete_file($wp_upload['file']);
+            }
+
+            return new \WP_Error('upload_failed', __('Failed to move the font file to its final location. Please check server write permissions.', 'ninja-media'));
         }
 
         self::fs()->chmod($destPath, FS_CHMOD_FILE);
@@ -195,10 +234,10 @@ class FontManager
     public static function getBuiltinFonts(): array
     {
         return [
-            ['name' => __('Sans Serif (Arial-like)',  'ninja-media'), 'value' => 'Sans Serif'],
-            ['name' => __('Serif (Times-like)',         'ninja-media'), 'value' => 'Serif'],
-            ['name' => __('Monospace (Courier-like)',   'ninja-media'), 'value' => 'Monospace'],
-            ['name' => __('DejaVu Sans (Unicode)',      'ninja-media'), 'value' => 'DejaVu Sans'],
+            ['name' => __('Sans Serif (Arial-like)', 'ninja-media'), 'value' => 'Sans Serif'],
+            ['name' => __('Serif (Times-like)', 'ninja-media'), 'value' => 'Serif'],
+            ['name' => __('Monospace (Courier-like)', 'ninja-media'), 'value' => 'Monospace'],
+            ['name' => __('DejaVu Sans (Unicode)', 'ninja-media'), 'value' => 'DejaVu Sans'],
         ];
     }
 
@@ -243,6 +282,7 @@ class FontManager
     private static function generateSlug(string $name): string
     {
         $slug = sanitize_title($name);
+
         return $slug ?: 'font-' . (string) time();
     }
 }

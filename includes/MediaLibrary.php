@@ -1,12 +1,11 @@
 <?php
 
-namespace PluginInja\NM;
+namespace Pninja\NM;
 
-use PluginInja\NM\Enqueue;
-use PluginInja\NM\Models\Attachment;
-use PluginInja\NM\Models\BaseModel;
-use PluginInja\NM\Utils\Helpers;
-use PluginInja\NM\Utils\Singleton;
+use Pninja\NM\Models\Attachment;
+use Pninja\NM\Models\BaseModel;
+use Pninja\NM\Utils\Helpers;
+use Pninja\NM\Utils\Singleton;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
@@ -67,6 +66,7 @@ class MediaLibrary
     public function filterUploadSizeLimit(int $bytes): int
     {
         $limitBytes = $this->getCustomUploadLimitBytes();
+
         return $limitBytes !== null ? $limitBytes : $bytes;
     }
 
@@ -357,7 +357,8 @@ class MediaLibrary
 
         $perPage = Helpers::getSetting('display.settings.perPage', 80);
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WordPress core verifies nonce for query-attachments action
-        $paged   = isset($_REQUEST['query']['paged']) ? max(1, absint($_REQUEST['query']['paged'])) : 1;
+        $paged_raw = isset($_REQUEST['query']['paged']) ? wp_unslash($_REQUEST['query']['paged']) : 0;
+        $paged     = max(1, absint($paged_raw));
 
         $query->set('posts_per_page', $perPage);
         $query->set('paged', $paged);
@@ -368,7 +369,7 @@ class MediaLibrary
                 'compare' => 'NOT EXISTS',
             ],
         ]);
-        
+
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WordPress core verifies nonce for query-attachments action
         $folder_id_raw = isset($_REQUEST['query']['folderId']) ? sanitize_text_field(wp_unslash($_REQUEST['query']['folderId'])) : '';
         if (empty($folder_id_raw)) {
@@ -380,6 +381,7 @@ class MediaLibrary
         if (array_key_exists($folder_id_raw, $dynamicMimeTypes)) {
             $query->set('post_status', 'inherit');
             $query->set('post_mime_type', BaseModel::MIME_TYPE_MAP[$folder_id_raw]);
+
             return;
         }
 
@@ -395,6 +397,7 @@ class MediaLibrary
                     'compare' => 'NOT EXISTS',
                 ],
             ]);
+
             return;
         }
 
@@ -407,6 +410,7 @@ class MediaLibrary
                     'compare' => '=',
                 ],
             ]);
+
             return;
         }
 
@@ -433,14 +437,14 @@ class MediaLibrary
 
     public function prepareAttachmentForJs($response, $attachment, $meta)
     {
-            if (empty($meta['folderId'])) {
-                return $response;
-            }
-    
-            $response['pnpnm_media'] = $meta['folderId'];
-    
+        if (empty($meta['folderId'])) {
             return $response;
-        
+        }
+
+        $response['pnpnm_media'] = $meta['folderId'];
+
+        return $response;
+
     }
 
     public function generateSvgMetadata(array $metadata, int $attachment_id): array
@@ -547,7 +551,7 @@ class MediaLibrary
 
         global $pagenow;
 
-        $data['pagenow']       = $pagenow;
+        $data['pagenow']        = $pagenow;
         $data['perPage']        = (int) Helpers::getSetting('display.settings.perPage', 20);
         $data['maxUploadSize']  = pnpnmMaxUploadFileSize();
 

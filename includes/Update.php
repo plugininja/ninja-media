@@ -1,11 +1,11 @@
 <?php
 
-namespace PluginInja\NM;
+namespace Pninja\NM;
 
-use PluginInja\NM\Utils\Helpers;
-use PluginInja\NM\Utils\Singleton;
+use Pninja\NM\Utils\Helpers;
+use Pninja\NM\Utils\Singleton;
 
-defined('ABSPATH') or exit('Hey, what are you doing here? You silly human!');
+defined('ABSPATH') || exit;
 
 class Update
 {
@@ -55,8 +55,8 @@ class Update
 
                 if (file_exists($filePath)) {
                     include_once $filePath;
-                    if (class_exists("PluginInja\\NM\\Updates\\Update_" . str_replace('.', '_', $version))) {
-                        $updateClass    = "PluginInja\\NM\\Updates\\Update_" . str_replace('.', '_', $version);
+                    if (class_exists("Pninja\\NM\\Updates\\Update_" . str_replace('.', '_', $version))) {
+                        $updateClass    = "Pninja\\NM\\Updates\\Update_" . str_replace('.', '_', $version);
                         $updateInstance = $updateClass::getInstance();
                         $update         = $updateInstance->run_update();
                         if (is_wp_error($update) || empty($update)) {

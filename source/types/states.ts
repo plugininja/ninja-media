@@ -13,6 +13,7 @@ export type MediaState = {
     allFiles: number;
     uncategorized: number;
     dynamicFolders: Record<string, number>;
+    unused: number;
     trash: number;
     folders: Record<string | number, Folder[]>;
     expandedFolderIds: string[];

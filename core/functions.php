@@ -7,7 +7,7 @@ if (!function_exists('pnpnmGetFolderTable')) {
     {
         global $wpdb;
         $charsetCollate = $wpdb->get_charset_collate();
-        $prefix = $wpdb->prefix;
+        $prefix         = $wpdb->prefix;
 
         $folders = [
             'folders' => "CREATE TABLE IF NOT EXISTS `{$prefix}pnpnm_folders` (
@@ -40,7 +40,7 @@ if (!function_exists('pnpnmGetFolderRelationshipTable')) {
     {
         global $wpdb;
         $charsetCollate = $wpdb->get_charset_collate();
-        $prefix = $wpdb->prefix;
+        $prefix         = $wpdb->prefix;
 
         return [
             'folder_relationships' => "CREATE TABLE IF NOT EXISTS `{$prefix}pnpnm_folder_relationships` (
@@ -63,36 +63,36 @@ if (!function_exists('pnpnmGetDefaultSettings')) {
             'general' => [
                 'folder' => [
                     'forceSorting'  => false,
-                    'showFolders' => true,
-                    'showFolderId' => false,
+                    'showFolders'   => true,
+                    'showFolderId'  => false,
                     'treeConnector' => false,
                 ],
 
                 'files' => [
-                    'bulkSelection' => true,
-                    'replaceMedia' => false,
-                    'moveToTrash' => true,
+                    'bulkSelection'     => true,
+                    'replaceMedia'      => false,
+                    'moveToTrash'       => true,
                     'controlUploadSize' => false,
-                    'uploadSize' => 300,
+                    'uploadSize'        => 300,
                 ],
 
                 'svgSupport' => [
                     'uploadSupport' => true,
-                    'sanitization' => true,
+                    'sanitization'  => true,
                 ]
             ],
 
             'display' => [
                 'theme' => [
-                    'theme' => 'default',
-                    'color' => '#4D49FC',
+                    'theme'     => 'default',
+                    'color'     => '#4D49FC',
                     'firstTime' => true,
                 ],
 
                 'settings' => [
-                    'perPage' => 80,
-                    'thumbnailSize' => 'medium',
-                    'detailsHover' => true,
+                    'perPage'              => 80,
+                    'thumbnailSize'        => 'medium',
+                    'detailsHover'         => true,
                     'breadcrumbNavigation' => true,
                 ]
             ],
@@ -104,15 +104,15 @@ if (!function_exists('pnpnmGetDefaultSettings')) {
                 ],
 
                 'organization' => [
-                    'dynamicFolders' => true,
+                    'dynamicFolders'     => true,
                     'groupUncategorized' => true,
-                    'unused' => true,
+                    'unused'             => true,
                 ],
             ],
 
             'tools' => [
                 'deleteOnUninstall' => false,
-                'autoSave' => false,
+                'autoSave'          => false,
             ],
         ];
     }
@@ -144,10 +144,10 @@ if (!function_exists('pnpnmUpdateSettings')) {
 if (!function_exists('pnpnmMaxUploadFileSize')) {
     function pnpnmMaxUploadFileSize(): int
     {
-        $controlUploadSize = \PluginInja\NM\Utils\Helpers::getSetting('general.files.controlUploadSize', false);
+        $controlUploadSize = \Pninja\NM\Utils\Helpers::getSetting('general.files.controlUploadSize', false);
 
         if ($controlUploadSize) {
-            $customMb = (int) \PluginInja\NM\Utils\Helpers::getSetting('general.files.uploadSize', 20);
+            $customMb = (int) \Pninja\NM\Utils\Helpers::getSetting('general.files.uploadSize', 20);
             if ($customMb > 0) {
                 return $customMb;
             }

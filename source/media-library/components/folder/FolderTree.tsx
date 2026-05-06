@@ -22,6 +22,7 @@ import {
     setLoading,
     setTrash,
     setUncategorized,
+    setUnused,
 } from "~/redux/features/media";
 
 const FolderTree = () => {
@@ -62,6 +63,7 @@ const FolderTree = () => {
         dispatch(setAllFiles(data?.data?.allFiles ?? 0));
         dispatch(setUncategorized(data?.data?.uncategorized ?? 0));
         dispatch(setDynamicFolders(data?.data?.dynamicFolders ?? {}));
+        dispatch(setUnused(data?.data?.unused ?? 0));
         dispatch(setTrash(data?.data?.trashed ?? 0));
 
         if (data?.data?.folders) {

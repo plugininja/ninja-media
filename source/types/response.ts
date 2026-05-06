@@ -17,6 +17,7 @@ export type GetFoldersResponse = {
     totalFolders: number;
     uncategorized: number;
     dynamicFolders: Record<string, number>;
+    unused: number;
     trashed: number;
     folders: Folder[];
 };

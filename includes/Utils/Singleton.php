@@ -1,6 +1,6 @@
 <?php
 
-namespace PluginInja\NM\Utils;
+namespace Pninja\NM\Utils;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
