@@ -4,6 +4,7 @@ namespace Pninja\NM\API;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
+use Pninja\NM\Utils\Helpers;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -33,11 +34,13 @@ abstract class BaseController
         return current_user_can('manage_options');
     }
 
-    protected function successResponse($data, string $message = '', array $meta = []): WP_REST_Response
+    public function checkReadPermission(WP_REST_Request $request): bool
     {
-        if ('' === $message) {
-            $message = __('Success', 'ninja-media');
-        }
+        return current_user_can('upload_files');
+    }
+
+    protected function successResponse($data, string $message = 'Success', array $meta = []): WP_REST_Response
+    {
         $response_data = [
             'success' => true,
             'message' => $message,
@@ -99,11 +102,8 @@ abstract class BaseController
         return $data;
     }
 
-    protected function handleException(\Exception $e, string $default_message = ''): WP_REST_Response
+    protected function handleException(\Exception $e, string $default_message = 'An error occurred'): WP_REST_Response
     {
-        if ('' === $default_message) {
-            $default_message = __('An error occurred.', 'ninja-media');
-        }
         $message = $default_message;
         $status  = self::HTTP_INTERNAL_SERVER_ERROR;
         $extra   = [];
@@ -121,4 +121,16 @@ abstract class BaseController
 
         return $this->errorResponse($message, $status, $extra);
     }
+    
+    public function getFilesystem(): \WP_Filesystem_Base
+	{
+		global $wp_filesystem;
+
+		if (empty($wp_filesystem)) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
+		return $wp_filesystem;
+	}
 }

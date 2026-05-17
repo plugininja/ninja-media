@@ -69,7 +69,7 @@ export default {
     },
 
     output: {
-        path: path.resolve(__dirname, "assets/js"),
+        path: path.resolve(__dirname, "../assets/js"),
         filename: (pathData) => {
             const name = pathData.chunk.name;
             const match = name.match(/^([a-zA-Z0-9_-]+)--(.+)$/);
@@ -91,15 +91,15 @@ export default {
             patterns: [
                 {
                     from: path.resolve(__dirname, "source/assets/fonts"),
-                    to: path.resolve(__dirname, "assets/fonts"),
+                    to: path.resolve(__dirname, "../assets/fonts"),
                 },
                 {
                     from: path.resolve(__dirname, "source/assets/icons"),
-                    to: path.resolve(__dirname, "assets/icons"),
+                    to: path.resolve(__dirname, "../assets/icons"),
                 },
                 {
                     from: path.resolve(__dirname, "source/assets/images"),
-                    to: path.resolve(__dirname, "assets/images"),
+                    to: path.resolve(__dirname, "../assets/images"),
                 },
             ],
         }),

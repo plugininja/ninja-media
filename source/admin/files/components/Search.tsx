@@ -1,11 +1,13 @@
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
-import { selectFiles, setQuery } from "~/redux/features/files";
+import { setQuery } from "~/redux/features/file/file";
+import { useAppDispatch } from "~/redux/hooks";
 import useDebounce from "~/hooks/useDebounce";
 import { useState } from "@wordpress/element";
 import Input from "~/components/input";
+import useFile from "../hooks/useFile";
+import { __ } from "@wordpress/i18n";
 
 const Search = () => {
-    const { query } = useAppSelector(selectFiles);
+    const { query } = useFile();
     const [searchTerm, setSearchTerm] = useState(query?.search || "");
 
     const dispatch = useAppDispatch();
@@ -29,7 +31,7 @@ const Search = () => {
     return (
         <Input
             searchIcon
-            placeholder="Search media..."
+            placeholder={__("Search media...", "ninja-media")}
             value={searchTerm}
             onChange={(value) => setSearchTerm(value as string)}
         />

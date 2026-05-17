@@ -1,14 +1,15 @@
+import { settingsInit } from "~/redux/features/settings/settings";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
-import { settingsInit } from "~/redux/features/settings";
-import { useUpgradePopUp } from "~/modal/Upgrade";
-import { useEffect } from "@wordpress/element";
+import { useEffect, useRef } from "@wordpress/element";
 import { useAppDispatch } from "~/redux/hooks";
 
 const MainRoute = ({ children }: { children: React.ReactNode }) => {
-    const [theme] = useLocalStorage<"light" | "dark">(
+    const [theme, setTheme] = useLocalStorage<"light" | "dark">(
         "pnpnm-theme-status",
         "light",
     );
+
+    const isFirstLoad = useRef(true);
 
     const dispatch = useAppDispatch();
 
@@ -16,9 +17,25 @@ const MainRoute = ({ children }: { children: React.ReactNode }) => {
 
     const settings = pnpnm?.settings || defaultSettings || {};
 
-    const pathname = window?.location?.hash?.split("#")[1] || "/";
+    useEffect(() => {
+        if (!isFirstLoad.current) {
+            return;
+        }
 
-    const { showUpgradePopUp } = useUpgradePopUp();
+        isFirstLoad.current = false;
+
+        const savedTheme = localStorage.getItem("pnpnm-theme-status");
+
+        if (savedTheme) {
+            return;
+        }
+
+        const systemDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+        ).matches;
+
+        setTheme(systemDark ? "dark" : "light");
+    }, [setTheme]);
 
     useEffect(() => {
         const root = document?.documentElement;
@@ -27,36 +44,34 @@ const MainRoute = ({ children }: { children: React.ReactNode }) => {
     }, [theme]);
 
     useEffect(() => {
-        const anchors = document.querySelectorAll(
-            'a[href^="admin.php?page=ninja-media#"]',
-        );
+        const updateMenu = () => {
+            const currentMenu = location.hash.split("/")[1];
 
-        anchors.forEach((a) => {
-            (a as HTMLAnchorElement).classList.remove("current");
-        });
+            const anchors = Array.from(
+                document.querySelectorAll<HTMLAnchorElement>(
+                    'a[href*="page=ninja-media#"]',
+                ),
+            );
 
-        const matched: HTMLAnchorElement[] = [];
+            anchors.forEach((a) => a.classList.remove("current"));
 
-        anchors.forEach((a) => {
-            const href = a.getAttribute("href");
-            const hashPath = href?.split("#")[1];
-            const anchor = a as HTMLAnchorElement;
+            const activeAnchor = anchors
+                .filter((a) => {
+                    const href = a.getAttribute("href") || "";
 
-            if (pathname.startsWith(hashPath || "")) {
-                matched.push(anchor);
-            }
-        });
+                    return href.split("#/")[1]?.split("/")[0] === currentMenu;
+                })
+                .at(-1);
 
-        if (matched.length >= 2) {
-            matched[1].classList.add("current");
-        } else if (matched.length === 1) {
-            matched[0].classList.add("current");
-        }
-    }, [pathname]);
+            activeAnchor?.classList.add("current");
+        };
 
-    useEffect(() => {
-        window.openUpgradePopUp = showUpgradePopUp;
-    }, [showUpgradePopUp]);
+        updateMenu();
+
+        window.addEventListener("hashchange", updateMenu);
+
+        return () => window.removeEventListener("hashchange", updateMenu);
+    }, []);
 
     useEffect(() => {
         dispatch(

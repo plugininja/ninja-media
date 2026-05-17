@@ -1,40 +1,32 @@
 import { useContextMenu } from "~/components/contextMenu/ContextMenu";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
 import { formatFileSize } from "~/utils/functions";
 import InlineStack from "~/components/inlineStack";
-import { File as FileType } from "~/types/files";
 import BlockStack from "~/components/blockStack";
+import { File as FileType } from "~/types/file";
+import { useViewDetails } from "./FileDetails";
 import Checkbox from "~/components/checkbox";
 import Avatar from "~/components/avatar";
+import useFile from "../hooks/useFile";
 import Card from "~/components/card";
 import Icon from "~/components/icon";
 import Text from "~/components/text";
 
-import {
-    selectFiles,
-    setDetailsFile,
-    setSelectedFiles,
-} from "~/redux/features/files";
-
 const File = ({ file }: { file: FileType }) => {
-    const { selectedFiles, hiddenFileIds, detailsFile, bulkSelect } =
-        useAppSelector(selectFiles);
+    const { setFile, selectedFiles, hiddenFileIds, bulkSelect } = useFile();
 
-    const dispatch = useAppDispatch();
+    const { openViewDetails } = useViewDetails();
 
     const { show } = useContextMenu();
 
-    const { id, name, url, extension, size } = file || {};
+    const { id, name, url, thumbnailUrl, extension, size, updatedAt } =
+        file || {};
 
     const isSelected = selectedFiles?.find((f) => f?.id === id);
 
     const handleSelect = () => {
         if (!bulkSelect) {
-            if (detailsFile?.id === id) {
-                dispatch(setDetailsFile(null));
-            } else {
-                dispatch(setDetailsFile(file));
-            }
+            setFile("detailsFile", file);
+            openViewDetails();
             return;
         }
 
@@ -44,7 +36,7 @@ const File = ({ file }: { file: FileType }) => {
             ? selectedFiles?.filter((f) => f?.id !== id)
             : [...(selectedFiles ?? []), file];
 
-        dispatch(setSelectedFiles(newSelectedFiles));
+        setFile("selectedFiles", newSelectedFiles);
     };
 
     if (hiddenFileIds?.includes(id)) return null;
@@ -65,6 +57,10 @@ const File = ({ file }: { file: FileType }) => {
             }}
             className="pnpnm-fade-in"
             onClick={handleSelect}
+            onDoubleClick={() => {
+                setFile("detailsFile", file);
+                openViewDetails();
+            }}
             onContextMenu={(event) => {
                 event.preventDefault();
                 show("file-menu", event as React.MouseEvent<HTMLElement>, {
@@ -90,7 +86,7 @@ const File = ({ file }: { file: FileType }) => {
                 )}
 
                 <Avatar
-                    src={url}
+                    src={`${thumbnailUrl || url}?v=${updatedAt}`}
                     alt={name}
                     width="100%"
                     height="100%"

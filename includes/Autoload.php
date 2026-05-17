@@ -40,7 +40,6 @@ class Autoload
         return [
             'Pninja\\NM\\Models\\'                           => [PNPNM_MODELS],
             'Pninja\\NM\\'                                   => [PNPNM_INCLUDES],
-            'Pninja\\NM\\App\\'                              => [PNPNM_APP],
         ];
     }
 }

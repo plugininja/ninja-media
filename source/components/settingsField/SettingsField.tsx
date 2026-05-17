@@ -2,6 +2,7 @@ import Description from "../description";
 import InlineStack from "../inlineStack";
 import BlockStack from "../blockStack";
 import { __ } from "@wordpress/i18n";
+import Status from "../status";
 import Button from "../button";
 import Card from "../card";
 import Text from "../text";
@@ -25,6 +26,7 @@ const SettingsField: SettingsFieldProps = ({
     rounded,
     padding = 20,
     contentPadding,
+    fullWidth = false,
     gap = 20,
     children,
     isIgnoreChildren = false,
@@ -57,15 +59,31 @@ const SettingsField: SettingsFieldProps = ({
                             : 0,
                 }}
             >
-                <BlockStack gap={10}>
-                    <InlineStack gap={15}>
+                <BlockStack gap={10} className={clsx(fullWidth && "w-full")}>
+                    <InlineStack
+                        gap={15}
+                        className={clsx(fullWidth && "w-full")}
+                    >
                         {action && action}
 
-                        {title && (
-                            <Text as="h4" size={titleSize} weight="medium">
-                                {title}
-                            </Text>
-                        )}
+                        {title &&
+                            (statusProps?.isPro ? (
+                                <InlineStack gap={10} wrap={false}>
+                                    <Text
+                                        as="h4"
+                                        size={titleSize}
+                                        weight="medium"
+                                    >
+                                        {title}
+                                    </Text>
+
+                                    <Status.Pro />
+                                </InlineStack>
+                            ) : (
+                                <Text as="h4" size={titleSize} weight="medium">
+                                    {title}
+                                </Text>
+                            ))}
 
                         {secondaryAction && secondaryAction}
                     </InlineStack>
@@ -109,6 +127,7 @@ const SettingsSubField: React.FC<SettingsSubFieldProps> = ({
     isIgnoreChildren,
     depend,
     dependOn = "",
+    dependOnExact = false,
     statusProps,
 }) => {
     const classes = clsx(className, depend && "pn-settings-field-disabled");
@@ -119,7 +138,9 @@ const SettingsSubField: React.FC<SettingsSubFieldProps> = ({
         if (dependent && depend) {
             e.stopPropagation();
 
-            const label = dependent.parentElement as HTMLElement;
+            const label = dependOnExact
+                ? dependent
+                : (dependent.parentElement as HTMLElement);
 
             if (!label) return;
 

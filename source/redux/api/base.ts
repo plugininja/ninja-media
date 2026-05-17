@@ -10,8 +10,6 @@ const rawBaseQuery = fetchBaseQuery({
     credentials: "same-origin",
     prepareHeaders: (headers, { endpoint }) => {
         headers.set("X-WP-Nonce", pnpnm.nonce);
-        // Skip Content-Type for file uploads — the browser must set it
-        // automatically so the multipart/form-data boundary is included.
         const fileUploadEndpoints = ["uploadWatermarkFont", "replaceMedia"];
         if (!fileUploadEndpoints.includes(endpoint)) {
             headers.set("Content-Type", "application/json");
@@ -56,6 +54,12 @@ export const wpBaseQuery: BaseQueryFn<
 export const baseApi = createApi({
     reducerPath: "baseApi",
     baseQuery: wpBaseQuery,
-    tagTypes: ["Dashboard", "Folders", "Files", "WatermarkFonts"],
+    tagTypes: [
+        "Dashboard",
+        "Folders",
+        "PostFolders",
+        "Files",
+        "WatermarkFonts",
+    ],
     endpoints: () => ({}),
 });

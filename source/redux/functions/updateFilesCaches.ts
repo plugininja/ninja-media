@@ -1,4 +1,4 @@
-import { filesApi } from "../api/files";
+import { file } from "../api/file";
 import { store } from "../store";
 
 const updateFilesCaches = (
@@ -12,7 +12,7 @@ const updateFilesCaches = (
     },
 ) => {
     const state = store.getState();
-    const queries = state[filesApi.reducerPath]?.queries ?? {};
+    const queries = state[file.reducerPath]?.queries ?? {};
 
     Object.entries(queries).forEach(([, queryEntry]: [string, any]) => {
         if (queryEntry?.status !== "fulfilled") return;
@@ -24,10 +24,11 @@ const updateFilesCaches = (
         if (!args) return;
 
         store.dispatch(
-            filesApi.util.updateQueryData("getFiles", args, (draft) => {
+            file.util.updateQueryData("getFiles", args, (draft) => {
                 if (!draft?.data) return;
 
                 const removedSet = new Set(removedIds.map(String));
+
                 draft.data.files = draft.data.files.filter(
                     (f) => !removedSet.has(String(f.id)),
                 );

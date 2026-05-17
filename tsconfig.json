@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Integrate Dropbox - TypeScript Compiler Options",
+  "display": " Ninja Media - TypeScript Compiler Options",
   "_version": "2.0.0",
   "exclude": [
     "assets"

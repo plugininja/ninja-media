@@ -1,31 +1,38 @@
-import { selectSettings } from "~/redux/features/settings";
 import PageContainer from "~/components/pageContainer";
 import SettingsField from "~/components/settingsField";
 import InlineStack from "~/components/inlineStack";
-import { useAppSelector } from "~/redux/hooks";
+import useSettings from "~/hooks/useSettings";
 import Checkbox from "~/components/checkbox";
 import Switcher from "~/components/switcher";
 import Field from "~/components/field";
 import Input from "~/components/input";
-import useSave from "~/hooks/useSave";
 import Text from "~/components/text";
+import { __ } from "@wordpress/i18n";
+import DOCS from "~/constants/docs";
 
 const General = () => {
-    const { data } = useAppSelector(selectSettings);
-
-    const { saveSettings } = useSave();
+    const { data, setSettings } = useSettings();
 
     const { folder, files, svgSupport } = data?.general || {};
 
-    const { forceSorting, showFolders, showFolderId, treeConnector } =
-        folder || {};
+    const {
+        postTypeFolders,
+        forceSorting,
+        showFolders,
+        showFolderId,
+        showCount,
+        treeConnector,
+    } = folder || {};
 
     const {
         bulkSelection,
         replaceMedia,
+        duplicateMedia,
         moveToTrash,
         controlUploadSize,
         uploadSize,
+        controlBigImageSize,
+        bigImageSize,
     } = files || {};
 
     const { uploadSupport, sanitization } = svgSupport || {};
@@ -33,19 +40,28 @@ const General = () => {
     return (
         <PageContainer>
             <Field
-                title="Folder"
-                description="Control how folders behave and appear in the media library."
-                docLink="https://plugininja.com"
+                title={__("Folder", "ninja-media")}
+                description={__(
+                    "Control how folders are created, displayed, and linked to your post types.",
+                    "ninja-media",
+                )}
+                docLink={DOCS?.documentation?.main}
             >
                 <SettingsField
                     background="extralight"
-                    description="Automatically places new folders in order instead of at the bottom."
+                    description={__(
+                        "Automatically places new folders in order instead of at the bottom.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Force sorting when adding new folders"
+                            title={__(
+                                "Force sorting when adding new folders",
+                                "ninja-media",
+                            )}
                             checked={forceSorting}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "general.folder.forceSorting",
                                     !forceSorting,
                                 )
@@ -56,13 +72,19 @@ const General = () => {
 
                 <SettingsField
                     background="extralight"
-                    description="Displays your media folders directly in the WordPress admin sidebar."
+                    description={__(
+                        "Displays your media folders directly in the WordPress admin sidebar.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Show folders in admin menu"
+                            title={__(
+                                "Show folders in admin menu",
+                                "ninja-media",
+                            )}
                             checked={showFolders}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "general.folder.showFolders",
                                     !showFolders,
                                 )
@@ -72,16 +94,37 @@ const General = () => {
                 />
 
                 <SettingsField
+                    statusProps={{ isPro: true, ownUi: false }}
                     background="extralight"
-                    description="Displays the folder ID in the file details which can be useful for dynamic folders to identify the folder structure."
+                    description={__(
+                        "Displays the folder ID in the file details which can be useful for dynamic folders to identify the folder structure.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Show folder ID"
+                            title={__("Show folder ID", "ninja-media")}
+                            isPro={true}
                             checked={showFolderId}
+                            onChange={() => {
+                            }}
+                        />
+                    }
+                />
+
+                <SettingsField
+                    background="extralight"
+                    description={__(
+                        "Displays the count in each folder, which can be useful for quickly assessing the number of items in a folder.",
+                        "ninja-media",
+                    )}
+                    action={
+                        <Switcher
+                            title={__("Show count in folders", "ninja-media")}
+                            checked={showCount}
                             onChange={() =>
-                                saveSettings(
-                                    "general.folder.showFolderId",
-                                    !showFolderId,
+                                setSettings(
+                                    "general.folder.showCount",
+                                    !showCount,
                                 )
                             }
                         />
@@ -90,13 +133,16 @@ const General = () => {
 
                 <SettingsField
                     background="extralight"
-                    description="A UI element that connects parent and child nodes in a tree structure using lines or arrows."
+                    description={__(
+                        "A UI element that connects parent and child nodes in a tree structure using lines or arrows.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Tree Connector"
+                            title={__("Tree Connector", "ninja-media")}
                             checked={treeConnector}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "general.folder.treeConnector",
                                     !treeConnector,
                                 )
@@ -104,22 +150,66 @@ const General = () => {
                         />
                     }
                 />
+
+                <SettingsField
+                    statusProps={{
+                        isPro: true,
+                        ownUi: false,
+                    }}
+                    background="extralight"
+                    title={__("Post Type folders", "ninja-media")}
+                    description={__(
+                        "Automatically creates folders for each post type in the media library to keep your media organized based on the content types you use.",
+                        "ninja-media",
+                    )}
+                >
+                    {pnpnm?.supportedPostTypes?.map((key, index) => (
+                        <InlineStack
+                            key={key ?? index}
+                            gap={10}
+                            style={{
+                                cursor: "pointer",
+                                userSelect: "none",
+                            }}
+                            onClick={() => {
+                            }}
+                        >
+                            <Checkbox
+                                size="small"
+                                checked={postTypeFolders?.includes(key)}
+                                onChange={() => {
+                                }}
+                            />
+
+                            <Text size="sm">{key}</Text>
+                        </InlineStack>
+                    ))}
+                </SettingsField>
             </Field>
 
             <Field
-                title="Files"
-                description="Control file behavior, selection, and upload options."
-                docLink="https://plugininja.com"
+                title={__("Files", "ninja-media")}
+                description={__(
+                    "Configure file management options including upload limits, media replacement, and deletion behaviour.",
+                    "ninja-media",
+                )}
+                docLink={DOCS?.documentation?.main}
             >
                 <SettingsField
                     background="extralight"
-                    description="Select multiple files at once and drag them to any folder in a single action."
+                    description={__(
+                        "Select multiple files at once and drag them into any folder in a single action.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Bulk selection and bulk drag"
+                            title={__(
+                                "Bulk selection and bulk drag",
+                                "ninja-media",
+                            )}
                             checked={bulkSelection}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "general.files.bulkSelection",
                                     !bulkSelection,
                                 )
@@ -129,49 +219,87 @@ const General = () => {
                 />
 
                 <SettingsField
+                    statusProps={{
+                        isPro: true,
+                        ownUi: false,
+                    }}
                     background="extralight"
-                    description="Swap any media file with a new one while keeping all existing links and references intact."
+                    description={__(
+                        "Swap any existing media file with a new version while preserving all post references and attachment IDs.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Replace Media"
+                            title={__("Replace Media", "ninja-media")}
+                            isPro={true}
                             checked={replaceMedia}
-                            onChange={() =>
-                                saveSettings(
-                                    "general.files.replaceMedia",
-                                    !replaceMedia,
-                                )
-                            }
+                            onChange={() => {
+                            }}
                         />
                     }
                 />
 
                 <SettingsField
+                    statusProps={{
+                        isPro: true,
+                        ownUi: false,
+                    }}
                     background="extralight"
-                    description="Send files to the trash instead of deleting them permanently, giving you a chance to recover them."
+                    description={__(
+                        "Create an exact copy of any media file directly from the media library.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Move files to trash before deleting"
+                            title={__("Duplicate Media", "ninja-media")}
+                            isPro={true}
+                            checked={duplicateMedia}
+                            onChange={() => {
+                            }}
+                        />
+                    }
+                />
+
+                <SettingsField
+                    statusProps={{
+                        isPro: true,
+                        ownUi: false,
+                    }}
+                    background="extralight"
+                    description={__(
+                        "Send deleted files to a trash bin so you can review or restore them before they are permanently removed.",
+                        "ninja-media",
+                    )}
+                    action={
+                        <Switcher
+                            title={__(
+                                "Move files to trash before deleting",
+                                "ninja-media",
+                            )}
+                            isPro={true}
                             checked={moveToTrash}
-                            onChange={() =>
-                                saveSettings(
-                                    "general.files.moveToTrash",
-                                    !moveToTrash,
-                                )
-                            }
+                            onChange={() => {
+                            }}
                         />
                     }
                 />
 
                 <SettingsField
                     background="extralight"
-                    description={`Control the maximum upload file size for the media library. Current server limit: ${pnpnm.maxUploadSize} MB.`}
+                    description={__(
+                        "Control the maximum upload file size for the media library. Current server limit: %s MB.",
+                        "ninja-media",
+                    ).replace("%s", String(pnpnm.maxUploadSize))}
                     action={
                         <Switcher
-                            id="control-upload-size-switcher"
-                            title="Control maximum upload file size"
+                            id="controlUploadSize"
+                            title={__(
+                                "Control maximum upload file size",
+                                "ninja-media",
+                            )}
                             checked={controlUploadSize}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "general.files.controlUploadSize",
                                     !controlUploadSize,
                                 )
@@ -181,10 +309,13 @@ const General = () => {
                 >
                     <SettingsField.SubField
                         background="white"
-                        title="Maximum upload size"
-                        description={`Set a custom upload size limit in MB. The server allows up to ${pnpnm.maxUploadSize} MB.`}
+                        title={__("Maximum upload size", "ninja-media")}
+                        description={__(
+                            "Set a custom upload size limit in MB. The server allows up to %s MB.",
+                            "ninja-media",
+                        ).replace("%s", String(pnpnm.maxUploadSize))}
                         depend={!controlUploadSize}
-                        dependOn="control-upload-size-switcher"
+                        dependOn="controlUploadSize"
                         secondaryAction={
                             <Input
                                 type="number"
@@ -193,8 +324,10 @@ const General = () => {
                                 customWidth="150px"
                                 suffix="MB"
                                 value={uploadSize || ""}
+                                debounce
+                                debounceTime={1000}
                                 onChange={(value) =>
-                                    saveSettings(
+                                    setSettings(
                                         "general.files.uploadSize",
                                         Number(value),
                                     )
@@ -203,22 +336,76 @@ const General = () => {
                         }
                     />
                 </SettingsField>
+
+                <SettingsField
+                    statusProps={{
+                        isPro: true,
+                        ownUi: false,
+                    }}
+                    background="extralight"
+                    description={__(
+                        "Control WordPress's built-in large image resizing. When enabled, uploaded images exceeding the pixel threshold you set will be automatically scaled down on upload.",
+                        "ninja-media",
+                    )}
+                    action={
+                        <Switcher
+                            id="controlBigImageSize"
+                            title={__(
+                                "Scale down large images on upload",
+                                "ninja-media",
+                            )}
+                            isPro={true}
+                            checked={controlBigImageSize}
+                            onChange={() => {
+                            }}
+                        />
+                    }
+                >
+                    <SettingsField.SubField
+                        background="white"
+                        title={__("Big image threshold", "ninja-media")}
+                        description={__(
+                            "Images with a width or height exceeding this value (in pixels) will be scaled down. WordPress default is 2560.",
+                            "ninja-media",
+                        )}
+                        depend={!controlBigImageSize}
+                        dependOn="controlBigImageSize"
+                        secondaryAction={
+                            <Input
+                                type="number"
+                                size="small"
+                                fullWidth={false}
+                                customWidth="150px"
+                                suffix="px"
+                                value={bigImageSize || ""}
+                                onChange={(value) => {
+                                }}
+                            />
+                        }
+                    />
+                </SettingsField>
             </Field>
 
             <Field
-                title="SVG Support"
-                description="Control SVG file upload support and security settings."
-                docLink="https://plugininja.com"
+                title={__("SVG Support", "ninja-media")}
+                description={__(
+                    "Allow SVG files to be uploaded and automatically sanitized to keep your site secure.",
+                    "ninja-media",
+                )}
+                docLink={DOCS?.documentation?.main}
             >
                 <SettingsField
                     background="extralight"
-                    description="Support for uploading SVG files to the media library. Please note that enabling this option can pose security risks if you upload SVG files from untrusted sources."
+                    description={__(
+                        "Support for uploading SVG files to the media library. Please note that enabling this option can pose security risks if you upload SVG files from untrusted sources.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="SVG upload support"
+                            title={__("SVG upload support", "ninja-media")}
                             checked={uploadSupport}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "general.svgSupport.uploadSupport",
                                     !uploadSupport,
                                 )
@@ -229,13 +416,19 @@ const General = () => {
 
                 <SettingsField
                     background="extralight"
-                    description="Automatically strip potentially harmful code from uploaded SVG files to keep your site safe."
+                    description={__(
+                        "Automatically clean uploaded SVG files to strip potentially harmful code before they are saved.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Built-in SVG sanitization"
+                            title={__(
+                                "Built-in SVG sanitization",
+                                "ninja-media",
+                            )}
                             checked={sanitization}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "general.svgSupport.sanitization",
                                     !sanitization,
                                 )

@@ -1,0 +1,15 @@
+export type FileContextMenu =
+    | "open"
+    | "view"
+    | "get"
+    | "edit"
+    | "download"
+    | "duplicate"
+    | "replace"
+    | "favorite"
+    | "unfavorite"
+    | "apply"
+    | "remove"
+    | "trash"
+    | "restore"
+    | "delete";

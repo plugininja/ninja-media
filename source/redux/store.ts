@@ -1,22 +1,22 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { filesMiddleware } from "./middleware/files";
-import settingsReducer from "./features/settings";
-import filesReducer from "./features/files";
-import mediaReducer from "./features/media";
+import settingsReducer from "./features/settings/settings";
+import { fileMiddleware } from "./middleware/file";
+import mediaReducer from "./features/media/media";
+import fileReducer from "./features/file/file";
 import { baseApi } from "./api/base";
 
 const rootReducer = combineReducers({
     [baseApi.reducerPath]: baseApi.reducer,
     settings: settingsReducer,
     media: mediaReducer,
-    files: filesReducer,
+    file: fileReducer,
 });
 
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
-            .concat(filesMiddleware)
+            .concat(fileMiddleware)
             .concat(baseApi.middleware),
 });
 

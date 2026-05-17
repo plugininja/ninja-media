@@ -11,8 +11,6 @@ class MediaEventListener
     use Singleton;
     private const TRACKED = [
         'updated_post_meta' => [
-            '_pnpnm_watermarked',
-            '_pnpnm_media_trashed',
             '_pnpnm_media_folder_id',
             '_wp_attachment_metadata',
             '_wp_attachment_image_alt',
@@ -32,23 +30,38 @@ class MediaEventListener
             '_wp_attachment_is_custom_header',
         ],
         'added_post_meta' => [
-            '_pnpnm_watermarked',
-            '_pnpnm_media_trashed',
             '_pnpnm_media_folder_id',
         ],
         'deleted_post_meta' => [
-            '_pnpnm_media_trashed',
-            '_pnpnm_watermarked',
         ],
     ];
+
+    private array $tracked;
 
     private bool $touching = false;
 
     public function __construct()
     {
+        $this->tracked = self::TRACKED;
+
         add_action('updated_post_meta', [$this, 'onMetaUpdatedOrAdded'], 10, 3);
         add_action('added_post_meta', [$this, 'onMetaUpdatedOrAdded'], 10, 3);
         add_action('deleted_post_meta', [$this, 'onMetaDeleted'], 10, 3);
+    }
+
+    public function addFavoriteStatus__premium_only(array $response, \WP_Post $attachment): array
+    {
+        $meta_key               = '_pnpnm_favorite_' . get_current_user_id();
+        $response['isFavorite'] = '1' === get_post_meta($attachment->ID, $meta_key, true);
+
+        return $response;
+    }
+
+    public function addWatermarkStatus__premium_only(array $response, \WP_Post $attachment): array
+    {
+        $response['isWatermarked'] = '1' === get_post_meta($attachment->ID, '_pnpnm_watermarked', true);
+
+        return $response;
     }
 
     public function onMetaUpdatedOrAdded(int $metaId, int $objectId, string $metaKey): void
@@ -57,8 +70,8 @@ class MediaEventListener
 
         if (
             $this->touching
-            || !isset(self::TRACKED[$hook])
-            || !in_array($metaKey, self::TRACKED[$hook], true)
+            || !isset($this->tracked[$hook])
+            || !in_array($metaKey, $this->tracked[$hook], true)
             || !$this->isAttachment($objectId)
         ) {
             return;
@@ -71,7 +84,7 @@ class MediaEventListener
     {
         if (
             $this->touching
-            || !in_array($metaKey, self::TRACKED['deleted_post_meta'], true)
+            || !in_array($metaKey, $this->tracked['deleted_post_meta'], true)
             || !$this->isAttachment($objectId)
         ) {
             return;

@@ -1,24 +1,19 @@
 import { useEffect, useRef, useState, useCallback } from "@wordpress/element";
 import updateFilesCaches from "~/redux/functions/updateFilesCaches";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
-import { selectSettings } from "~/redux/features/settings";
 import { useCustomAlert } from "~/components/alert/Alert";
 import { useDeleteFileMutation } from "~/redux/api/media";
+import { deleteFile } from "~/redux/features/file/file";
 import InlineStack from "~/components/inlineStack";
 import BlockStack from "~/components/blockStack";
 import { createRoot } from "@wordpress/element";
+import { useAppDispatch } from "~/redux/hooks";
+import { __, sprintf } from "@wordpress/i18n";
+import useSettings from "~/hooks/useSettings";
 import { useParams } from "react-router-dom";
 import Button from "~/components/button";
+import useFile from "../hooks/useFile";
 import Card from "~/components/card";
 import Text from "~/components/text";
-import {
-    deleteFile,
-    selectFiles,
-    setBulkSelect,
-    setCount,
-    setHiddenFileIds,
-    setSelectedFiles,
-} from "~/redux/features/files";
 
 const DURATION = 5;
 
@@ -29,10 +24,10 @@ export const DeleteFile = ({
     ids?: (string | number)[];
     onClose: () => void;
 }) => {
-    const { data } = useAppSelector(selectSettings);
+    const { data } = useSettings();
     const [loading, setLoading] = useState(false);
 
-    const { count, selectedFiles, bulkSelect } = useAppSelector(selectFiles);
+    const { setFile, count, selectedFiles, bulkSelect } = useFile();
     const [deleteFileMutation] = useDeleteFileMutation();
     const dispatch = useAppDispatch();
     const { showAlert } = useCustomAlert();
@@ -54,11 +49,11 @@ export const DeleteFile = ({
                 ids: ids ?? selectedFiles?.map((f) => f?.id) ?? [],
             }).unwrap();
 
-            dispatch(setHiddenFileIds([]));
+            setFile("hiddenFileIds", []);
 
             if (!enableUndo && bulkSelect) {
-                dispatch(setBulkSelect(false));
-                dispatch(setSelectedFiles([]));
+                setFile("bulkSelect", false);
+                setFile("selectedFiles", []);
             }
 
             const {
@@ -77,16 +72,14 @@ export const DeleteFile = ({
                     ? dynamicFolders[dynamicKey] ?? 0
                     : Object.keys(dynamicFolders ?? {}).length;
 
-            dispatch(
-                setCount({
-                    ...count,
-                    all: allFiles ?? 0,
-                    uncategorized: uncategorized ?? 0,
-                    dynamic: dynamicCount,
-                    unused: unused ?? 0,
-                    trash: trash ?? 0,
-                }),
-            );
+            setFile("count", {
+                ...count,
+                all: allFiles ?? 0,
+                uncategorized: uncategorized ?? 0,
+                dynamic: dynamicCount,
+                unused: unused ?? 0,
+                trash: trash ?? 0,
+            });
 
             updateFilesCaches(deleted ?? [], {
                 allFiles,
@@ -101,7 +94,9 @@ export const DeleteFile = ({
                 type: "success",
                 text:
                     response?.message ||
-                    `${multiple ? "Files" : "File"} deleted successfully`,
+                    (multiple
+                        ? __("Files deleted successfully", "ninja-media")
+                        : __("File deleted successfully", "ninja-media")),
                 timer: 3000,
                 timerProgressBar: true,
                 showConfirmButton: false,
@@ -112,7 +107,9 @@ export const DeleteFile = ({
                 type: "error",
                 text:
                     error?.data?.message ||
-                    `Failed to delete ${multiple ? "files" : "file"}`,
+                    (multiple
+                        ? __("Failed to delete files", "ninja-media")
+                        : __("Failed to delete file", "ninja-media")),
                 timer: 3000,
                 timerProgressBar: true,
                 showConfirmButton: false,
@@ -125,6 +122,7 @@ export const DeleteFile = ({
     const UndoUI = ({
         multiple,
         onUndo,
+        onDeleteNow,
         progress,
         timeLeft,
         radius,
@@ -132,6 +130,7 @@ export const DeleteFile = ({
     }: {
         multiple: boolean;
         onUndo: () => void;
+        onDeleteNow: () => void;
         progress: number;
         timeLeft: number;
         radius: number;
@@ -166,18 +165,31 @@ export const DeleteFile = ({
                     </div>
 
                     <Text size="sm">
-                        {multiple ? "Files" : "File"} will be deleted…
+                        {multiple
+                            ? __("Files will be deleted…", "ninja-media")
+                            : __("File will be deleted…", "ninja-media")}
                     </Text>
                 </InlineStack>
 
-                <Button
-                    variant="secondary"
-                    size="extrasmall"
-                    startIcon="undo"
-                    onClick={onUndo}
-                >
-                    Undo
-                </Button>
+                <InlineStack gap={10} wrap={false} align="end">
+                    <Button
+                        variant="secondary"
+                        size="extrasmall"
+                        startIcon="undo"
+                        onClick={onUndo}
+                    >
+                        {__("Undo", "ninja-media")}
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        size="extrasmall"
+                        startIcon="delete_history"
+                        onClick={onDeleteNow}
+                    >
+                        {__("Delete", "ninja-media")}
+                    </Button>
+                </InlineStack>
             </InlineStack>
 
             <div
@@ -230,14 +242,21 @@ export const DeleteFile = ({
                 didUndoRef.current = true;
                 stopTimer();
                 cleanup();
-                dispatch(setHiddenFileIds([]));
-            }, [stopTimer, dispatch]);
+                setFile("hiddenFileIds", []);
+            }, [stopTimer, setFile]);
 
             const cleanup = useCallback(() => {
                 stopTimer();
                 if (container.parentNode) document.body.removeChild(container);
                 if (root) root.unmount();
             }, [stopTimer]);
+
+            const handleDeleteNow = useCallback(() => {
+                didUndoRef.current = true;
+                stopTimer();
+                cleanup();
+                performActualDelete();
+            }, [stopTimer, cleanup, performActualDelete]);
 
             useEffect(() => {
                 startTimer();
@@ -248,6 +267,7 @@ export const DeleteFile = ({
                 <UndoUI
                     multiple={multiple}
                     onUndo={handleUndo}
+                    onDeleteNow={handleDeleteNow}
                     progress={progress}
                     timeLeft={Math.ceil((progress / 100) * DURATION)}
                     radius={radius}
@@ -267,13 +287,11 @@ export const DeleteFile = ({
             return;
         }
 
-        dispatch(
-            setHiddenFileIds(ids ?? selectedFiles?.map((f) => f?.id) ?? []),
-        );
+        setFile("hiddenFileIds", ids ?? selectedFiles?.map((f) => f?.id) ?? []);
 
         if (bulkSelect) {
-            dispatch(setBulkSelect(false));
-            dispatch(setSelectedFiles([]));
+            setFile("bulkSelect", false);
+            setFile("selectedFiles", []);
         }
 
         onClose();
@@ -309,15 +327,22 @@ export const DeleteFile = ({
 
             <BlockStack gap={10}>
                 <Text size="xl" weight="semibold">
-                    Delete
+                    {__("Delete", "ninja-media")}
                 </Text>
 
                 <Text color="descgray">
                     {multiple
-                        ? `Are you sure you want to delete these ${
-                              ids?.length ?? 0
-                          } files?`
-                        : "Are you sure you want to delete this file?"}
+                        ? sprintf(
+                              __(
+                                  "Are you sure you want to delete these %d files?",
+                                  "ninja-media",
+                              ),
+                              ids?.length ?? 0,
+                          )
+                        : __(
+                              "Are you sure you want to delete this file?",
+                              "ninja-media",
+                          )}
                 </Text>
             </BlockStack>
 
@@ -329,7 +354,7 @@ export const DeleteFile = ({
                     onClick={onClose}
                     disabled={loading}
                 >
-                    Cancel
+                    {__("Cancel", "ninja-media")}
                 </Button>
 
                 <Button
@@ -339,7 +364,7 @@ export const DeleteFile = ({
                     onClick={triggerDelete}
                     loading={loading}
                 >
-                    Delete
+                    {__("Delete", "ninja-media")}
                 </Button>
             </InlineStack>
         </BlockStack>

@@ -21,6 +21,7 @@ interface SettingsField {
     rounded?: BorderRadius;
     padding?: string | number;
     contentPadding?: string | number;
+    fullWidth?: boolean;
     gap?: string | number;
     children?: React.ReactNode;
     isIgnoreChildren?: boolean;
@@ -36,4 +37,5 @@ export interface SettingsFieldProps extends React.FC<SettingsField> {
 export interface SettingsSubFieldProps extends SettingsField {
     depend?: boolean;
     dependOn?: string;
+    dependOnExact?: boolean;
 }

@@ -9,30 +9,44 @@
         padding: 20px;
         z-index: 999;
         border: 1px solid $light;
+
+        &--toggle {
+            position: absolute;
+            top: 85px;
+            right: -20px;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        &:hover .pn-sidebar--toggle {
+            opacity: 1;
+        }
     }
 
     .pn-sidebar__resizer {
         position: absolute;
         top: 0;
         right: 0;
-        width: 6px;
+        width: 4px;
         height: 100%;
         cursor: col-resize;
         z-index: 1000;
         background-color: transparent;
+        transition: background-color 0.3s ease;
 
         &:hover {
-            background-color: rgba(0, 0, 0, 0.08);
+            background-color: $primary;
         }
     }
 
     .pn-sidebar__header {
         position: relative;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
 
         .pnpnm-logo {
             position: absolute;
-            top: 3px;
+            top: 0px;
             left: 0;
         }
     }
@@ -40,6 +54,14 @@
     .pn-sidebar__menu {
         &-item {
             cursor: pointer;
+
+            &-button {
+                border: 1px solid transparent !important;
+
+                &-active {
+                    border-color: $secondary !important;
+                }
+            }
         }
     }
 
@@ -67,65 +89,6 @@
         transition: opacity 0.3s ease 0.3s;
     }
 
-    .pn-sidebar__bottom-help-center {
-        background-color: $secondary;
-        border: 1px solid $secondary;
-        border-radius: 10px;
-        height: 48px;
-        padding: 10px;
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-
-        .pn-icon {
-            color: $black;
-        }
-
-        &:hover {
-            background-color: $primary;
-            color: white;
-
-            .pn-icon {
-                color: white;
-            }
-
-            .pn-sidebar__bottom-help-center-title {
-                transition: color 0.3s ease;
-                color: white;
-            }
-        }
-    }
-
-    .pn-sidebar__bottom-upgrade-pro {
-        background-color: $primary;
-        border: 1px solid $secondary;
-        border-radius: 10px;
-        height: 48px;
-        padding: 10px;
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-
-        .pn-icon {
-            color: white;
-        }
-
-        &-title {
-            color: white !important;
-        }
-
-        &:hover {
-            background-color: $secondary;
-
-            .pn-icon {
-                color: $black;
-            }
-
-            .pn-sidebar__bottom-upgrade-pro-title {
-                transition: color 0.3s ease;
-                color: $black !important;
-            }
-        }
-    }
-
     .pn-sidebar__fade {
         opacity: 0;
         visibility: hidden;
@@ -143,15 +106,19 @@
     }
 
     .pn-sidebar--collapsed {
-        .pn-sidebar__header {
-            &--toggle {
-                span {
-                    transform: rotateY(180deg);
-                }
+        .pn-sidebar--toggle {
+            span {
+                transform: rotateY(180deg);
             }
         }
 
         .pn-sidebar__bottom {
+            opacity: 0;
+            visibility: hidden;
+            transition: none;
+        }
+
+        .pn-sidebar__fade {
             opacity: 0;
             visibility: hidden;
             transition: none;

@@ -5,7 +5,7 @@ namespace Pninja\NM;
 use Pninja\NM\Utils\Helpers;
 use Pninja\NM\Utils\Singleton;
 
-defined('ABSPATH') || exit;
+defined('ABSPATH') || exit('No direct script access allowed');
 
 class Update
 {

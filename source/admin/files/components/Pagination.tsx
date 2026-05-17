@@ -5,7 +5,7 @@ import Button from "~/components/button";
 import Icon from "~/components/icon";
 import Card from "~/components/card";
 import { __ } from "@wordpress/i18n";
-import { FC } from "react";
+import type { FC } from "react";
 
 type PaginationProps = {
     variant?: "small" | "large";

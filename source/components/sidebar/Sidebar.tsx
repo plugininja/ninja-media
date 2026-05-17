@@ -5,6 +5,7 @@ import IconButton from "../iconButton";
 import { __ } from "@wordpress/i18n";
 import DOCS from "~/constants/docs";
 import Tooltip from "../tooltip";
+import Status from "../status";
 import Card from "../card";
 import Text from "../text";
 import Icon from "../icon";
@@ -93,7 +94,7 @@ const Sidebar = ({
                 id={id}
                 style={{
                     ...style,
-                    width: collapsed ? 98 : width,
+                    width: collapsed ? 92 : width,
                     flexShrink: 0,
                     transition:
                         collapsed || !isResizing ? "width 0.25s ease" : "none",
@@ -106,12 +107,13 @@ const Sidebar = ({
             >
                 <InlineStack
                     align={collapsed ? "center" : "end"}
+                    blockAlign="center"
                     gap={5}
                     className="pn-sidebar__header"
                 >
                     {!collapsed && (
                         <a
-                            href={pnpnm?.siteUrl}
+                            href={DOCS.featuresPage}
                             target="_blank"
                             rel="noreferrer"
                         >
@@ -119,17 +121,23 @@ const Sidebar = ({
                         </a>
                     )}
 
-                    <IconButton
-                        variant={collapsed ? "primary" : "secondary"}
-                        name="keyboard_tab_rtl"
-                        size="small"
-                        color={collapsed ? "white" : "primary"}
-                        fontSize="lg"
-                        rounded="md"
-                        className="pn-sidebar__header--toggle"
-                        onClick={toggle}
-                    />
+                    <Text size="sm" weight="medium">
+                        v {pnpnm?.version}
+                    </Text>
                 </InlineStack>
+
+                <IconButton
+                    variant={collapsed ? "primary" : "white"}
+                    name="keyboard_tab_rtl"
+                    size="small"
+                    border
+                    borderColor="light"
+                    color={collapsed ? "white" : "primary"}
+                    fontSize="lg"
+                    rounded="md"
+                    className="pn-sidebar--toggle"
+                    onClick={toggle}
+                />
 
                 {children}
 
@@ -145,7 +153,7 @@ const Sidebar = ({
 };
 
 Sidebar.Menu = ({ children }: SidebarMenuProps) => (
-    <BlockStack gap={10} className="pn-sidebar__menu">
+    <BlockStack gap={6} className="pn-sidebar__menu">
         {children}
     </BlockStack>
 );
@@ -154,6 +162,7 @@ Sidebar.Item = ({
     title,
     icon,
     count,
+    statusProps,
     active = false,
     onClick,
 }: SidebarItemProps) => {
@@ -169,10 +178,16 @@ Sidebar.Item = ({
             disabled={!collapsed}
         >
             <Card
-                padding={10}
-                background={active ? "primary" : "white"}
+                padding={6}
+                background={active ? "light" : "white"}
                 rounded="lg"
-                borderStyle="none"
+                border={active ? "secondary" : "transparent"}
+                statusProps={{
+                    ...statusProps,
+                    top: collapsed ? -5 : 10,
+                    right: collapsed ? -5 : 10,
+                    tooltipDisabled: collapsed,
+                }}
                 className="pn-sidebar__menu-item"
                 onClick={onClick}
             >
@@ -194,15 +209,20 @@ Sidebar.Item = ({
                                 }}
                             >
                                 <IconButton
-                                    variant={active ? "white" : "secondary"}
+                                    variant={active ? "white" : "transparent"}
                                     size="small"
                                     rounded="md"
                                     name={icon}
+                                    border={false}
                                     color="primary"
-                                    borderStyle={active ? "none" : "solid"}
                                     style={{
                                         flexShrink: 0,
                                     }}
+                                    className={clsx(
+                                        "pn-sidebar__menu-item-button",
+                                        active &&
+                                            "pn-sidebar__menu-item-button-active",
+                                    )}
                                 />
 
                                 <Card
@@ -229,21 +249,27 @@ Sidebar.Item = ({
                             </BlockStack>
                         ) : (
                             <IconButton
-                                variant={active ? "white" : "secondary"}
+                                variant={active ? "white" : "transparent"}
                                 size="small"
                                 rounded="md"
+                                border={false}
                                 name={icon}
                                 color="primary"
-                                borderStyle={active ? "none" : "solid"}
                                 style={{
                                     flexShrink: 0,
                                 }}
+                                className={clsx(
+                                    "pn-sidebar__menu-item-button",
+                                    active &&
+                                        "pn-sidebar__menu-item-button-active",
+                                )}
                             />
                         )}
 
                         {!collapsed && (
                             <Text
-                                color={active ? "pure" : "black"}
+                                color={active ? "black" : "secondaryblack"}
+                                weight={active ? "medium" : "normal"}
                                 size="md"
                                 wrap={false}
                                 className="pn-sidebar__menu-item-title"
@@ -284,6 +310,7 @@ Sidebar.Bottom = ({
     trashCount,
     trashActive = false,
     helpCenter = true,
+    isPro = false,
     trashClick,
     disabledTrash = false,
 }: SidebarBottomProps) => {
@@ -313,29 +340,39 @@ Sidebar.Bottom = ({
                                 height: "fit-content",
                             }}
                         >
-                            <IconButton
-                                variant="error"
-                                name="delete"
-                                rounded="md"
-                                iconStyle={{
-                                    color: trashActive
-                                        ? "var(--pnpnm-white)"
-                                        : undefined,
-                                }}
-                                style={{
-                                    backgroundColor: trashActive
-                                        ? "var(--pnpnm-error)"
-                                        : undefined,
-                                    opacity: disabledTrash ? 0.5 : 1,
-                                    cursor: disabledTrash
-                                        ? "not-allowed"
-                                        : "pointer",
-                                    pointerEvents: disabledTrash
-                                        ? "none"
-                                        : "auto",
-                                }}
-                                onClick={() => !disabledTrash && trashClick?.()}
-                            />
+                            <Status
+                                isPro={true}
+                                size="small"
+                                top={-10}
+                                right={-10}
+                                tooltipDisabled={collapsed}
+                            >
+                                <IconButton
+                                    variant="error"
+                                    name="delete"
+                                    rounded="md"
+                                    iconStyle={{
+                                        color: trashActive
+                                            ? "var(--pnpnm-white)"
+                                            : undefined,
+                                    }}
+                                    style={{
+                                        backgroundColor: trashActive
+                                            ? "var(--pnpnm-error)"
+                                            : undefined,
+                                        opacity: disabledTrash ? 0.5 : 1,
+                                        cursor: disabledTrash
+                                            ? "not-allowed"
+                                            : "pointer",
+                                        pointerEvents: disabledTrash
+                                            ? "none"
+                                            : "auto",
+                                    }}
+                                    onClick={() =>
+                                        !disabledTrash && trashClick?.()
+                                    }
+                                />
+                            </Status>
 
                             {typeof trashCount === "number" &&
                                 trashCount > 0 && (
@@ -386,31 +423,33 @@ Sidebar.Bottom = ({
                     </Tooltip>
                 )}
 
-                <Text size="sm" weight="medium">
-                    v {pnpnm?.version}
-                </Text>
+                {!pnpnm?.isPro && isPro && (
+                    <Tooltip
+                        title={__("Upgrade to Pro", "ninja-media")}
+                        wrap="no-wrap"
+                        placement="right"
+                    >
+                        <IconButton
+                            variant="secondary"
+                            name="crown"
+                            rounded="md"
+                            onClick={() =>
+                                window.open(
+                                    pnpnm?.upgradeUrl,
+                                    "_blank",
+                                    "noreferrer",
+                                )
+                            }
+                        />
+                    </Tooltip>
+                )}
             </BlockStack>
 
             <BlockStack
-                gap={10}
+                gap={20}
                 className="pn-sidebar__bottom pn-sidebar__fade"
             >
                 {children}
-
-                <InlineStack
-                    gap={5}
-                    align="between"
-                    wrap={false}
-                    style={{ paddingLeft: "5px", paddingRight: "5px" }}
-                >
-                    <Text size="sm" weight="medium">
-                        {__("Version", "ninja-media")}
-                    </Text>
-
-                    <Text size="sm" weight="medium">
-                        {pnpnm?.version}
-                    </Text>
-                </InlineStack>
             </BlockStack>
         </>
     );
@@ -429,6 +468,12 @@ Sidebar.Trash = ({
 }) => {
     return (
         <Card
+            statusProps={{
+                isPro: true,
+                size: "small",
+                placement: "right-center",
+                right: 10,
+            }}
             padding={10}
             background={active ? "error" : "errorextralight"}
             border={active ? "error" : "errorextralight"}
@@ -454,7 +499,9 @@ Sidebar.Trash = ({
                     fontSize="xl"
                 />
 
-                <Text color={active ? "white" : "error"}>Trash</Text>
+                <Text color={active ? "white" : "error"}>
+                    {__("Trash", "ninja-media")}
+                </Text>
             </InlineStack>
 
             {typeof count === "number" && count > 0 && (
@@ -486,20 +533,40 @@ Sidebar.HelpCenter = () => {
         <InlineStack
             gap={8}
             wrap={false}
-            className="pn-sidebar__bottom-help-center"
+            align="between"
+            style={{
+                cursor: "pointer",
+                userSelect: "none",
+            }}
             onClick={() =>
                 window.open(DOCS.supportLink, "_blank", "noreferrer")
             }
         >
-            <Icon name="contact_support" fontSize="xl" />
+            <InlineStack gap={10} wrap={false}>
+                <Icon name="contact_support" color="black" fontSize="xl" />
 
-            <Text className="pn-sidebar__bottom-help-center-title">
-                {__("Help Center", "ninja-media")}
-            </Text>
+                <Text color="black">{__("Help Center", "ninja-media")}</Text>
+            </InlineStack>
 
-            {/* <Icon name="open_in_new" fontSize="lg" /> */}
+            <Icon name="open_in_new" color="descgray" fontSize="xl" />
         </InlineStack>
     );
 };
+
+Sidebar.UpgradePro = () => (
+    <InlineStack
+        gap={8}
+        wrap={false}
+        style={{
+            cursor: "pointer",
+            userSelect: "none",
+        }}
+        onClick={() => window.open(DOCS.pricingPage, "_blank", "noreferrer")}
+    >
+        <Icon name="crown" color="primary" fontSize="xl" />
+
+        <Text color="primary">{__("Upgrade to Pro", "ninja-media")}</Text>
+    </InlineStack>
+);
 
 export default Sidebar;

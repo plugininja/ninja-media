@@ -1,4 +1,6 @@
 import { SwitcherProps } from "./Switcher.type";
+import InlineStack from "../inlineStack";
+import Status from "../status";
 import Text from "../text";
 import clsx from "clsx";
 
@@ -13,6 +15,7 @@ const Switcher: React.FC<SwitcherProps> = ({
     ariaLabel,
     loading = false,
     disabled,
+    isPro = false,
     onChange,
 }) => {
     const handleChange = (isChecked: boolean) => {
@@ -52,16 +55,30 @@ const Switcher: React.FC<SwitcherProps> = ({
                 <div className="pn-switcher__toggle-thumb" />
             </div>
 
-            {title && (
-                <Text
-                    size={titleSize}
-                    weight="medium"
-                    className="cursor-pointer"
-                    onClick={() => handleChange(!checked)}
-                >
-                    {title}
-                </Text>
-            )}
+            {title &&
+                (isPro ? (
+                    <InlineStack gap={10} wrap={false}>
+                        <Text
+                            size={titleSize}
+                            weight="medium"
+                            className="cursor-pointer"
+                            onClick={() => handleChange(!checked)}
+                        >
+                            {title}
+                        </Text>
+
+                        <Status.Pro />
+                    </InlineStack>
+                ) : (
+                    <Text
+                        size={titleSize}
+                        weight="medium"
+                        className="cursor-pointer"
+                        onClick={() => handleChange(!checked)}
+                    >
+                        {title}
+                    </Text>
+                ))}
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import type { StatusConfig, StatusProps } from "./Status.type";
+import { toBoolean } from "~/utils/utils";
 import InlineStack from "../inlineStack";
 import { __ } from "@wordpress/i18n";
 import Tooltip from "../tooltip";
@@ -10,22 +11,35 @@ const Status = ({
     id,
     style,
     className = "",
+    isPro = false,
     isComingSoon = false,
     isHot = false,
     isNew = false,
     isBeta = false,
+    ownUi = true,
     placement = "default",
     top = 10,
     bottom,
     left,
     right = 10,
     tooltipPlacement = "left",
+    tooltipDisabled = false,
     size = "medium",
     widthFull = true,
     ignore = false,
     children,
 }: StatusProps) => {
+    const allowFeature = isPro ? toBoolean(pnpnm?.isPro) : true;
+
     const statusConfig: StatusConfig[] = [
+        {
+            key: "pro",
+            variant: "pro",
+            title: __("Premium Only", "ninja-media"),
+            icon: "crown",
+            iconColor: "dark",
+            condition: !allowFeature,
+        },
         {
             key: "comingsoon",
             variant: "warning",
@@ -62,7 +76,7 @@ const Status = ({
 
     const statusList = statusConfig?.filter((status) => status?.condition);
 
-    if (ignore || (!isComingSoon && !isNew && !isHot && !isBeta)) {
+    if (ignore || (!isPro && !isComingSoon && !isNew && !isHot && !isBeta)) {
         return <>{children}</>;
     }
 
@@ -130,9 +144,15 @@ const Status = ({
     return (
         <div
             id={id}
-            style={style}
+            style={{ ...style }}
             className={classes}
             onClick={(e) => {
+                if (!allowFeature) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    return;
+                }
+
                 if (isComingSoon) {
                     e.stopPropagation();
                     e.preventDefault();
@@ -140,52 +160,65 @@ const Status = ({
                 }
             }}
         >
-            <InlineStack
-                wrap={false}
-                gap={
-                    size === "extrasmall"
-                        ? 5
-                        : size === "small"
-                        ? 7
-                        : size === "medium"
-                        ? 9
-                        : size === "large"
-                        ? 11
-                        : 13
-                }
-                style={positionStyles}
-                className="pn-status__items"
-            >
-                {statusList.map(({ key, variant, title, icon, iconColor }) => (
-                    <Tooltip
-                        key={key}
-                        title={title}
-                        placement={tooltipPlacement}
-                        arrow
-                        wrap="no-wrap"
-                    >
-                        <Card
-                            padding={5}
-                            rounded="sm"
-                            borderStyle="none"
-                            background={variant}
-                            className={clsx(
-                                "pn-status__items-item",
-                                `pn-status__items-item--${size}`,
-                            )}
-                        >
-                            <Icon name={icon} color={iconColor} />
-                        </Card>
-                    </Tooltip>
-                ))}
-            </InlineStack>
+            {ownUi && (
+                <InlineStack
+                    wrap={false}
+                    gap={
+                        size === "extrasmall"
+                            ? 5
+                            : size === "small"
+                            ? 7
+                            : size === "medium"
+                            ? 9
+                            : size === "large"
+                            ? 11
+                            : 13
+                    }
+                    style={positionStyles}
+                    className="pn-status__items"
+                >
+                    {statusList.map(
+                        ({ key, variant, title, icon, iconColor }) => (
+                            <Tooltip
+                                key={key}
+                                title={title}
+                                placement={tooltipPlacement}
+                                arrow
+                                wrap="no-wrap"
+                                disabled={tooltipDisabled}
+                            >
+                                <Card
+                                    padding={5}
+                                    rounded="sm"
+                                    borderStyle="none"
+                                    background={variant}
+                                    className={clsx(
+                                        "pn-status__items-item",
+                                        `pn-status__items-item--${size}`,
+                                    )}
+                                >
+                                    <Icon name={icon} color={iconColor} />
+                                </Card>
+                            </Tooltip>
+                        ),
+                    )}
+                </InlineStack>
+            )}
 
             <div
                 className={clsx(
                     "pn-status__content",
-                    isComingSoon ? "pn-status__content--disabled" : "",
+                    !allowFeature || isComingSoon
+                        ? "pn-status__content--disabled"
+                        : "",
                 )}
                 onClick={(e) => {
+                    if (!allowFeature) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        return;
+                    }
+
                     if (isComingSoon) {
                         e.stopPropagation();
                         e.preventDefault();
@@ -196,6 +229,33 @@ const Status = ({
                 {children}
             </div>
         </div>
+    );
+};
+
+Status.Pro = ({ title }: { title?: string }) => {
+    if (toBoolean(pnpnm?.isPro)) {
+        return null;
+    }
+
+    return (
+        <Tooltip
+            title={
+                title ||
+                __(
+                    "This feature is only available in the pro version",
+                    "ninja-media",
+                )
+            }
+            arrow
+            wrap="no-wrap"
+            style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            <Icon name="crown" color="primary" fontSize="xl" />
+        </Tooltip>
     );
 };
 

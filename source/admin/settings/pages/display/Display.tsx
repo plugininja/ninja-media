@@ -1,38 +1,35 @@
 import { StatusProps } from "~/components/status/Status.type";
-import GoogleDrive from "~/assets/icons/themes/GoogleDrive";
-import { selectSettings } from "~/redux/features/settings";
+import Plugininja from "~/assets/icons/themes/Plugininja";
 import { useEffect, useState } from "@wordpress/element";
 import SettingsField from "~/components/settingsField";
 import PageContainer from "~/components/pageContainer";
-import Default from "~/assets/icons/themes/Default";
-import Windows from "~/assets/icons/themes/Windows";
-import Dropbox from "~/assets/icons/themes/Dropbox";
+import Awesome from "~/assets/icons/themes/Awesome";
+import Default from "~/assets/icons/themes/NinjaDefault";
 import InlineStack from "~/components/inlineStack";
 import ColorPicker from "~/components/colorPicker";
 import Description from "~/components/description";
 import BlockStack from "~/components/blockStack";
-import SelectBox from "~/components/selectBox";
-import { useAppSelector } from "~/redux/hooks";
 import useDebounce from "~/hooks/useDebounce";
+import Bold from "~/assets/icons/themes/Bold";
+import useSettings from "~/hooks/useSettings";
 import Switcher from "~/components/switcher";
+import Status from "~/components/status";
 import Slider from "~/components/slider";
 import Field from "~/components/field";
-import useSave from "~/hooks/useSave";
+import { __ } from "@wordpress/i18n";
 import Text from "~/components/text";
 import Card from "~/components/card";
+import DOCS from "~/constants/docs";
 import clsx from "clsx";
 
 const Display = () => {
-    const { data } = useAppSelector(selectSettings);
-
-    const { saveSettings } = useSave();
+    const { data, setSettings } = useSettings();
 
     const { theme: themeValue, settings } = data?.display || {};
 
     const { theme, color: colorValue, firstTime } = themeValue || {};
 
-    const { perPage, thumbnailSize, detailsHover, breadcrumbNavigation } =
-        settings || {};
+    const { perPage, detailsHover, breadcrumbNavigation } = settings || {};
 
     const [color, setColor] = useState<string>(colorValue || "#4D49FC");
 
@@ -44,7 +41,7 @@ const Display = () => {
 
     useDebounce(
         () => {
-            saveSettings("display.theme.color", color);
+            setSettings("display.theme.color", color);
 
             const root = document.documentElement;
 
@@ -59,22 +56,35 @@ const Display = () => {
     return (
         <PageContainer>
             <Field
-                title="Theme"
-                description="Choose the visual style and accent color for the media library interface."
-                docLink="https://plugininja.com"
+                title={__("Theme", "ninja-media")}
+                description={__(
+                    "Choose the visual style and accent color for the media library interface.",
+                    "ninja-media",
+                )}
+                docLink={DOCS?.documentation?.main}
             >
-                <SettingsField background="extralight" title="Select Theme">
-                    <Description text="Choose a theme that matches your preferred file manager style." />
+                <SettingsField
+                    background="extralight"
+                    title={__("Select Theme", "ninja-media")}
+                >
+                    <Description
+                        text={__(
+                            "Choose a visual style for the folder sidebar and media browser.",
+                            "ninja-media",
+                        )}
+                    />
 
                     <InlineStack gap={20}>
                         {THEMES?.map(
                             ({ key, title, icon, statusProps }, index) => (
                                 <Card
                                     key={key ?? index}
-                                    // statusProps={{
-                                    //     ...statusProps,
-                                    //     widthFull: false,
-                                    // }}
+                                    statusProps={{
+                                        ...statusProps,
+                                        ownUi: false,
+                                        widthFull: false,
+                                        size: "small",
+                                    }}
                                     padding={5}
                                     background="white"
                                     rounded="md"
@@ -89,9 +99,8 @@ const Display = () => {
                                         theme === key &&
                                             "pnpnm-theme-preview--active",
                                     )}
-                                    onClick={() =>
-                                        saveSettings("display.theme.theme", key)
-                                    }
+                                    onClick={() => {
+                                    }}
                                 >
                                     <Card
                                         padding={0}
@@ -111,7 +120,9 @@ const Display = () => {
 
                                     <InlineStack
                                         align="center"
-                                        blockAlign="center"
+                                        blockAlign="end"
+                                        gap={10}
+                                        wrap={false}
                                         style={{
                                             position: "absolute",
                                             bottom: 0,
@@ -130,6 +141,8 @@ const Display = () => {
                                         >
                                             {title}
                                         </Text>
+
+                                        {statusProps?.isPro && <Status.Pro />}
                                     </InlineStack>
                                 </Card>
                             ),
@@ -139,9 +152,14 @@ const Display = () => {
 
                 <SettingsField
                     background="extralight"
-                    title="Media Library Color"
+                    title={__("Media Library Color", "ninja-media")}
                 >
-                    <Description text="Set a custom accent color for the media library. Applies to active states, buttons, and highlights." />
+                    <Description
+                        text={__(
+                            "Set the primary accent color used throughout the media library interface.",
+                            "ninja-media",
+                        )}
+                    />
 
                     <BlockStack gap={5}>
                         <ColorPicker
@@ -151,7 +169,7 @@ const Display = () => {
                                 setColor(c);
 
                                 if (firstTime) {
-                                    saveSettings(
+                                    setSettings(
                                         "display.theme.firstTime",
                                         false,
                                     );
@@ -178,7 +196,7 @@ const Display = () => {
                                 setColor(c);
 
                                 if (firstTime) {
-                                    saveSettings(
+                                    setSettings(
                                         "display.theme.firstTime",
                                         false,
                                     );
@@ -190,11 +208,17 @@ const Display = () => {
             </Field>
 
             <Field
-                title="View Settings"
-                description="Adjust how files and folders are displayed in the media library."
-                docLink="https://plugininja.com"
+                title={__("View Settings", "ninja-media")}
+                description={__(
+                    "Adjust how many items appear per page, thumbnail sizes, and hover preview behavior.",
+                    "ninja-media",
+                )}
+                docLink={DOCS?.documentation?.main}
             >
-                <SettingsField background="extralight" title="Items per page">
+                <SettingsField
+                    background="extralight"
+                    title={__("Items per page", "ninja-media")}
+                >
                     <Slider
                         min={20}
                         max={500}
@@ -202,7 +226,7 @@ const Display = () => {
                         reset
                         value={perPage || 80}
                         onChange={(value) =>
-                            saveSettings(
+                            setSettings(
                                 "display.settings.perPage",
                                 Number(value),
                             )
@@ -211,53 +235,38 @@ const Display = () => {
                 </SettingsField>
 
                 <SettingsField
+                    statusProps={{
+                        isPro: true,
+                        ownUi: false,
+                    }}
                     background="extralight"
-                    title="Thumbnail sizes"
-                    description="Choose the thumbnail size used when displaying media files in the library grid."
-                    secondaryAction={
-                        <SelectBox
-                            size="small"
-                            style={{
-                                width: "150px",
-                            }}
-                            options={THUMBNAIL_SIZES}
-                            value={[thumbnailSize || "medium"]}
-                            onChange={(value) =>
-                                saveSettings(
-                                    "display.settings.thumbnailSize",
-                                    value[0] as "small" | "medium" | "large",
-                                )
-                            }
-                        />
-                    }
-                />
-
-                <SettingsField
-                    background="extralight"
-                    description="Show a quick preview panel with file details when you hover over a media item."
+                    description="Show file name, type, and size as a tooltip when hovering over a media item."
                     action={
                         <Switcher
-                            title="Show media details on hover"
+                            title={__(
+                                "Show media details on hover",
+                                "ninja-media",
+                            )}
+                            isPro={true}
                             checked={detailsHover}
-                            onChange={() =>
-                                saveSettings(
-                                    "display.settings.detailsHover",
-                                    !detailsHover,
-                                )
-                            }
+                            onChange={() => {
+                            }}
                         />
                     }
                 />
 
                 <SettingsField
                     background="extralight"
-                    description="Display a breadcrumb trail at the top of the media library to show your current folder path."
+                    description={__(
+                        "Show a clickable folder trail above the media grid so you can navigate back up through nested folders.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Breadcrumb navigation"
+                            title={__("Breadcrumb navigation", "ninja-media")}
                             checked={breadcrumbNavigation}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "display.settings.breadcrumbNavigation",
                                     !breadcrumbNavigation,
                                 )
@@ -273,50 +282,38 @@ const Display = () => {
 export default Display;
 
 const THEMES: {
-    key: "default" | "windows" | "google-drive" | "dropbox";
+    key: "default" | "bold" | "plugininja" | "awesome";
     title: string;
     icon: React.ReactNode;
     statusProps?: StatusProps;
 }[] = [
     {
         key: "default",
-        title: "Default",
+        title: __("Default", "ninja-media"),
         icon: <Default />,
     },
     {
-        key: "windows",
-        title: "Windows",
-        icon: <Windows />,
-        statusProps: {},
+        key: "bold",
+        title: __("Bold", "ninja-media"),
+        icon: <Bold />,
+        statusProps: {
+            isPro: true,
+        },
     },
     {
-        key: "google-drive",
-        title: "Google Drive",
-        icon: <GoogleDrive />,
-        statusProps: {},
+        key: "plugininja",
+        title: __("Plugininja", "ninja-media"),
+        icon: <Plugininja />,
+        statusProps: {
+            isPro: true,
+        },
     },
     {
-        key: "dropbox",
-        title: "Dropbox",
-        icon: <Dropbox />,
-        statusProps: {},
-    },
-];
-
-const THUMBNAIL_SIZES: {
-    name: string;
-    value: "small" | "medium" | "large";
-}[] = [
-    {
-        name: "Small",
-        value: "small",
-    },
-    {
-        name: "Medium",
-        value: "medium",
-    },
-    {
-        name: "Large",
-        value: "large",
+        key: "awesome",
+        title: __("Awesome", "ninja-media"),
+        icon: <Awesome />,
+        statusProps: {
+            isPro: true,
+        },
     },
 ];

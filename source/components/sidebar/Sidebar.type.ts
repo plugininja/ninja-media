@@ -1,3 +1,5 @@
+import { StatusProps } from "../status/Status.type";
+
 export interface SidebarContextType {
     collapsed: boolean;
 }
@@ -22,6 +24,7 @@ export interface SidebarItemProps {
     title: React.ReactNode;
     icon?: string;
     count?: number;
+    statusProps?: StatusProps;
     active?: boolean;
     onClick?: () => void;
 }
@@ -37,6 +40,7 @@ export interface SidebarBottomProps {
     trashCount?: number;
     trashActive?: boolean;
     helpCenter?: boolean;
+    isPro?: boolean;
     trashClick?: () => void;
     disabledTrash?: boolean;
 }

@@ -54,6 +54,7 @@ export default {
     ...defaultConfig,
 
     mode: "production",
+    devtool: false,
 
     entry: {
         ...jsEntries,
@@ -80,7 +81,7 @@ export default {
 
             return `${name}.js`;
         },
-        chunkFilename: "chunks/[name].chunk.js", // ✅ store shared code separately
+        chunkFilename: "chunks/[name].chunk.js",
         clean: true,
     },
 

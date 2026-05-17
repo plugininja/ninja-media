@@ -1,4 +1,5 @@
 import InlineStack from "~/components/inlineStack";
+import { Theme } from "~/types/settings/settings";
 import BlockStack from "~/components/blockStack";
 import SkeletonLoader from "./SkeletonLoader";
 import { useMemo } from "@wordpress/element";
@@ -9,7 +10,7 @@ const SkeletonFolder = ({
     style,
     className,
 }: {
-    theme?: "default" | "windows" | "google-drive" | "dropbox";
+    theme?: Theme;
     style?: React.CSSProperties;
     className?: string;
 }) => {

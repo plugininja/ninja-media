@@ -7,26 +7,31 @@
   "files": [
     "assets",
     "core",
+    "languages",
+    "freemius",
     "includes",
     "models",
     "index.php",
     "ninja-media.php",
-    "uninstall.php",
     "readme.txt"
   ],
   "scripts": {
     "dev-admin": "webpack serve --config webpack.dev.config.js",
     "build-admin": "webpack --config webpack.prod.config.js",
     "watch-assets": "wp-scripts start --config webpack.dev.config.js",
-    "watch-sass": "sass --watch source/assets/sass:assets/css --style=expanded",
+    "watch-sass": "node scripts/watch-css.js",
     "buildSass": "sass source/assets/sass:assets/css --style=compressed --no-source-map",
-    "buildPostcss": "postcss assets/css/**/*.css --replace --no-map",
+    "buildPostcss": "postcss \"assets/css/**/*.css\" --replace --no-map",
     "start": "concurrently \"npm:watch-*\"",
     "dev-hot": "concurrently \"npm:watch-sass\" \"npm:dev-admin\" ",
-    "clean-maps": "find . \\( -name \"*.map\" -o -name \".DS_Store\" \\) -type f -delete",
+    "clean-maps": "node scripts/clean-maps.js",
     "plugin-zip": "wp-scripts plugin-zip",
+    "strip-premium": "node scripts/strip-premium.js",
+    "zip:free": "node scripts/zip-free.js",
+    "build:free": "npm run buildSass && npm run buildPostcss && npm run build-admin && npm run clean-maps && npm run strip-premium && npm run zip:free",
     "build": "npm run buildSass && npm run buildPostcss && concurrently \"npm:build-*\" && npm run clean-maps",
-    "build:zip": "npm run build && npm run plugin-zip"
+    "build:zip": "npm run build && npm run clean-maps && npm run plugin-zip",
+    "build:premium-zip": "npm run buildSass && npm run buildPostcss && npm run build-admin && npm run clean-maps && npm run plugin-zip"
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.3.1",

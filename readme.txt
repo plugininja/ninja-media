@@ -1,100 +1,266 @@
-=== Ninja Media ===
-Contributors: plugininja, abdullaharham
-Tags: media library, media folders, file manager, media organizer, watermark
-Requires at least: 6.4
+=== Ninja Media - Media Library Folders ===
+Contributors: plugininja, abdullaharram
+Tags: media library, media folders, file manager, media organizer, svg support
+Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Organize your WordPress media library with folders, watermarks, replace media, SVG support, and advanced file management tools.
+Organize your WordPress media library with folders, drag-and-drop, SVG support, and bulk file management.
 
 == Description ==
 
-Ninja Media gives you full control over your WordPress media library. Create folders and sub-folders, drag and drop files to organize them, apply image watermarks automatically on upload, replace existing media without breaking links, and control who can access which folders.
+Ninja Media gives you full control over your WordPress media library. Create an unlimited folder tree, drag and drop files to organize them, search and paginate through thousands of files, and manage everything from a clean React-based interface without leaving WP-Admin.
 
-**Key Features**
+**Folder Management**
 
-* **Folders & Sub-folders** — Create an unlimited folder tree for your media library. Supports drag-and-drop file assignment.
-* **Post-Type Folders** — Organize posts, pages, and any custom post type into folders, not just attachments.
-* **Watermarks** — Automatically apply text or image watermarks to uploaded images. Control position, opacity, font, size, tiling, and more.
-* **Custom Watermark Fonts** — Upload your own TTF, OTF, WOFF, or WOFF2 font files for text watermarks.
-* **Replace Media** — Replace any attachment with a new file while preserving all post links and metadata.
-* **SVG Support** — Enable SVG uploads with built-in sanitization to keep your site safe.
-* **Bulk Selection** — Select multiple files at once for bulk move, delete, or folder assignment.
-* **Dynamic Folders** — Automatically group media by type, date, unused files, and more.
-* **Auto Organization** — Automatically assign uploaded media to the correct folder based on rules you define.
-* **Context Menu** — Right-click on any file or folder for quick actions.
-* **Undo Actions** — Undo recent file and folder operations.
-* **Breadcrumb Navigation** — Navigate deep folder trees easily with a breadcrumb trail.
-* **User Access Control** — Restrict folder access by user or role.
-* **Upload Size Control** — Set a custom maximum upload size from the plugin settings.
-* **REST API & WP-CLI Support** — Integrate with external tools via the REST API or manage the library from the command line.
+🔗 Official Website Link: [Official Website](https://plugininja.com/ninja-media)
+🔗 Join Our FB Community: [Plugininja Facebook Group](https://www.facebook.com/groups/plugininja)
+
+* Create, rename, and delete folders and unlimited sub-folders
+* Drag and drop files between folders
+* Move folders to any position in the tree
+* Sort folders by name, date, or custom order
+* Visual tree with breadcrumb navigation and expand/collapse
+* The Uncategorized view collects all files not yet assigned to a folder
+
+**Media Browser**
+
+* Browse media organized by folder with pagination (up to 200 files per page)
+* Search media and folders by name
+* Bulk-select files for batch operations
+* Context menu -- right-click any file or folder for quick actions
+
+**SVG Support**
+
+* SVG upload support
+* Automatic sanitization strips potentially harmful markup before saving
+
+**Upload & Image Controls**
+
+* Set a custom maximum upload file size, independent of the server default
+* Configure WordPress's large-image scaling threshold
+* Automatically generate all registered thumbnail sizes on upload
+
+**Settings**
+
+* Export and import your full configuration as a JSON file
+* Auto-save -- changes are saved automatically as you make them
+* Delete data on uninstall option (off by default; data is never deleted on deactivation)
+
+**Developer & Integration**
+
+* Full REST API for all folder and media operations
+* Filter and action hooks around every significant operation
+* Properly enqueued assets, nonces, capability checks, and sanitized I/O throughout
+
+**Pro Version**
+
+= WebP Conversion (Pro) =
+* Automatically convert JPEG and PNG uploads to WebP format
+* Reduces file size and improves page-load performance
+
+= Post-Type Folders (Pro) =
+* Organize posts, pages, and any public custom post type into their own independent folder trees
+* Works alongside the media folder system -- each post type has its own sidebar and folder tree
+* Assign posts to folders from the standard WordPress admin list screens
+* Supports third-party post types (Tutor LMS courses and more)
+* Control which post types show folder panels from the Settings screen
+
+= Download Folders as ZIP (Pro) =
+* Export any folder (or multiple folders) as a ZIP archive
+* Preserves original folder structure inside the archive
+* Download link is returned immediately for direct browser download
+
+= Replace Media (Pro) =
+* Swap any attachment with a new file
+* Preserves the original attachment ID, URL, metadata, folder assignments, and all post relationships -- existing links and embeds keep working
+
+= Watermarks (Pro) =
+* Apply text or image watermarks automatically on upload or in bulk to existing media
+* Text watermarks: choose font family (including custom uploaded fonts), size, color, bold/italic, rotation, and opacity; supports {site_name} placeholder
+* Image watermarks: set position, scale percentage, opacity, and tile pattern (horizontal/vertical spacing, diagonal)
+* Restore original files at any time from the built-in backup stored in /uploads/pnpnm-originals/
+* Apply to all registered thumbnail sizes, full size only, or a custom selection
+* Advanced conditions: filter by image dimensions, file size, allowed extensions, user role, and post type
+
+= Custom Watermark Fonts (Pro) =
+* Upload your own TTF, OTF, WOFF, or WOFF2 font files
+* Manage and delete uploaded fonts from the Watermark settings panel
+
+= Favorites (Pro) =
+* Star any media item to add it to your personal Favorites collection
+* Favorites are per-user and persist across sessions
+
+= Duplicate Media (Pro) =
+* Create an exact copy of any media file with a single click
+* Auto-generates a unique filename (filename-copy.ext, filename-copy-1.ext, etc.)
+* Carries over all post meta to the new attachment
+
+= Trash & Restore (Pro) =
+* Send media to a soft-delete Trash bin instead of deleting permanently
+* Browse all trashed files in the dedicated Trash view
+* Restore files to their original folder at any time
+* Permanently delete individual or all trashed files when ready
+
+= Unused Media Detection (Pro) =
+* Automatically identifies media files not referenced in any post or page
+* The Dedicated Unused Files view lists every orphaned attachment
+* Remove unused files in bulk, with an option to move them to Trash first
+
+= Dynamic Folders (Pro) =
+* Smart virtual folders that group media automatically by file type/extension
+* No manual sorting required -- files appear in their dynamic folder the moment they are uploaded
+
+= Theme Selection (Pro) =
+* Choose from four visual styles: Default, Bold, Plugininja, or Beautiful
+
+= Media Details on Hover (Pro) =
+* Show file name, type, and size as a tooltip when hovering over a media item in the grid
+
+= Show Folder ID (Pro) =
+* Display the numeric folder ID in the topbar and More menu for developer reference
+
+= Folder Color Picker (Pro) =
+* Assign a custom hex color to any folder for visual organization in the tree
+
+== Third Party / External Services ==
+
+This plugin uses Freemius (https://freemius.com) as its licensing and update management platform. Freemius may collect and transmit data to its servers in the following situations:
+
+**Free version:** When the plugin is activated, Freemius displays an optional opt-in dialog. If the site administrator opts in, the following data may be sent to Freemius servers:
+
+* Site URL and admin email address
+* WordPress version, PHP version, and server environment
+* Plugin version and activation status
+
+Opting in is not required to use the plugin. If you skip or decline, no data is sent.
+
+**Pro version:** When a Pro license is active, Freemius communicates with its servers to validate the license and check for updates. The following data is sent:
+
+* License key and activation status
+* Site URL
+* WordPress and plugin version
+* Freemius Website: https://freemius.com
+* Freemius Terms of Service: https://freemius.com/terms/
+* Freemius Privacy Policy: https://freemius.com/privacy/
+
+== Privacy Policy ==
+
+This plugin integrates Freemius for license management and optional usage tracking. If the site administrator opts in to sharing data during plugin activation, non-personal diagnostic information is transmitted to Freemius. No visitor or user data is ever collected.
+
+For full details, see the Third Party / External Services section above
+and the Freemius Privacy Policy at https://freemius.com/privacy/
 
 == Installation ==
 
 1. Upload the `ninja-media` folder to the `/wp-content/plugins/` directory, or install the plugin through the WordPress Plugins screen directly.
-2. Activate the plugin through the **Plugins** screen in WordPress.
-3. Go to Ninja Media** to start organizing your files.
-4. Configure watermarks, access control, and other options under **Settings → Ninja Media**.
+2. Activate the plugin through the Plugins screen in WordPress.
+3. Go to **Ninja Media > File Manager** in the admin sidebar to start organizing your files.
+4. Configure SVG support, upload limits, and other options under **Ninja Media > Settings**.
 
 == Frequently Asked Questions ==
 
-= Will this plugin affect my existing media files? =
+= Will activating the plugin affect my existing media files? =
 
 No. Activating the plugin does not move, rename, or alter any existing files. It adds an organizational layer on top of your existing media library.
 
+= Does it work with media that is already uploaded? =
+
+Yes. All existing attachments appear in the Uncategorized view immediately after activation. You can move them into folders at any time.
+
+= Can I apply watermarks to images I already uploaded? =
+
+Yes, via the bulk-apply tool in the Watermark settings panel. This is a Pro feature.
+
+= Does the Replace Media feature break existing links? =
+
+No. When you replace an attachment, the plugin preserves the original attachment ID, URL, and all post relationships. Your existing links and embeds continue to work unchanged. This is a Pro feature.
+
 = Is SVG upload safe? =
 
-The plugin includes built-in SVG sanitization that strips potentially dangerous markup before saving the file. Sanitization is enabled by default and can be configured in the General settings.
+The plugin includes built-in SVG sanitization that strips potentially dangerous markup (scripts, external references, event handlers) before saving the file. Sanitization is on by default.
 
 = What watermark font formats are supported? =
 
-TTF, OTF, WOFF, and WOFF2. You can also choose from several built-in fonts (Sans Serif, Serif, Monospace, DejaVu Sans).
+TTF, OTF, WOFF, and WOFF2. Several built-in system fonts (Sans Serif, Serif, Monospace, DejaVu Sans) are also available without uploading anything. Custom font upload is a Pro feature.
 
 = What happens to my data if I deactivate the plugin? =
 
-Deactivation does not remove any data. Your folders, settings, and media remain intact. Data is only removed if you choose to delete the plugin and have enabled the "Delete data on uninstall" option in Tools settings.
+Deactivation does not remove any data. Your folders, settings, and media assignments remain intact. Data is only removed if you delete the plugin and have enabled "Delete data on uninstall" in the Tools settings (this option is off by default).
+
+= Can I restore original images after applying a watermark? =
+
+Yes (Pro). The plugin stores a backup of the original file in /uploads/pnpnm-originals/ before applying a watermark. You can restore any image to its original state from the Watermark settings at any time.
+
+= What happens to trashed media? =
+
+Trashed media is soft-deleted -- it is hidden from normal views but not permanently removed. You can browse, restore, or permanently delete trashed items from the Trash view at any time. This is a Pro feature.
 
 = Is the plugin compatible with Multisite? =
 
-Multisite compatibility is planned. Single-site installs are fully supported.
+Yes, Multisite is fully supported.
+
+= Does this plugin work with Elementor, WooCommerce, or other page builders? =
+
+The media library integrates with the standard WordPress media picker used by all page builders. The Post-Type Folders feature (Pro) includes compatibility with Tutor LMS and is designed to support additional plugins over time.
 
 == Screenshots ==
 
-1. The main media library view with folder tree and file grid.
-2. Folder management — create, rename, and nest folders.
+1. The main File Manager -- folder tree sidebar and media grid.
+2. Creating and nesting folders with the context menu.
+3. Breadcrumb navigation inside a deep folder hierarchy.
+4. Watermark settings -- configure text or image watermarks (Pro).
+5. Replace media -- upload a replacement file for any attachment (Pro).
+6. Trash view -- browse and restore soft-deleted media (Pro).
+7. Post-Type Folders -- organize custom post types into folder trees (Pro).
+8. Plugin settings -- general, display, advanced, and tools panels.
 
 == Contributors ==
 
-This plugin is brought to you by:
+This plugin is developed and maintained by:
 
-* **Plugin Ninja** - Lead development and architecture
-* **Abdullah Arham** - Core development and feature implementation
+* Plugininja -- Lead development and architecture
+* Abdullah Arham -- Core development and feature implementation
 
-**Want to contribute?**
-
-Ninja Media is open source! Contributions are welcome on GitHub:
-https://github.com/plugininja/ninja-media
-
-Report bugs, suggest features, or submit pull requests to help make Ninja Media better for everyone.
+Contributions, bug reports, and feature suggestions are welcome on GitHub: https://github.com/plugininja/ninja-media
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1 - 2026-05-13 =
+* Fixes a post-type library container timing issue. Update recommended for all Pro users using Post-Type Folders.
+* Added: Favorites -- mark and filter media items per user. (Pro)
+* Added: Automatic thumbnail generation on upload.
+* Added: Text and image watermarks with custom font upload (Pro).
+* Added: Replace Media with link and ID preservation (Pro).
+* Added: Duplicate Media with unique filename generation (Pro).
+* Added: Trash and Restore for soft-delete media management (Pro).
+* Added: Unused media detection and bulk-remove tool (Pro).
+* Added: Dynamic Folders -- auto-group media by file type (Pro).
+* Added: WebP conversion on upload (Pro).
+* Added: Download folders as ZIP (Pro).
+* Added: Post-Type Folders for posts, pages, and custom post types (Pro).
+* Added: Theme selection -- Default, Bold, Plugininja, or Beautiful (Pro).
+* Added: Media details tooltip on hover (Pro).
+* Added: Folder color picker (Pro).
+* Added: Show Folder ID toggle (Pro).
+
+= 1.0.0 - 2026-05-10 =
 * Initial release.
 * Folder management for media library and custom post types.
-* Text and image watermarks with custom font upload.
-* Replace Media with link preservation.
 * SVG upload with sanitization.
 * Bulk selection and context menu.
-* Dynamic folders (by type, date, unused).
 * Auto organization rules.
-* User and role-based folder access control.
-* REST API and WP-CLI integration.
+* Upload size limit and large-image threshold controls.
+* Uncategorized view groups all media not assigned to any folder.
+* Settings panel with export/import and auto-save.
 
 == Upgrade Notice ==
 
+= 1.0.1 =
+Fixes a post-type library container timing issue. Update recommended for all Pro users using Post-Type Folders.
+
 = 1.0.0 =
-Initial release — no upgrade steps required.
+Initial release -- no upgrade steps required.

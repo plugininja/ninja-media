@@ -1,20 +1,20 @@
-import { selectFiles, setSelectedFiles } from "~/redux/features/files";
 import { useContextMenu } from "~/components/contextMenu/ContextMenu";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
-import { selectSettings } from "~/redux/features/settings";
 import SkeletonLoader from "~/components/skeletonLoader";
-import useFileActions from "~/hooks/useFileActions";
 import { formatFileSize } from "~/utils/functions";
 import InlineStack from "~/components/inlineStack";
+import { useViewDetails } from "./FileDetails";
+import useSettings from "~/hooks/useSettings";
 import { useParams } from "react-router-dom";
 import Checkbox from "~/components/checkbox";
 import FileLocations from "./FileLocations";
 import Avatar from "~/components/avatar";
 import { useDeleteFile } from "./Delete";
 import Button from "~/components/button";
+import useFile from "../hooks/useFile";
+import { __ } from "@wordpress/i18n";
 import Card from "~/components/card";
 import Text from "~/components/text";
-import { File } from "~/types/files";
+import { File } from "~/types/file";
 import clsx from "clsx";
 
 const FileLists = ({
@@ -24,23 +24,32 @@ const FileLists = ({
     loading: boolean;
     loadMore?: boolean;
 }) => {
-    const { data } = useAppSelector(selectSettings);
-    const { files, selectedFiles, hiddenFileIds, query, bulkSelect } =
-        useAppSelector(selectFiles);
-    const HEADER = ["NAME", "TYPE", "SIZE", "LOCATION", "DATE", "ACTION"];
+    const { data } = useSettings();
+    const { setFile, files, selectedFiles, hiddenFileIds, query, bulkSelect } =
+        useFile();
+    const HEADER = [
+        { key: "NAME", label: __("NAME", "ninja-media") },
+        { key: "TYPE", label: __("TYPE", "ninja-media") },
+        { key: "SIZE", label: __("SIZE", "ninja-media") },
+        { key: "LOCATION", label: __("LOCATION", "ninja-media") },
+        { key: "DATE", label: __("DATE", "ninja-media") },
+        { key: "ACTION", label: __("ACTION", "ninja-media") },
+    ];
     const FLEX_VALUES = ["5", "1.3", "1.3", "1.3", "1.5", "1.3"];
 
-    const { trashFile } = useFileActions();
+    const { openViewDetails } = useViewDetails();
     const { openDeleteFile } = useDeleteFile();
 
     const { menuKey } = useParams();
 
-    const dispatch = useAppDispatch();
-
     const { show } = useContextMenu();
 
     const handleSelect = (file: File) => {
-        if (!bulkSelect) return;
+        if (!bulkSelect) {
+            setFile("detailsFile", file);
+            openViewDetails();
+            return;
+        }
 
         const isExist = selectedFiles?.find((f) => f?.id === file?.id);
 
@@ -48,7 +57,7 @@ const FileLists = ({
             ? selectedFiles?.filter((f) => f?.id !== file?.id)
             : [...(selectedFiles ?? []), file];
 
-        dispatch(setSelectedFiles(newSelectedFiles));
+        setFile("selectedFiles", newSelectedFiles);
     };
 
     const enableTrash = data?.general?.files?.moveToTrash ?? false;
@@ -65,14 +74,14 @@ const FileLists = ({
                             "pnpnm-file-list-header--active",
                     )}
                 >
-                    {HEADER?.map((header, index) => (
+                    {HEADER?.map(({ key, label }, index) => (
                         <InlineStack
-                            key={header ?? index}
+                            key={key}
                             gap={10}
                             align={
-                                header === "NAME"
+                                key === "NAME"
                                     ? "start"
-                                    : header === "ACTION"
+                                    : key === "ACTION"
                                     ? "end"
                                     : "center"
                             }
@@ -87,7 +96,7 @@ const FileLists = ({
                                 wrap={false}
                                 ellipsis
                             >
-                                {header}
+                                {label}
                             </Text>
                         </InlineStack>
                     ))}
@@ -117,7 +126,7 @@ const FileLists = ({
                                 key={file?.id ?? index}
                                 data-file-id={file?.id}
                                 style={{
-                                    cursor: bulkSelect ? "pointer" : "default",
+                                    cursor: "pointer",
                                     opacity: bulkSelect
                                         ? isSelected
                                             ? 1
@@ -126,6 +135,10 @@ const FileLists = ({
                                 }}
                                 className="pnpnm-file-list-item"
                                 onClick={() => handleSelect(file)}
+                                onDoubleClick={() => {
+                                    setFile("detailsFile", file);
+                                    openViewDetails();
+                                }}
                                 onContextMenu={(e) => {
                                     e.preventDefault();
                                     show(
@@ -160,7 +173,7 @@ const FileLists = ({
                                         }}
                                     >
                                         <Avatar
-                                            src={file?.url}
+                                            src={`${file?.url}?v=${file?.updatedAt}`}
                                             alt={file?.name}
                                             width="100%"
                                             height="100%"
@@ -253,7 +266,14 @@ const FileLists = ({
                                             variant="error"
                                             size="supersmall"
                                             startIcon="recycling"
-                                            onClick={() => trashFile(ids)}
+                                            statusProps={{
+                                                isPro: true,
+                                                size: "extrasmall",
+                                                placement: "right-center",
+                                                right: 1,
+                                            }}
+                                            onClick={() => {
+                                            }}
                                         >
                                             Trash
                                         </Button>

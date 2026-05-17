@@ -1,64 +1,117 @@
-import { FILE_CONTEXT_MENU_LISTS } from "~/media-library/components/context/FileContext";
+import { FILE_CONTEXT_MENU_LISTS } from "~/media-library/context/FileContext";
 import { Item, Menu, Separator } from "~/components/contextMenu/ContextMenu";
-import { selectSettings } from "~/redux/features/settings";
-import { selectFiles } from "~/redux/features/files";
-import { useAppSelector } from "~/redux/hooks";
+import { FileContextMenu } from "~/types/file/file";
+import useSettings from "~/hooks/useSettings";
 import { useParams } from "react-router-dom";
+import Status from "~/components/status";
+import useFile from "../hooks/useFile";
 import Icon from "~/components/icon";
 import { __ } from "@wordpress/i18n";
 import Card from "~/components/card";
 import Text from "~/components/text";
-import { File } from "~/types/files";
+import { File } from "~/types/file";
 
 const FileContext = ({
     onMenuClick,
 }: {
-    onMenuClick: (key: string, files: File[]) => void;
+    onMenuClick: ({
+        key,
+        files,
+    }: {
+        key: FileContextMenu;
+        files: File[];
+    }) => void;
 }) => {
-    const { data } = useAppSelector(selectSettings);
-    const { view, bulkSelect } = useAppSelector(selectFiles);
+    const { data } = useSettings();
+    const { bulkSelect } = useFile();
     const { menuKey } = useParams();
 
     const enableTrash = data?.general?.files?.moveToTrash ?? false;
 
     return (
-        <Menu id="file-menu">
+        <Menu
+            id="file-menu"
+            style={{
+                width: "220px",
+            }}
+        >
             {({ props }) => {
-                const FILTERED_MENUS = [
-                    ...FILE_EXTRA_MENU_LISTS,
-                    ...FILE_CONTEXT_MENU_LISTS,
-                ]?.filter((item) => {
-                    if (item?.key === "trash") {
-                        return menuKey === "trash"
-                            ? false
-                            : enableTrash
-                            ? true
-                            : false;
-                    } else if (item?.key === "restore") {
-                        return menuKey === "trash" ? true : false;
-                    } else if (item?.key === "delete") {
-                        return !enableTrash
-                            ? true
-                            : menuKey === "trash"
-                            ? true
-                            : false;
-                    } else if (item?.key === "open") {
-                        return menuKey === "trash" || bulkSelect ? false : true;
-                    } else if (item?.key === "view") {
-                        return bulkSelect || view === "list" ? false : true;
-                    }
-                });
+                const FILTERED_MENUS = FILE_CONTEXT_MENU_LISTS?.filter(
+                    (item) => {
+                        if (item?.key === "open") {
+                            return menuKey === "trash" || bulkSelect
+                                ? false
+                                : true;
+                        } else if (item?.key === "view") {
+                            return bulkSelect ? false : true;
+                        } else if (item?.key === "get") {
+                            return bulkSelect ? false : true;
+                        } else if (item?.key === "edit") {
+                            return false;
+                        } else if (item?.key === "download") {
+                            return bulkSelect ? false : true;
+                        } else if (item?.key === "duplicate") {
+                            return menuKey === "trash" || bulkSelect
+                                ? false
+                                : true;
+                        } else if (item?.key === "replace") {
+                            return menuKey === "trash" || bulkSelect
+                                ? false
+                                : true;
+                        } else if (item?.key === "favorite") {
+                            return menuKey === "trash" || bulkSelect
+                                ? false
+                                : props?.files[0]?.isFavorite
+                                ? false
+                                : true;
+                        } else if (item?.key === "unfavorite") {
+                            return menuKey === "trash" || bulkSelect
+                                ? false
+                                : props?.files[0]?.isFavorite
+                                ? true
+                                : false;
+                        } else if (item?.key === "apply") {
+                            return false;
+                        } else if (item?.key === "remove") {
+                            return false;
+                        } else if (item?.key === "trash") {
+                            return menuKey === "trash"
+                                ? false
+                                : enableTrash
+                                ? true
+                                : false;
+                        } else if (item?.key === "restore") {
+                            return menuKey === "trash" ? true : false;
+                        } else if (item?.key === "delete") {
+                            return !enableTrash
+                                ? true
+                                : menuKey === "trash"
+                                ? true
+                                : false;
+                        }
+                    },
+                );
 
                 return FILTERED_MENUS?.map(
-                    ({ key, title, icon, className }, index) => {
+                    ({ key, title, icon, className, statusProps }, index) => {
                         return (
                             <div key={key ?? index}>
+                                {["trash", "delete"].includes(key) && (
+                                    <Separator />
+                                )}
+
                                 {["trash", "delete"].includes(key) ? (
                                     <Card
+                                        statusProps={{
+                                            isPro: key === "trash",
+                                            size: "extrasmall",
+                                            top: 7.5,
+                                            right: 7,
+                                        }}
                                         margin={
                                             key === "trash"
-                                                ? "10px 5px 5px 5px"
-                                                : 5
+                                                ? "5px 5px 5px 5px"
+                                                : "8px 5px 5px 5px"
                                         }
                                         padding={5}
                                         background="errorextralight"
@@ -74,7 +127,10 @@ const FileContext = ({
                                         }}
                                         className="hover-errorlight"
                                         onClick={() =>
-                                            onMenuClick(key, props?.files)
+                                            onMenuClick({
+                                                key,
+                                                files: props?.files,
+                                            })
                                         }
                                     >
                                         <Icon
@@ -94,25 +150,26 @@ const FileContext = ({
                                         </Text>
                                     </Card>
                                 ) : (
-                                    <Item
-                                        className={className}
-                                        onClick={() =>
-                                            onMenuClick(key, props?.files)
-                                        }
+                                    <Status
+                                        {...statusProps}
+                                        size="extrasmall"
+                                        placement="right-center"
+                                        right={5}
                                     >
-                                        <Icon name={icon} />
+                                        <Item
+                                            className={className}
+                                            onClick={() =>
+                                                onMenuClick({
+                                                    key,
+                                                    files: props?.files,
+                                                })
+                                            }
+                                        >
+                                            <Icon name={icon} />
 
-                                        {title}
-                                    </Item>
-                                )}
-
-                                {key === "restore" && (
-                                    <Separator
-                                        style={{
-                                            marginBottom:
-                                                key === "restore" ? 8 : 0,
-                                        }}
-                                    />
+                                            {title}
+                                        </Item>
+                                    </Status>
                                 )}
                             </div>
                         );
@@ -124,21 +181,3 @@ const FileContext = ({
 };
 
 export default FileContext;
-
-const FILE_EXTRA_MENU_LISTS: {
-    key: "view" | "open";
-    title: string;
-    icon: string;
-    className?: string;
-}[] = [
-    {
-        key: "view",
-        title: __("View details", "ninja-media"),
-        icon: "art_track",
-    },
-    {
-        key: "open",
-        title: __("Open in Media Library", "ninja-media"),
-        icon: "photo_library",
-    },
-];

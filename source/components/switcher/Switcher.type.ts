@@ -11,5 +11,6 @@ export interface SwitcherProps {
     ariaLabel?: string;
     loading?: boolean;
     disabled?: boolean;
+    isPro?: boolean;
     onChange?: (checked: boolean) => void;
 }

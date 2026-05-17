@@ -1,5 +1,5 @@
 import { CustomAlertProvider } from "~/components/alert/Alert.tsx";
-import Breadcrumb from "./components/breadcrumb/Breadcrumb.tsx";
+import Breadcrumb from "./breadcrumb/Breadcrumb.tsx";
 import { createRoot } from "@wordpress/element";
 import MainRoute from "~/routes/MainRoute.tsx";
 import { store } from "~/redux/store.ts";
@@ -38,7 +38,6 @@ class PNPNMMedia {
             this.$('.upload-php #posts-filter input[name="mode"][value="list"]')
                 .length
         ) {
-            // this.initTree();
         } else {
             if (this.pageType !== "upload-list") {
                 this.initFilter();
@@ -57,6 +56,13 @@ class PNPNMMedia {
 
                         if ($this.pageType !== "upload-list") {
                             $this.addAttachmentClass();
+                        }
+
+                        if (pnpnm.perPage && this.collection?.props) {
+                            this.collection.props.set(
+                                "posts_per_page",
+                                pnpnm.perPage,
+                            );
                         }
                     },
                 );
@@ -99,6 +105,38 @@ class PNPNMMedia {
             this.handleUploader();
             this.handleUploadStatus();
         }
+
+        if (pnpnm?.isElementor || typeof window.elementor !== "undefined") {
+            this.initElementorSupport();
+        }
+    }
+
+    initElementorSupport() {
+        const $this = this;
+
+        const attachHooks = () => {
+            if (wp?.media?.view?.AttachmentsBrowser) {
+                wp.media.view.AttachmentsBrowser.prototype.on(
+                    "ready",
+                    function () {
+                        $this.initTree();
+                    },
+                );
+            }
+
+            if (
+                wp?.media?.view?.AttachmentFilters &&
+                !wp.media.view.AttachmentFilters.pnpnm_media
+            ) {
+                $this.initFilter();
+            }
+        };
+
+        if (typeof window.elementor !== "undefined" && window.elementor.on) {
+            window.elementor.on("document:loaded", attachHooks);
+        }
+
+        attachHooks();
     }
 
     getFrame() {
@@ -113,8 +151,6 @@ class PNPNMMedia {
             : this.$(".upload-php .media-frame").first();
     }
 
-    // Filter the WP media library by an array of attachment IDs.
-    // Pass null to clear the filter (show all).
     filterByFolder(itemIds) {
         const frame = wp?.media?.frame;
 
@@ -128,7 +164,6 @@ class PNPNMMedia {
             if (itemIds === null) {
                 content.collection.props.unset("post__in");
             } else {
-                // [-1] means "show nothing" for an empty folder
                 content.collection.props.set({
                     post__in: itemIds.length ? itemIds : [-1],
                 });
@@ -150,14 +185,12 @@ class PNPNMMedia {
 
         if (windowWidth <= 900) return;
 
-        // For upload-grid view: remove hide-menu so sidebar becomes visible
         if (isUploadView && !isModalVisible) {
             if ($frame.hasClass("hide-menu") && windowWidth > 768) {
                 $frame.addClass("pnpnm-tree-view").removeClass("hide-menu");
             }
         }
 
-        // For modal / non-upload frames: also remove hide-menu
         if (!isUploadView || isModalVisible) {
             if ($frame.hasClass("hide-menu")) {
                 const placeholderText = $frame
@@ -169,14 +202,11 @@ class PNPNMMedia {
                     .attr("placeholder", placeholderText);
 
                 if (windowWidth > 768) {
-                    $frame
-                        .addClass("pnpnm-tree-view")
-                        .removeClass("hide-menu");
+                    $frame.addClass("pnpnm-tree-view").removeClass("hide-menu");
                 }
             }
         }
 
-        // Check if tree already exists inside the media-frame-menu
         const treeExists =
             $frame.find(".media-frame-menu .pnpnm-media-tree-wrap").length > 0;
 
@@ -310,6 +340,15 @@ class PNPNMMedia {
                     id: "pnpnm-media-folder-filter",
 
                     createFilters() {
+                        const defaultFilters = [
+                            "uncategorized",
+                            "dynamic",
+                            "favorites",
+                            "used",
+                            "unused",
+                            "trash",
+                        ];
+
                         const filtersMap = {};
                         const perPage = pnpnm.perPage || 60;
 
@@ -324,29 +363,22 @@ class PNPNMMedia {
                             },
                         };
 
-                        filtersMap.uncategorized = {
-                            text: wp.i18n.__("Uncategorized"),
-                            props: {
-                                folderId: "uncategorized",
-                                posts_per_page: perPage,
-                            },
-                        };
+                        defaultFilters.forEach((key) => {
+                            filtersMap[key] = {
+                                text: wp.i18n.__(
+                                    key
+                                        .replace(/_/g, " ")
+                                        .replace(/\b\w/g, (c) =>
+                                            c.toUpperCase(),
+                                        ),
+                                ),
 
-                        filtersMap.dynamic = {
-                            text: wp.i18n.__("Dynamic Folders"),
-                            props: {
-                                folderId: "dynamic",
-                                posts_per_page: perPage,
-                            },
-                        };
-
-                        filtersMap.trash = {
-                            text: wp.i18n.__("Trash"),
-                            props: {
-                                folderId: "trash",
-                                posts_per_page: perPage,
-                            },
-                        };
+                                props: {
+                                    folderId: key,
+                                    posts_per_page: perPage,
+                                },
+                            };
+                        });
 
                         folders.forEach((folder) => {
                             if (!folder?.id) return;
@@ -418,9 +450,7 @@ class PNPNMMedia {
         }
     }
 
-    addAttachmentClass() {
-        // TODO
-    }
+    addAttachmentClass() {}
 
     onModalOpen() {
         const OriginalModal = wp?.media?.view?.Modal;
@@ -431,6 +461,8 @@ class PNPNMMedia {
             wp.media.view.Modal = OriginalModal.extend({
                 open: function () {
                     OriginalModal.prototype.open.apply(this, arguments);
+
+                    setTimeout(() => $this.initTree(), 0);
 
                     const attachmentDetails = $this.$(".attachment-details");
 
@@ -476,8 +508,6 @@ class PNPNMMedia {
         if (typeof wp === "undefined" || !wp.Uploader) return;
         const $this = this;
 
-        // ── Temporarily relax post__in filter while files are queued so the
-        //    native upload progress bar renders inside the attachment browser.
         const origAdded = wp.Uploader.prototype.added;
 
         wp.Uploader.prototype.added = function (files) {
@@ -491,13 +521,9 @@ class PNPNMMedia {
                         content.collection.props.get("post__in");
                     content.collection.props.unset("post__in");
                 }
-            } catch (e) {
-                /* non-fatal */
-            }
+            } catch (e) {}
         };
 
-        // ── On successful upload: dispatch event so the React sidebar can
-        //    auto-assign the new attachment to the currently selected folder.
         const origSuccess = wp.Uploader.prototype.success;
 
         wp.Uploader.prototype.success = function (attachment) {
@@ -523,8 +549,6 @@ class PNPNMMedia {
             return;
         const $this = this;
 
-        // After all files in a batch finish, re-apply the folder filter
-        // (which now includes the newly uploaded IDs injected by the App).
         const OrigInline = wp.media.view.UploaderInline;
 
         wp.media.view.UploaderInline = OrigInline.extend({
@@ -536,7 +560,6 @@ class PNPNMMedia {
             success() {
                 if (typeof OrigInline.prototype.success === "function")
                     OrigInline.prototype.success.apply(this, arguments);
-                // Re-apply any paused filter once WP's uploader view is done
 
                 if ($this._pausedFilter) {
                     try {
@@ -547,9 +570,7 @@ class PNPNMMedia {
                                 post__in: $this._pausedFilter,
                             });
                         }
-                    } catch (e) {
-                        /* non-fatal */
-                    }
+                    } catch (e) {}
                     $this._pausedFilter = null;
                 }
             },

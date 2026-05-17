@@ -1,31 +1,35 @@
-import { FOLDER_OPTIONS } from "~/media-library/components/topbar/Sorting";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
-import { selectSettings } from "~/redux/features/settings";
 import { useNavigate, useParams } from "react-router-dom";
-import useFileActions from "~/hooks/useFileActions";
+import { FOLDER_OPTIONS } from "~/shared/topbar/Sorting";
+import { setQuery } from "~/redux/features/file/file";
+import useFileActions from "../hooks/useFileActions";
 import InlineStack from "~/components/inlineStack";
+import { useAppDispatch } from "~/redux/hooks";
 import SelectBox from "~/components/selectBox";
+import { __, sprintf } from "@wordpress/i18n";
+import useSettings from "~/hooks/useSettings";
 import Checkbox from "~/components/checkbox";
 import { useDeleteFile } from "./Delete";
 import Button from "~/components/button";
+import useFile from "../hooks/useFile";
 import Text from "~/components/text";
-import {
-    selectFiles,
-    setBulkSelect,
-    setLoadingType,
-    setQuery,
-    setSelectedFiles,
-    setView,
-} from "~/redux/features/files";
 
 const Header = () => {
-    const { data } = useAppSelector(selectSettings);
-    const { view, loadingType, files, selectedFiles, query, bulkSelect } =
-        useAppSelector(selectFiles);
+    const { data } = useSettings();
+    const {
+        setFile,
+        view,
+        loadingType,
+        files,
+        selectedFiles,
+        query,
+        bulkSelect,
+    } = useFile();
 
     const { menuKey, dynamicKey } = useParams();
 
-    const { trashFile, restoreFile } = useFileActions();
+    const {
+        restoreFile,
+    } = useFileActions();
 
     const { openDeleteFile } = useDeleteFile();
 
@@ -37,16 +41,16 @@ const Header = () => {
 
     const handleBulkSelect = () => {
         if (bulkSelect) {
-            dispatch(setSelectedFiles([]));
+            setFile("selectedFiles", []);
         }
-        dispatch(setBulkSelect(!bulkSelect));
+        setFile("bulkSelect", !bulkSelect);
     };
 
     const handleAllSelect = () => {
         if (selectedFiles?.length === files?.length) {
-            dispatch(setSelectedFiles([]));
+            setFile("selectedFiles", []);
         } else {
-            dispatch(setSelectedFiles(files));
+            setFile("selectedFiles", files);
         }
     };
 
@@ -55,15 +59,15 @@ const Header = () => {
     };
 
     const handleView = () => {
-        dispatch(setView(view === "grid" ? "list" : "grid"));
+        setFile("view", view === "grid" ? "list" : "grid");
     };
 
     const handleLoadingType = () => {
-        dispatch(
-            setLoadingType(
-                loadingType === "infinite" ? "pagination" : "infinite",
-            ),
+        setFile(
+            "loadingType",
+            loadingType === "infinite" ? "pagination" : "infinite",
         );
+
         if (loadingType === "infinite") {
             dispatch(setQuery({ page: 1 }));
         }
@@ -74,9 +78,6 @@ const Header = () => {
     };
 
     const handleTrash = () => {
-        const ids = selectedFiles?.map((f) => f?.id) ?? [];
-
-        trashFile(ids);
     };
 
     const handleRestore = () => {
@@ -110,7 +111,9 @@ const Header = () => {
         <InlineStack align="between" gap={10}>
             <InlineStack gap={10}>
                 <SelectBox
-                    prefix={<Text size="sm">Sort by:</Text>}
+                    prefix={
+                        <Text size="sm">{__("Sort by:", "ninja-media")}</Text>
+                    }
                     options={FOLDER_OPTIONS}
                     value={[query?.orderBy]}
                     onChange={(value) =>
@@ -133,7 +136,9 @@ const Header = () => {
                         })
                     }
                 >
-                    {query?.order === "ASC" ? "Ascending" : "Descending"}
+                    {query?.order === "ASC"
+                        ? __("Ascending", "ninja-media")
+                        : __("Descending", "ninja-media")}
                 </Button>
 
                 <Button
@@ -146,8 +151,8 @@ const Header = () => {
                     onClick={handleLoadingType}
                 >
                     {loadingType === "infinite"
-                        ? "Pagination"
-                        : "Infinite Scroll"}
+                        ? __("Pagination", "ninja-media")
+                        : __("Infinite Scroll", "ninja-media")}
                 </Button>
 
                 {showTrash && (
@@ -156,7 +161,7 @@ const Header = () => {
                         startIcon="recycling"
                         onClick={handleTrash}
                     >
-                        Trash
+                        {__("Trash", "ninja-media")}
                     </Button>
                 )}
 
@@ -166,7 +171,7 @@ const Header = () => {
                         startIcon="restore"
                         onClick={handleRestore}
                     >
-                        Restore
+                        {__("Restore", "ninja-media")}
                     </Button>
                 )}
 
@@ -176,7 +181,7 @@ const Header = () => {
                         startIcon="delete"
                         onClick={handleDelete}
                     >
-                        Delete
+                        {__("Delete", "ninja-media")}
                     </Button>
                 )}
 
@@ -186,7 +191,7 @@ const Header = () => {
                         startIcon="left_click"
                         onClick={handleReSelect}
                     >
-                        Re Select
+                        {__("Re Select", "ninja-media")}
                     </Button>
                 )}
             </InlineStack>
@@ -204,7 +209,9 @@ const Header = () => {
                             onChange={handleAllSelect}
                         />
 
-                        {isAllSelected ? "Deselect All" : "Select All"}
+                        {isAllSelected
+                            ? __("Deselect All", "ninja-media")
+                            : __("Select All", "ninja-media")}
                     </Button>
                 )}
 
@@ -220,8 +227,11 @@ const Header = () => {
                     />
 
                     {bulkSelect
-                        ? `Selected ${selectedFiles?.length}`
-                        : "Bulk Select"}
+                        ? sprintf(
+                              __("Selected %d", "ninja-media"),
+                              selectedFiles?.length,
+                          )
+                        : __("Bulk Select", "ninja-media")}
                 </Button>
 
                 <Button
@@ -229,7 +239,9 @@ const Header = () => {
                     startIcon={view === "grid" ? "dehaze" : "grid_view"}
                     onClick={handleView}
                 >
-                    {view === "grid" ? "List view" : "Grid view"}
+                    {view === "grid"
+                        ? __("List view", "ninja-media")
+                        : __("Grid view", "ninja-media")}
                 </Button>
             </InlineStack>
         </InlineStack>

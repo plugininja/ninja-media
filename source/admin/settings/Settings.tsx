@@ -1,4 +1,4 @@
-import { selectSettings } from "~/redux/features/settings";
+import PremiumCard from "~/components/status/PremiumCard";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import { SETTINGS_MENUS } from "~/constants/menus";
@@ -6,20 +6,20 @@ import ToggleTheme from "~/components/toggleTheme";
 import InlineStack from "~/components/inlineStack";
 import Advanced from "./pages/advanced/Advanced";
 import IconButton from "~/components/iconButton";
+import BlockStack from "~/components/blockStack";
 import { useEffect } from "@wordpress/element";
-import { useAppSelector } from "~/redux/hooks";
 import Display from "./pages/display/Display";
 import General from "./pages/general/General";
+import useSettings from "~/hooks/useSettings";
 import Sidebar from "~/components/sidebar";
 import Button from "~/components/button";
 import Topbar from "~/components/topbar";
 import Layout from "~/components/layout";
 import Tools from "./pages/tools/Tools";
-import useSave from "~/hooks/useSave";
 import Text from "~/components/text";
 
 const Settings = () => {
-    const { data } = useAppSelector(selectSettings);
+    const { data, isDataChanged, saveSettings } = useSettings();
     const [theme, setTheme] = useLocalStorage<"light" | "dark">(
         "pnpnm-theme-status",
         "light",
@@ -29,11 +29,9 @@ const Settings = () => {
 
     const navigate = useNavigate();
 
-    const { isDataChanged, saveSettingsData } = useSave();
-
     useEffect(() => {
         if (data?.tools?.autoSave && isDataChanged) {
-            saveSettingsData();
+            saveSettings();
         }
     }, [data?.tools?.autoSave, isDataChanged]);
 
@@ -62,7 +60,7 @@ const Settings = () => {
         <Button
             variant="primary"
             startIcon="check"
-            onClick={() => saveSettingsData()}
+            onClick={() => saveSettings()}
             disabled={!isDataChanged}
         >
             Save Settings
@@ -82,7 +80,7 @@ const Settings = () => {
 
     return (
         <Layout>
-            <Sidebar>
+            <Sidebar minWidth={300}>
                 <Sidebar.Menu>
                     {SETTINGS_MENUS?.map(({ key, title, icon }, index) => (
                         <Sidebar.Item
@@ -94,6 +92,16 @@ const Settings = () => {
                         />
                     ))}
                 </Sidebar.Menu>
+
+                {!pnpnm.isPro && (
+                    <BlockStack
+                        align="center"
+                        inlineAlign="center"
+                        className="h-full"
+                    >
+                        <PremiumCard />
+                    </BlockStack>
+                )}
 
                 <Sidebar.Bottom>
                     <Sidebar.HelpCenter />

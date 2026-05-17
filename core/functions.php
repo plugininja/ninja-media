@@ -2,12 +2,16 @@
 
 defined("ABSPATH") || exit("No direct script access allowed");
 
+function pnpnm_fs() {
+    return \Pninja\NM\pnpnm_fs();
+}
+
 if (!function_exists('pnpnmGetFolderTable')) {
     function pnpnmGetFolderTable(): array
     {
         global $wpdb;
         $charsetCollate = $wpdb->get_charset_collate();
-        $prefix         = $wpdb->prefix;
+        $prefix = $wpdb->prefix;
 
         $folders = [
             'folders' => "CREATE TABLE IF NOT EXISTS `{$prefix}pnpnm_folders` (
@@ -31,7 +35,9 @@ if (!function_exists('pnpnmGetFolderTable')) {
             ) $charsetCollate;",
         ];
 
-        return array_merge($folders, pnpnmGetFolderRelationshipTable());
+        $tables = array_merge($folders, pnpnmGetFolderRelationshipTable());
+
+        return $tables;
     }
 }
 
@@ -40,7 +46,7 @@ if (!function_exists('pnpnmGetFolderRelationshipTable')) {
     {
         global $wpdb;
         $charsetCollate = $wpdb->get_charset_collate();
-        $prefix         = $wpdb->prefix;
+        $prefix = $wpdb->prefix;
 
         return [
             'folder_relationships' => "CREATE TABLE IF NOT EXISTS `{$prefix}pnpnm_folder_relationships` (
@@ -63,37 +69,38 @@ if (!function_exists('pnpnmGetDefaultSettings')) {
             'general' => [
                 'folder' => [
                     'forceSorting'  => false,
-                    'showFolders'   => true,
-                    'showFolderId'  => false,
-                    'treeConnector' => false,
+                    'showFolders' => true,
+                    'showCount' => true,
+                    'treeConnector' => true,
+
                 ],
 
                 'files' => [
-                    'bulkSelection'     => true,
-                    'replaceMedia'      => false,
-                    'moveToTrash'       => true,
+                    'bulkSelection' => true,
                     'controlUploadSize' => false,
-                    'uploadSize'        => 300,
-                ],
+                    'uploadSize' => 300,
+                    'replaceMedia' => true,
+                    'duplicateMedia' => true,
+                    
+                    ],
 
                 'svgSupport' => [
                     'uploadSupport' => true,
-                    'sanitization'  => true,
+                    'sanitization' => true,
                 ]
             ],
 
             'display' => [
                 'theme' => [
-                    'theme'     => 'default',
-                    'color'     => '#4D49FC',
+                    'color' => '#4D49FC',
                     'firstTime' => true,
+
                 ],
 
                 'settings' => [
-                    'perPage'              => 80,
-                    'thumbnailSize'        => 'medium',
-                    'detailsHover'         => true,
+                    'perPage' => 80,
                     'breadcrumbNavigation' => true,
+
                 ]
             ],
 
@@ -104,16 +111,24 @@ if (!function_exists('pnpnmGetDefaultSettings')) {
                 ],
 
                 'organization' => [
-                    'dynamicFolders'     => true,
-                    'groupUncategorized' => true,
-                    'unused'             => true,
+                    'uncategorized' => true,
+                    'dynamicFolders' => true,
+                    'favorites' => true,
+                    'used' => true,
+                    'unused' => true,
+                ],
+
+                'imageProcessing' => [
+                    'thumbnailGenerator' => false,
+
                 ],
             ],
 
             'tools' => [
                 'deleteOnUninstall' => false,
-                'autoSave'          => false,
+                'autoSave' => false,
             ],
+
         ];
     }
 }
@@ -138,6 +153,16 @@ if (!function_exists('pnpnmUpdateSettings')) {
         $updated = array_merge($current, $settings);
 
         return update_option(PNPNM_OPTIONS_NAME, $updated);
+    }
+}
+
+if (!function_exists('pnpnmGetSupportedPostTypes')) {
+    function pnpnmGetSupportedPostTypes(): array
+    {
+        $postTypes = get_post_types(['public' => true], 'names');
+        unset($postTypes['attachment']);
+
+        return array_values($postTypes);
     }
 }
 

@@ -1,14 +1,15 @@
 <?php
 
-defined('ABSPATH') or exit('Direct access to this file is not allowed.');
+defined('ABSPATH') || exit('No direct script access allowed');
 
 /**
  * Plugin version information
  */
 define('PNPNM_DB_VERSION', '1.0.0');
 define('PNPNM_OPTIONS_VERSION', '1.0.0');
-define('PNPNM_VERSION', '1.0.0');
 define('PNPNM_PLUGIN_BASE', plugin_basename(PNPNM_FILE));
+
+define('PNPNM_VERSION', '1.0.1');
 
 /**
  * Plugin URLs
@@ -19,28 +20,19 @@ define('PNPNM_PLUGIN_URL', 'https://plugininja.com/ninja-media/');
 define('PNPNM_INCLUDES_URL', PNPNM_URL . 'includes');
 define('PNPNM_INTEGRATIONS_URL', PNPNM_INCLUDES_URL . '/Integrations');
 
-
 /**
  * Plugin directory paths
  */
 define('PNPNM_PATH', plugin_dir_path(PNPNM_FILE));
 define('PNPNM_INCLUDES', PNPNM_PATH . 'includes');
-define('PNPNM_INTEGRATIONS', PNPNM_INCLUDES . '/Integrations');
 define('PNPNM_MODELS', PNPNM_PATH . 'models');
-define('PNPNM_APP', PNPNM_PATH . 'app');
 define('PNPNM_UPDATES', PNPNM_INCLUDES . '/Updates');
-define('PNPNM_FONTS', PNPNM_INCLUDES . '/Fonts');
 
 /**
  * Plugin author information
  */
-define('PNPNM_AUTHOR', 'Pninja');
+define('PNPNM_AUTHOR', 'PluginInja');
 define('PNPNM_AUTHOR_URL', 'https://plugininja.com/');
-
-/**
- * Plugin capabilities and access
- */
-define('PNPNM_ACCESS_CAP', 'manage_pnpnm_files');
 
 /**
  * Plugin localization
@@ -59,7 +51,7 @@ define('PNPNM_SLUG', PNPNM_TEXTDOMAIN);
  * Plugin minimum requirements
  */
 define('PNPNM_PHP_VERSION', '7.4');
-define('PNPNM_WP_VERSION', '6.4');
+define('PNPNM_WP_VERSION', '6.2');
 
 /**
  * Plugin database

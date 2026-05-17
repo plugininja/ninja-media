@@ -2,10 +2,12 @@
 
 namespace Pninja\NM\Utils;
 
+use function in_array;
+use function intval;
 use function is_array;
 use function sprintf;
 
-defined('ABSPATH') || exit();
+defined('ABSPATH') || exit('No direct script access allowed');
 
 class Helpers
 {
@@ -99,13 +101,16 @@ class Helpers
 
     public static function getSettings()
     {
-        $settings = get_option(PNPNM_OPTIONS_NAME, false);
+        $defaultSettings = get_option(PNPNM_OPTIONS_NAME, false);
 
-        if (! $settings || ! is_array($settings)) {
-            return pnpnmGetDefaultSettings();
+        if (! $defaultSettings) {
+
+            $defaultSettings = pnpnmGetDefaultSettings();
+
+            update_option(PNPNM_OPTIONS_NAME, $defaultSettings);
         }
 
-        return $settings;
+        return $defaultSettings;
     }
 
     public static function getSetting($key = null, $defaultValue = null)
@@ -133,11 +138,9 @@ class Helpers
         return $settings[$key] ?? $defaultValue;
     }
 
-
     public static function updateSettings($data)
     {
         $data = self::sanitization($data);
-
         return update_option(PNPNM_OPTIONS_NAME, $data);
     }
 
@@ -146,7 +149,13 @@ class Helpers
         $sanitize_data = [];
 
         foreach ($data as $key => $value) {
-            if (is_string($value)) {
+            if (is_bool($value)) {
+                $sanitize_data[$key] = $value;
+            } elseif (is_int($value)) {
+                $sanitize_data[$key] = $value;
+            } elseif (is_float($value)) {
+                $sanitize_data[$key] = $value;
+            } elseif (is_string($value)) {
                 $sanitize_data[$key] = sanitize_text_field(wp_unslash($value));
             } elseif (is_array($value)) {
                 $sanitize_data[$key] = self::sanitize_nested_array($value);

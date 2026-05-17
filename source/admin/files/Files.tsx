@@ -1,34 +1,38 @@
-import { selectSettings } from "~/redux/features/settings";
+import PremiumCard from "~/components/status/PremiumCard";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 import FilesContainer from "./components/FilesContainer";
-import { selectFiles } from "~/redux/features/files";
 import ToggleTheme from "~/components/toggleTheme";
+import Upgrade from "~/components/status/Upgrade";
 import { FILES_MENUS } from "~/constants/menus";
 import { useEffect } from "@wordpress/element";
-import { useAppSelector } from "~/redux/hooks";
+import { useAppDispatch } from "~/redux/hooks";
 import Sidebar from "~/components/sidebar";
 import Layout from "~/components/layout";
 import Topbar from "~/components/topbar";
 import Search from "./components/Search";
 import Header from "./components/Header";
+import Button from "~/components/button";
+import { file } from "~/redux/api/file";
+import useFile from "./hooks/useFile";
+import { __ } from "@wordpress/i18n";
+import Icon from "~/components/icon";
+import clsx from "clsx";
 
 const Files = () => {
     const [theme, setTheme] = useLocalStorage<"light" | "dark">(
         "pnpnm-theme-status",
         "light",
     );
-    const { data } = useAppSelector(selectSettings);
-    const { count } = useAppSelector(selectFiles);
+    const { setFile, count, loading } = useFile();
 
     const { menuKey, dynamicKey } = useParams();
 
     const navigate = useNavigate();
 
-    const enableTrash =
-        data?.general?.files?.moveToTrash ??
-        pnpnm?.settings?.general?.files?.moveToTrash ??
-        false;
+    const dispatch = useAppDispatch();
+
+    const enableTrash = pnpnm?.settings?.general?.files?.moveToTrash ?? false;
 
     useEffect(() => {
         if (menuKey === "trash" && !enableTrash) {
@@ -41,6 +45,27 @@ const Files = () => {
     };
 
     const search = <Search />;
+
+    const refresh = (
+        <Button
+            variant="primary"
+            onClick={() => {
+                if (loading) return;
+
+                setFile("loading", true);
+                setFile("query.page", 1);
+                dispatch(file.util.invalidateTags(["Files"]));
+            }}
+        >
+            <Icon
+                name="refresh"
+                color="pure"
+                fontSize="lg"
+                className={clsx(loading && "loading")}
+            />
+            {__("Refresh", "advanced-media-library")}
+        </Button>
+    );
 
     const themeButton = <ToggleTheme theme={theme} setTheme={setTheme} />;
 
@@ -64,12 +89,15 @@ const Files = () => {
                     ))}
                 </Sidebar.Menu>
 
+                {!pnpnm.isPro && (
+                    <PremiumCard compact style={{ marginTop: 10 }} />
+                )}
+
                 <Sidebar.Bottom
                     trash
                     trashCount={count?.trash}
                     trashActive={menuKey === "trash"}
                     trashClick={() => {
-                        navigate("/files/trash");
                     }}
                     disabledTrash={!enableTrash}
                 >
@@ -77,7 +105,6 @@ const Files = () => {
                         active={menuKey === "trash"}
                         count={count?.trash}
                         onClick={() => {
-                            navigate("/files/trash");
                         }}
                         disabled={!enableTrash}
                     />
@@ -87,12 +114,27 @@ const Files = () => {
             </Sidebar>
 
             <Layout.Wrapper>
-                <Topbar leftContents={[search]} rightContents={[themeButton]} />
+                <Topbar
+                    leftContents={[search]}
+                    rightContents={[themeButton, refresh]}
+                />
 
                 <Layout.Content>
-                    <Header />
+                    {pnpnm?.isPro ? (
+                        <>
+                            <Header />
 
-                    <FilesContainer />
+                            <FilesContainer />
+                        </>
+                    ) : ["all", "uncategorized"].includes(menuKey!) ? (
+                        <>
+                            <Header />
+
+                            <FilesContainer />
+                        </>
+                    ) : (
+                        <Upgrade />
+                    )}
                 </Layout.Content>
             </Layout.Wrapper>
         </Layout>

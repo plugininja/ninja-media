@@ -1,4 +1,4 @@
-import { Dashboard } from "./dashboard";
+import { Settings } from "./settings/settings";
 
 declare global {
     const pnpnm: {
@@ -11,17 +11,20 @@ declare global {
         isPlain: boolean;
         nonce: string;
         pagenow: string;
-        defaultSettings: Dashboard;
-        settings: Dashboard;
+        isPro: boolean;
+        defaultSettings: Settings;
+        settings: Settings;
         maxUploadSize: number;
         perPage: number;
+        supportedPostTypes: string[];
+        currentPostType: string;
+        currentPostFolder: number | null;
     };
 
     interface Window {
         pnpnm: typeof pnpnm;
         wp: any;
         pnpnmMedia: any;
-        openUpgradePopUp: () => void;
         pnpnmAdjustSidebarWidth?: (width: number) => void;
     }
 }

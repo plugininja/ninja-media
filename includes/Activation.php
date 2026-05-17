@@ -8,18 +8,31 @@ defined('ABSPATH') || exit('No direct script access allowed');
 
 class Activation
 {
-    public static function init()
+    public static function init( bool $network_wide = false ): void
+    {
+        if ( is_multisite() && $network_wide ) {
+            $sites = get_sites( [ 'fields' => 'ids', 'number' => 0 ] );
+            foreach ( $sites as $blog_id ) {
+                switch_to_blog( $blog_id );
+                self::activateSite();
+                restore_current_blog();
+            }
+        } else {
+            self::activateSite();
+        }
+    }
+
+    public static function activateSite(): void
     {
         Helpers::checkPluginRequirements();
         $update = Update::getInstance();
 
-        if ($update->isUpdateAvailable()) {
+        if ( $update->isUpdateAvailable() ) {
             $update->performUpdates();
         } else {
             self::setDefaultTable();
             self::setDefaultData();
             self::setDefaultSettings();
-            self::setCustomCap();
         }
     }
 
@@ -67,14 +80,6 @@ class Activation
     {
         if (!get_option(PNPNM_OPTIONS_NAME, false)) {
             update_option(PNPNM_OPTIONS_NAME, pnpnmGetDefaultSettings());
-        }
-    }
-
-    private static function setCustomCap()
-    {
-        $role = get_role('administrator');
-        if (!empty($role)) {
-            $role->add_cap(PNPNM_ACCESS_CAP);
         }
     }
 

@@ -1,20 +1,19 @@
-import { selectSettings, settingsInit } from "~/redux/features/settings";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
+import { settingsInit } from "~/redux/features/settings/settings";
 import { useCustomAlert } from "~/components/alert/Alert";
 import PageContainer from "~/components/pageContainer";
 import SettingsField from "~/components/settingsField";
+import { Settings } from "~/types/settings/settings";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "~/redux/hooks";
+import { __, sprintf } from "@wordpress/i18n";
+import useSettings from "~/hooks/useSettings";
 import Switcher from "~/components/switcher";
-import { Settings } from "~/types/settings";
 import Button from "~/components/button";
 import Field from "~/components/field";
-import useSave from "~/hooks/useSave";
-import { __ } from "@wordpress/i18n";
+import DOCS from "~/constants/docs";
 
 const Tools = () => {
-    const { defaultData, data } = useAppSelector(selectSettings);
-
-    const { saveSettings, saveSettingsData } = useSave();
+    const { defaultData, data, setSettings, saveSettings } = useSettings();
 
     const dispatch = useAppDispatch();
 
@@ -81,7 +80,7 @@ const Tools = () => {
                 const importedData = JSON.parse(result);
 
                 if (importedData) {
-                    saveSettingsData(importedData);
+                    saveSettings(importedData);
 
                     dispatch(
                         settingsInit({
@@ -109,15 +108,18 @@ const Tools = () => {
     const handleReset = () => {
         showAlert({
             type: "error",
-            title: "Reset Settings",
-            text: "Are you sure you want to reset all settings?",
+            title: __("Reset Settings", "ninja-media"),
+            text: __(
+                "Are you sure you want to reset all settings?",
+                "ninja-media",
+            ),
             showCancelButton: true,
-            confirmButtonText: "Reset",
+            confirmButtonText: __("Reset", "ninja-media"),
             onConfirm: async () => {
                 try {
                     if (!defaultData) return;
 
-                    await saveSettingsData(defaultData);
+                    await saveSettings(defaultData);
 
                     dispatch(
                         settingsInit({
@@ -141,7 +143,8 @@ const Tools = () => {
                         toast: true,
                         type: "error",
                         text:
-                            error?.data?.message || "Failed to reset settings!",
+                            error?.data?.message ||
+                            __("Failed to reset settings!", "ninja-media"),
                         timer: 3000,
                         timerProgressBar: true,
                         showConfirmButton: false,
@@ -154,19 +157,28 @@ const Tools = () => {
     return (
         <PageContainer>
             <Field
-                title="Cleanup Tools"
-                description="Manage plugin data and control what happens when the plugin is removed."
-                docLink="https://plugininja.com"
+                title={__("Cleanup Tools", "ninja-media")}
+                description={__(
+                    "Manage what happens to plugin data when the plugin is deactivated or uninstalled.",
+                    "ninja-media",
+                )}
+                docLink={DOCS?.documentation?.main}
             >
                 <SettingsField
                     background="extralight"
-                    description="Remove all folders, settings, and plugin data from the database when the plugin is uninstalled. This action cannot be undone."
+                    description={__(
+                        "Permanently remove all plugin data — folders, settings, and database tables — when the plugin is uninstalled.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Delete plugin data on uninstall"
+                            title={__(
+                                "Delete plugin data on uninstall",
+                                "ninja-media",
+                            )}
                             checked={deleteOnUninstall}
                             onChange={() =>
-                                saveSettings(
+                                setSettings(
                                     "tools.deleteOnUninstall",
                                     !deleteOnUninstall,
                                 )
@@ -177,19 +189,25 @@ const Tools = () => {
             </Field>
 
             <Field
-                title="Backup & Restore"
-                description="Export your settings to a file or import them from a previous backup."
-                docLink="https://plugininja.com"
+                title={__("Backup & Restore", "ninja-media")}
+                description={__(
+                    "Export your settings to a file, import a saved configuration, or reset everything back to defaults.",
+                    "ninja-media",
+                )}
+                docLink={DOCS?.documentation?.main}
             >
                 <SettingsField
                     background="extralight"
-                    description="Automatically save settings as you make changes, without needing to click a save button."
+                    description={__(
+                        "Automatically save setting changes as you make them, without needing to click the Save button.",
+                        "ninja-media",
+                    )}
                     action={
                         <Switcher
-                            title="Enable Auto Save"
+                            title={__("Enable Auto Save", "ninja-media")}
                             checked={autoSave}
                             onChange={() =>
-                                saveSettings("tools.autoSave", !autoSave)
+                                setSettings("tools.autoSave", !autoSave)
                             }
                         />
                     }
@@ -197,8 +215,11 @@ const Tools = () => {
 
                 <SettingsField
                     background="extralight"
-                    title="Export Data"
-                    description="Download all plugin settings as a JSON file you can use to restore or migrate to another site."
+                    title={__("Export Data:", "ninja-media")}
+                    description={__(
+                        "Download all current plugin settings as a JSON file. Use this to back up your configuration or transfer it to another site.",
+                        "ninja-media",
+                    )}
                     secondaryAction={
                         <Button
                             variant="primary"
@@ -206,15 +227,18 @@ const Tools = () => {
                             startIcon="output_circle"
                             onClick={handleExport}
                         >
-                            Export
+                            {__("Export", "ninja-media")}
                         </Button>
                     }
                 />
 
                 <SettingsField
                     background="extralight"
-                    title="Import Data"
-                    description="Upload a previously exported JSON file to restore settings. This will overwrite your current configuration."
+                    title={__("Import Data:", "ninja-media")}
+                    description={__(
+                        "Select the exported JSON file you would like to import. Please note that the import will replace the current data.",
+                        "ninja-media",
+                    )}
                     secondaryAction={
                         <>
                             <input
@@ -230,7 +254,7 @@ const Tools = () => {
                                 startIcon="input_circle"
                                 onClick={handleImport}
                             >
-                                Import
+                                {__("Import", "ninja-media")}
                             </Button>
                         </>
                     }
@@ -238,8 +262,11 @@ const Tools = () => {
 
                 <SettingsField
                     background="extralight"
-                    title="Reset Settings"
-                    description="Restore all settings to their default values. This cannot be undone."
+                    title={__("Reset Settings", "ninja-media")}
+                    description={__(
+                        "Restore all plugin settings to their original default values. This cannot be undone.",
+                        "ninja-media",
+                    )}
                     secondaryAction={
                         <Button
                             variant="error"
@@ -247,7 +274,7 @@ const Tools = () => {
                             startIcon="autorenew"
                             onClick={handleReset}
                         >
-                            Reset
+                            {__("Reset", "ninja-media")}
                         </Button>
                     }
                 />

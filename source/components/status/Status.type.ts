@@ -4,10 +4,12 @@ export interface StatusProps {
     id?: string;
     style?: React.CSSProperties;
     className?: string;
+    isPro?: boolean;
     isComingSoon?: boolean;
     isHot?: boolean;
     isNew?: boolean;
     isBeta?: boolean;
+    ownUi?: boolean;
     placement?:
         | "center"
         | "right-center"
@@ -20,6 +22,7 @@ export interface StatusProps {
     left?: number | string;
     right?: number | string;
     tooltipPlacement?: "top" | "bottom" | "left" | "right" | "auto";
+    tooltipDisabled?: boolean;
     size?: Size;
     widthFull?: boolean;
     ignore?: boolean;
@@ -27,8 +30,8 @@ export interface StatusProps {
 }
 
 export type StatusConfig = {
-    key: "comingsoon" | "hot" | "new" | "beta";
-    variant: "warning" | "error" | "new" | "light";
+    key: "pro" | "comingsoon" | "hot" | "new" | "beta";
+    variant: "pro" | "warning" | "error" | "new" | "light";
     title: string;
     icon: string;
     iconColor: TextColor;

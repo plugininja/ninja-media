@@ -4,6 +4,7 @@ export interface DisabledProps {
     className?: string;
     depend?: boolean;
     dependOn?: string;
+    dependOnExact?: boolean;
     gap?: number;
     children?: React.ReactNode;
 }

@@ -2,10 +2,12 @@
 
 namespace Pninja\NM\API;
 
-use Pninja\NM\API\Controllers\MediaLibrary;
-use Pninja\NM\API\Controllers\ReplaceMedia;
 use Pninja\NM\API\Controllers\Settings;
+use Pninja\NM\API\Controllers\MediaLibrary;
+use Pninja\NM\API\Controllers\Tools;
 use Pninja\NM\Utils\Singleton;
+
+use function Pninja\NM\pnpnm_fs;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
@@ -16,24 +18,19 @@ class ApiRegistry
 
     public function __construct()
     {
-        $this->doHooks();
-    }
-
-    public function doHooks()
-    {
-        add_action('rest_api_init', [$this, 'registerRoutes']);
         $this->register_controllers();
+        add_action('rest_api_init', [$this, 'registerRoutes']);
     }
 
     private function register_controllers(): void
     {
         $this->controllers = [
-            'settings'           => new Settings(),
-            'media-library'      => new MediaLibrary(),
-            'replace-media'      => new ReplaceMedia(),
+            'settings'      => new Settings(),
+            'media-library' => new MediaLibrary(),
+            'tools'         => new Tools(),
         ];
+            
     }
-
 
     public function registerRoutes(): void
     {

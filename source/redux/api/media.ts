@@ -1,19 +1,16 @@
-import { ServerResponse } from "~/types/states";
-import { Folder } from "~/types/media";
+import { ServerResponse } from "~/types/response";
+import { Folder } from "~/types/folder";
 import { baseApi } from "./base";
 import {
     AssignFileResponse,
     CreateFolderResponse,
     DeleteFileResponse,
-    DownloadFolderResponse,
     GetBreadcrumbsResponse,
     GetFolderResponse,
     GetFoldersResponse,
-    ReplaceMediaResponse,
     RestoreFileResponse,
-    TrashFileResponse,
     UpdateFolderResponse,
-} from "~/types/response";
+} from "~/types/media/response";
 
 export const media = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -175,16 +172,17 @@ export const media = baseApi.injectEndpoints({
             },
         }),
 
-        downloadFolder: builder.mutation<
-            ServerResponse<DownloadFolderResponse>,
-            { ids: (string | number)[] }
+        deleteFolder: builder.mutation<
+            ServerResponse<{ allFiles: number; uncategorized: number }>,
+            { ids: (string | number)[]; isMediaDelete?: boolean }
         >({
-            query: ({ ids }) => {
+            query: ({ ids, isMediaDelete }) => {
                 return {
-                    url: `media-library/folder/download`,
-                    method: "GET",
-                    params: {
+                    url: `media-library/folder`,
+                    method: "DELETE",
+                    body: {
                         ids,
+                        isMediaDelete,
                     },
                 };
             },
@@ -200,36 +198,6 @@ export const media = baseApi.injectEndpoints({
                     method: "POST",
                     body: {
                         attachments,
-                    },
-                };
-            },
-        }),
-
-        deleteFolder: builder.mutation<
-            ServerResponse<{ uncategorized: number }>,
-            { ids: (string | number)[] }
-        >({
-            query: ({ ids }) => {
-                return {
-                    url: `media-library/folder`,
-                    method: "DELETE",
-                    body: {
-                        ids,
-                    },
-                };
-            },
-        }),
-
-        trashFile: builder.mutation<
-            ServerResponse<TrashFileResponse>,
-            { ids: (string | number)[] }
-        >({
-            query: ({ ids }) => {
-                return {
-                    url: `media-library/trash`,
-                    method: "POST",
-                    body: {
-                        ids,
                     },
                 };
             },
@@ -256,7 +224,7 @@ export const media = baseApi.injectEndpoints({
         >({
             query: ({ ids }) => {
                 return {
-                    url: `media-library/trash`,
+                    url: `media-library/delete`,
                     method: "DELETE",
                     body: {
                         ids,
@@ -265,17 +233,6 @@ export const media = baseApi.injectEndpoints({
             },
         }),
 
-        replaceMedia: builder.mutation<
-            ReplaceMediaResponse,
-            { id: number; formData: FormData }
-        >({
-            query: ({ id, formData }) => ({
-                url: `replace-media/${id}`,
-                method: "POST",
-                body: formData,
-                formData: true,
-            }),
-        }),
     }),
 });
 
@@ -287,11 +244,8 @@ export const {
     useUpdateFolderMutation,
     useCopyFolderMutation,
     useMoveFolderMutation,
-    useDownloadFolderMutation,
     useAssignFileMutation,
     useDeleteFolderMutation,
-    useTrashFileMutation,
     useRestoreFileMutation,
     useDeleteFileMutation,
-    useReplaceMediaMutation,
 } = media;

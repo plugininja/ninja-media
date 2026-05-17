@@ -35,6 +35,8 @@ export interface InputProps
     readOnly?: boolean;
     required?: boolean;
     spellCheck?: boolean;
+    debounce?: boolean;
+    debounceTime?: number;
     color?: TextColor;
     size?: Size;
     borderStyle?: BorderStyle;

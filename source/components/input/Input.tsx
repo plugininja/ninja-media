@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "@wordpress/element";
+import { forwardRef, useEffect, useRef, useState } from "@wordpress/element";
 import { InputProps } from "./Input.type";
 import { __ } from "@wordpress/i18n";
 import Icon from "../icon";
@@ -30,6 +30,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         readOnly = false,
         required = false,
         spellCheck = false,
+        debounce = false,
+        debounceTime = 300,
         color = "light",
         size = "medium",
         borderStyle = "solid",
@@ -58,6 +60,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
     const [internalValue, setInternalValue] = useState(controlledValue);
 
+    const debounceRef = useRef<number | null>(null);
+
     useEffect(() => {
         setInternalValue(controlledValue);
     }, [controlledValue]);
@@ -65,8 +69,31 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
         setInternalValue(newValue);
-        onChange?.(type === "number" ? Number(newValue) || 0 : newValue);
+
+        const parsedValue =
+            type === "number" ? Number(newValue) || 0 : newValue;
+
+        if (!debounce) {
+            onChange?.(parsedValue);
+            return;
+        }
+
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
+        debounceRef.current = window.setTimeout(() => {
+            onChange?.(parsedValue);
+        }, debounceTime);
     };
+
+    useEffect(() => {
+        return () => {
+            if (debounceRef.current) {
+                clearTimeout(debounceRef.current);
+            }
+        };
+    }, []);
 
     const handleBlur = () => {
         onBlur?.(

@@ -77,24 +77,35 @@ const ColorPicker: ColorPickerComponent = ({
 
             if (full) {
                 setColor(full);
-                onChange?.(full);
             }
         }
-    }, [inputValue, onChange]);
+    }, [inputValue]);
 
     const isValid = isValidCssColor(formatColorInput(inputValue));
 
     const handleColorBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (statusProps?.isPro && !pnpnm?.isPro) return;
+
         setColor(e.target.value);
         setInputValue(e.target.value);
         onChange?.(e.target.value);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (statusProps?.isPro && !pnpnm?.isPro) return;
+
         setInputValue(e.target.value);
+
+        const formatted = formatColorInput(e.target.value);
+        if (isValidCssColor(formatted)) {
+            const full = toFullHexColor(formatted);
+            if (full) onChange?.(full);
+        }
     };
 
     const handleClear = () => {
+        if (statusProps?.isPro && !pnpnm?.isPro) return;
+
         setColor(resolvedDefault);
         setInputValue(resolvedDefault);
         onChange?.(resolvedDefault);
@@ -120,6 +131,7 @@ const ColorPicker: ColorPickerComponent = ({
                         value={color}
                         onChange={handleColorBoxChange}
                         className="pn-color-picker__wrapper-picker-box"
+                        disabled={statusProps?.isPro && !pnpnm?.isPro}
                     />
                 </Status>
 
@@ -133,6 +145,7 @@ const ColorPicker: ColorPickerComponent = ({
                             "pn-color-picker__wrapper-picker-input",
                             !isValid && "error",
                         )}
+                        disabled={statusProps?.isPro && !pnpnm?.isPro}
                     />
                 </Status>
             </div>

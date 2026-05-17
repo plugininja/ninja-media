@@ -1,4 +1,5 @@
 import { SkeletonLoaderProps } from "./SkeletonLoader.type";
+import SkeletonBreadcrumb from "./SkeletonBreadcrumb";
 import SkeletonFolder from "./SkeletonFolder";
 import type { CSSProperties } from "react";
 import SkeletonFile from "./SkeletonFile";
@@ -33,5 +34,7 @@ const SkeletonLoader = ({
 SkeletonLoader.SkeletonFolder = SkeletonFolder;
 
 SkeletonLoader.SkeletonFile = SkeletonFile;
+
+SkeletonLoader.SkeletonBreadcrumb = SkeletonBreadcrumb;
 
 export default SkeletonLoader;

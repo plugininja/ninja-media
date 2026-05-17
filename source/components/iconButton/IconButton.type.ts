@@ -17,7 +17,8 @@ export type ButtonVariant =
     | "white"
     | "warning"
     | "error"
-    | "link";
+    | "link"
+    | "transparent";
 
 export interface IconButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement> {

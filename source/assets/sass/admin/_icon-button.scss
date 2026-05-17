@@ -147,6 +147,16 @@ $icon-button-sizes: (
             }
         }
 
+        &.pn-icon-button--transparent {
+            color: $primary;
+            background: none;
+            border: none;
+
+            &:focus {
+                background-color: transparent;
+            }
+        }
+
         &.pn-icon-button--disabled {
             cursor: not-allowed;
             opacity: 0.6;

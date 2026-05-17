@@ -18,24 +18,30 @@ class Admin
 
         $showFolders = Helpers::getSetting('general.folder.showFolders', false);
         if ($showFolders) {
-            add_action('admin_bar_menu', [$this, 'adminBarMenu'], 10);
+            add_action('admin_bar_menu', [$this, 'adminBarMenu'], 100);
         }
     }
 
-    private static function subMenuPages(): array
-    {
-        return [
+    private static function subMenuPages(): array {
+        $pages = [
             [
-                'id'   => 'advanced_media_library_settings',
+                'id'   => 'ninja_media_settings',
                 'menu' => __('Settings', 'ninja-media'),
                 'slug' => PNPNM_SLUG . '#/settings/general',
             ],
             [
-                'id'   => 'advanced_media_library',
+                'id'   => 'ninja_media_watermark',
+                'menu' => __('Watermark', 'ninja-media'),
+                'slug' => PNPNM_SLUG . '#/watermark/text',
+            ],
+            [
+                'id'   => 'ninja_media',
                 'menu' => __('File Manager', 'ninja-media'),
                 'slug' => PNPNM_SLUG . '#/files/all',
             ],
         ];
+
+        return $pages;
     }
 
     public function adminMenu()
@@ -60,8 +66,66 @@ class Admin
         echo '<div id="pnpnm-admin" class="pnpnm-admin pnpnm-top-level-wrapper"></div>';
     }
 
-    private static function addMenuPage($menu, $slug)
+    public function renderPostTypeLibraryContainer__premium_only(): void
     {
+        $screen = get_current_screen();
+
+        if (!$screen) {
+            return;
+        }
+
+        $postType = $this->resolveScreenPostType__premium_only($screen);
+
+        if (empty($postType) || !in_array($postType, $this->getEnabledPostTypes__premium_only(), true)) {
+            return;
+        }
+
+        $script = sprintf(
+            '(function() {
+                var wpbodyContent = document.getElementById("wpbody");
+                if (wpbodyContent) {
+                    var container = document.createElement("div");
+                    container.id = "pnpnm-post-type-library";
+                    container.className = "pnpnm-post-type-wrapper";
+                    container.setAttribute("data-post-type", %s);
+                    wpbodyContent.insertBefore(container, wpbodyContent.firstChild);
+                }
+            })();',
+            wp_json_encode($postType)
+        );
+
+        wp_add_inline_script('pnpnm-post-types', $script, 'before');
+    }
+
+    private function resolveScreenPostType__premium_only(\WP_Screen $screen): string
+    {
+        $postType = in_array($screen->base, ['edit', 'post'], true) ? $screen->post_type : '';
+
+        return (string) apply_filters('pnpnm_screen_post_type', $postType, $screen);
+    }
+
+    private function getEnabledPostTypes__premium_only(): array
+    {
+        $setting = get_option(PNPNM_OPTIONS_NAME, []);
+        $types   = $setting['general']['folder']['postTypeFolders'] ?? [];
+
+        return is_array($types) ? array_values(array_filter(array_map('sanitize_key', $types))) : [];
+    }
+
+    public function resolveThirdPartyScreenPostType__premium_only(string $postType, \WP_Screen $screen): string
+    {
+        if (!empty($postType)) {
+            return $postType;
+        }
+
+        $map = [
+            'toplevel_page_tutor' => 'courses',  // Tutor LMS
+        ];
+
+        return $map[$screen->id] ?? $postType;
+    }
+
+    private static function addMenuPage($menu, $slug) {
         add_menu_page(
             __('Ninja Media', 'ninja-media'),
             __('Ninja Media', 'ninja-media'),
@@ -75,8 +139,7 @@ class Admin
         remove_submenu_page(PNPNM_SLUG, PNPNM_SLUG);
     }
 
-    private static function addSubMenuPage($menu, $slug)
-    {
+    private static function addSubMenuPage($menu, $slug) {
         add_submenu_page(
             PNPNM_SLUG,
             $menu,
@@ -93,7 +156,6 @@ class Admin
             return;
         }
 
-        // Root node
         $this->addAdminBarMenuItem($wp_admin_bar, [
             'id'    => 'pnpnm-root',
             'title' => __('Media Library', 'ninja-media'),

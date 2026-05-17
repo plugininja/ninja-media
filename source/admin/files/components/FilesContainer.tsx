@@ -1,50 +1,38 @@
-import { FileQueryParams, useGetFilesQuery } from "~/redux/api/files";
+import { FileQueryParams, useGetFilesQuery } from "~/redux/api/file";
 import { useCallback, useEffect, useRef } from "@wordpress/element";
 import { MenuProvider } from "~/components/contextMenu/ContextMenu";
-import { useAppDispatch, useAppSelector } from "~/redux/hooks";
-import { useInfiniteScroll } from "~/hooks/useInfiniteScroll";
+import { appendFiles, setQuery } from "~/redux/features/file/file";
+import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import SkeletonLoader from "~/components/skeletonLoader";
-import { useDragSelect } from "~/hooks/useDragSelect";
-import useFileActions from "~/hooks/useFileActions";
+import { useDragSelect } from "../hooks/useDragSelect";
+import useFileContext from "../hooks/useFileContext";
 import InlineStack from "~/components/inlineStack";
 import { PAGE_OPTIONS } from "~/constants/files";
 import BlockStack from "~/components/blockStack";
-import { File as FileType } from "~/types/files";
+import { File as FileType } from "~/types/file";
+import { useAppDispatch } from "~/redux/hooks";
+import NotFound from "~/assets/icons/NotFound";
 import SelectBox from "~/components/selectBox";
 import GridStack from "~/components/gridStack";
 import { useParams } from "react-router-dom";
-import DynamicFiles from "./DynamicFiles";
-import { useDeleteFile } from "./Delete";
-import FileDetails from "./FileDetails";
 import FileContext from "./FileContext";
+import useFile from "../hooks/useFile";
 import Pagination from "./Pagination";
 import Text from "~/components/text";
 import FileLists from "./FileLists";
 import File from "./File";
-import {
-    appendFiles,
-    selectFiles,
-    setCount,
-    setDetailsFile,
-    setDynamicFolders,
-    setFiles,
-    setHasMore,
-    setQuery,
-    setSelectedFiles,
-    setTotalPages,
-} from "~/redux/features/files";
 
 const FilesContainer = () => {
     const {
+        setFile,
         view,
         loadingType,
         files,
         selectedFiles,
-        detailsFile,
         query,
         hasMore,
         bulkSelect,
-    } = useAppSelector(selectFiles);
+    } = useFile();
 
     const { menuKey, dynamicKey } = useParams();
     const isFirstLoad = useRef(true);
@@ -69,30 +57,32 @@ const FilesContainer = () => {
                 search: "",
             }),
         );
-        dispatch(setSelectedFiles([]));
+        setFile("selectedFiles", []);
     }, [menuKey, dynamicKey, loadingType]);
 
     const {
         data: fetchedFiles,
         isLoading,
         isFetching,
-    } = useGetFilesQuery(finalQuery as FileQueryParams);
+    } = useGetFilesQuery(finalQuery as FileQueryParams, {
+        skip: !["all", "uncategorized"].includes(menuKey!) && !pnpnm?.isPro,
+    });
 
-    const { trashFile, restoreFile } = useFileActions();
-
-    const { openDeleteFile } = useDeleteFile();
+    const handleFileContext = useFileContext();
 
     const containerRef = useRef<HTMLDivElement>(null);
 
     const {
         allFiles,
         uncategorized,
+        dynamicFolders,
+        favorites,
+        used,
         unused,
         trash,
         files: responseFiles,
         page: currentPage,
         totalPages,
-        dynamicFolders,
     } = fetchedFiles?.data || {};
 
     const isFirstPage = query.page === 1;
@@ -103,7 +93,7 @@ const FilesContainer = () => {
         if (!responseFiles) return;
 
         if (isFirstPage || isPagination) {
-            dispatch(setFiles(responseFiles));
+            setFile("files", responseFiles);
         } else {
             dispatch(appendFiles(responseFiles));
         }
@@ -113,19 +103,26 @@ const FilesContainer = () => {
                 ? dynamicFolders[dynamicKey] ?? 0
                 : Object.keys(dynamicFolders ?? {}).length;
 
-        dispatch(
-            setCount({
-                all: allFiles ?? 0,
-                uncategorized: uncategorized ?? 0,
-                dynamic: dynamicCount,
-                unused: unused ?? 0,
-                trash: trash ?? 0,
-            }),
-        );
-        dispatch(setDynamicFolders(dynamicFolders ?? {}));
-        dispatch(setTotalPages(totalPages ?? 1));
-        dispatch(setHasMore(query?.page < (totalPages ?? 1)));
+        setFile("count", {
+            all: allFiles ?? 0,
+            uncategorized: uncategorized ?? 0,
+            dynamic: dynamicCount,
+            favorites: favorites ?? 0,
+            used: used ?? 0,
+            unused: unused ?? 0,
+            trash: trash ?? 0,
+        });
+
+        setFile("dynamicFolders", dynamicFolders ?? {});
+        setFile("totalPages", totalPages ?? 1);
+        setFile("hasMore", query?.page < (totalPages ?? 1));
     }, [fetchedFiles]);
+
+    useEffect(() => {
+        if (!isFetching) {
+            setFile("loading", false);
+        }
+    }, [isFetching]);
 
     const handleLoadMore = useCallback(() => {
         dispatch(setQuery({ page: query.page + 1 }));
@@ -145,7 +142,7 @@ const FilesContainer = () => {
                 ...selectedFiles,
                 ...draggedFiles.filter((f) => !existingIds.has(String(f.id))),
             ];
-            dispatch(setSelectedFiles(merged));
+            setFile("selectedFiles", merged);
         },
         [selectedFiles],
     );
@@ -157,39 +154,9 @@ const FilesContainer = () => {
         isEnabled: bulkSelect,
     });
 
-    const handleFileMenuClick = (key: string, menuFiles: FileType[]) => {
-        const ids = menuFiles?.map((f) => f?.id) ?? [];
-        switch (key) {
-            case "open":
-                window.open(
-                    `${pnpnm?.siteUrl}/wp-admin/upload.php?item=${ids[0]}`,
-                    "_blank",
-                );
-                break;
-            case "view":
-                dispatch(setDetailsFile(menuFiles[0]));
-                break;
-            case "trash":
-                trashFile(ids);
-                break;
-            case "restore":
-                restoreFile(ids);
-                break;
-            case "delete":
-                openDeleteFile(ids);
-                break;
-            default:
-                break;
-        }
-    };
-
     const showInitialLoading =
         (isLoading || isFetching) && (isFirstPage || isPagination);
     const showLoadMoreSkeleton = isFetching && !isFirstPage && !isPagination;
-
-    if (menuKey === "dynamic" && !dynamicKey) {
-        return <DynamicFiles loading={isLoading || isFetching} />;
-    }
 
     return (
         <MenuProvider>
@@ -199,50 +166,32 @@ const FilesContainer = () => {
                     position: "relative",
                     marginTop: 20,
                     userSelect: "none",
-                    display:
-                        view === "grid" &&
-                        detailsFile &&
-                        files?.find((file) => file?.id === detailsFile?.id) &&
-                        !bulkSelect
-                            ? "flex"
-                            : "block",
-                    alignItems: "start",
-                    gap: 20,
-                    flex: 1,
                 }}
                 onMouseDown={handleMouseDown}
             >
                 {view === "grid" ? (
-                    <>
-                        <GridStack
-                            gap={15}
-                            columns="auto-fill"
-                            min="180px"
-                            className="flex-1"
-                        >
-                            {showInitialLoading ? (
-                                <SkeletonLoader.SkeletonFile
-                                    length={query?.perPage}
-                                />
-                            ) : (
-                                files?.map((file) => (
-                                    <File key={file?.id} file={file} />
-                                ))
-                            )}
+                    <GridStack
+                        gap={15}
+                        columns="auto-fill"
+                        min="180px"
+                        className="flex-1"
+                    >
+                        {showInitialLoading ? (
+                            <SkeletonLoader.SkeletonFile
+                                length={query?.perPage}
+                            />
+                        ) : (
+                            files?.map((file) => (
+                                <File key={file?.id} file={file} />
+                            ))
+                        )}
 
-                            {showLoadMoreSkeleton && (
-                                <SkeletonLoader.SkeletonFile
-                                    length={query?.perPage}
-                                />
-                            )}
-                        </GridStack>
-
-                        {detailsFile &&
-                            files?.find(
-                                (file) => file?.id === detailsFile?.id,
-                            ) &&
-                            !bulkSelect && <FileDetails />}
-                    </>
+                        {showLoadMoreSkeleton && (
+                            <SkeletonLoader.SkeletonFile
+                                length={query?.perPage}
+                            />
+                        )}
+                    </GridStack>
                 ) : (
                     <FileLists
                         loading={showInitialLoading}
@@ -259,13 +208,15 @@ const FilesContainer = () => {
                             marginTop: "50px",
                         }}
                     >
+                        <NotFound />
+
                         <Text size="xl" weight="semibold" align="center">
                             No media found
                         </Text>
 
                         <Text size="sm" align="center">
-                            Try adjusting your search or filter to find what
-                            you're looking for.
+                            Try adjusting your search or filter or refreshing to
+                            find what you're looking for.
                         </Text>
                     </BlockStack>
                 )}
@@ -277,7 +228,7 @@ const FilesContainer = () => {
                     />
                 )}
 
-                <FileContext onMenuClick={handleFileMenuClick} />
+                <FileContext onMenuClick={handleFileContext} />
 
                 {dragBox && (
                     <div
@@ -306,7 +257,7 @@ const FilesContainer = () => {
                         <SelectBox
                             placement="top"
                             options={PAGE_OPTIONS}
-                            value={[query?.perPage?.toString() || "30"]}
+                            value={[query?.perPage?.toString() || "80"]}
                             onChange={(value) =>
                                 dispatch(
                                     setQuery({ perPage: Number(value[0]) }),

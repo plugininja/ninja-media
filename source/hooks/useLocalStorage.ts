@@ -1,32 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useState } from "@wordpress/element";
 import { useEventListener } from "./useEventListener";
 import type { Dispatch, SetStateAction } from "react";
 
-/**
- * Configuration options for the useLocalStorage hook.
- * @template T - The type of the value to store.
- */
 type UseLocalStorageOptions<T> = {
-    /** Custom serializer function to convert value to string. Defaults to JSON.stringify. */
     serializer?: (value: T) => string;
-    /** Custom deserializer function to convert string to value. Defaults to JSON.parse. */
     deserializer?: (value: string) => T;
-    /** Whether to initialize with value from localStorage on mount. Defaults to true. */
     initializeWithValue?: boolean;
-    /** Error handler function called when localStorage operations fail. */
     onError?: (error: Error, key: string) => void;
 };
 
-/**
- * Hook to manage a value in localStorage with optional serialization and deserialization.
- *
- * @template T - The type of the value to store.
- * @param {string} key - The key to store the value under in localStorage.
- * @param {T | (() => T)} [initialValue] - The initial value or a function to compute it.
- * @param {UseLocalStorageOptions<T>} [options] - Optional configuration for serialization, deserialization, and initialization.
- * @returns {[T, Dispatch<SetStateAction<T>>, () => void]} - The stored value, a setter function, and a remover function.
- */
 export function useLocalStorage<T>(
     key: string,
     initialValue: T | (() => T) = undefined as T,
@@ -81,7 +63,6 @@ export function useLocalStorage<T>(
         return getInitialValue();
     });
 
-    /** Function to update localStorage and state with error handling. */
     const setValue: Dispatch<SetStateAction<T>> = useCallback(
         (value) => {
             if (!isLocalStorageAvailable()) {
@@ -106,7 +87,6 @@ export function useLocalStorage<T>(
         [key, storedValue, serializer, onError, isLocalStorageAvailable],
     );
 
-    /** Function to remove value from localStorage and reset state to initial value. */
     const removeValue = useCallback(() => {
         if (isLocalStorageAvailable()) {
             window.localStorage.removeItem(key);
@@ -115,7 +95,6 @@ export function useLocalStorage<T>(
         setStoredValue(getInitialValue());
     }, [key, isLocalStorageAvailable, getInitialValue]);
 
-    /** Handle storage events from other tabs/windows when our key changes. */
     const handleStorageChange = useCallback(
         (event: StorageEvent) => {
             if (event.key === key) {
@@ -125,7 +104,6 @@ export function useLocalStorage<T>(
         [key, readValueFromStorage],
     );
 
-    /** Listen for storage changes from other tabs/windows using the custom hook. */
     useEventListener(
         "storage",
         handleStorageChange,
