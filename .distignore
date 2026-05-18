@@ -1,0 +1,55 @@
+# Development files
+package.json
+package-lock.json
+composer.json
+composer.lock
+tsconfig.json
+webpack.dev.config.js
+webpack.prod.config.js
+postcss.autoprefixer.js
+postcss.config-sass.js
+
+# Documentation and instructions
+AGENTS.md
+CLAUDE.md
+.editorconfig
+.eslintrc
+.stylelintrc.json
+
+# Source files (built output is in assets/)
+source/
+
+# Node modules and vendor
+node_modules/
+vendor/
+
+# Tests
+tests/
+phpunit.xml
+phpunit.xml.dist
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Build artifacts
+*.map
+.cache/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

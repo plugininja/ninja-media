@@ -1,0 +1,3 @@
+# Exclude source maps from plugin-zip (npm-packlist respects .npmignore even when files[] is set)
+**/*.map
+**/.DS_Store

@@ -1,10 +1,10 @@
 === Ninja Media - Media Library Folders ===
-Contributors: plugininja, abdullaharram
+Contributors: plugininja, abdullaharham
 Tags: media library, media folders, file manager, media organizer, svg support
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,16 +12,16 @@ Organize your WordPress media library with folders, drag-and-drop, SVG support, 
 
 == Description ==
 
-Ninja Media gives you full control over your WordPress media library. Create an unlimited folder tree, drag and drop files to organize them, search and paginate through thousands of files, and manage everything from a clean React-based interface without leaving WP-Admin.
+Ninja Media is a Media Library Folder Management Plugin. It gives you the power to create an unlimited folder tree, drag and drop files to organize them, search and paginate through thousands of files, and manage everything from your traditional media library, not need to jump anywhere.
 
 **Folder Management**
 
 🔗 Official Website Link: [Official Website](https://plugininja.com/ninja-media)
 🔗 Join Our FB Community: [Plugininja Facebook Group](https://www.facebook.com/groups/plugininja)
 
-* Create, rename, and delete folders and unlimited sub-folders
-* Drag and drop files between folders
-* Move folders to any position in the tree
+* Create, rename, and organize folders in Media Library.
+* Drag and drop files between folders.
+* Move folders to any position in the tree.
 * Sort folders by name, date, or custom order
 * Visual tree with breadcrumb navigation and expand/collapse
 * The Uncategorized view collects all files not yet assigned to a folder
@@ -48,7 +48,6 @@ Ninja Media gives you full control over your WordPress media library. Create an 
 
 * Export and import your full configuration as a JSON file
 * Auto-save -- changes are saved automatically as you make them
-* Delete data on uninstall option (off by default; data is never deleted on deactivation)
 
 **Developer & Integration**
 
@@ -171,33 +170,13 @@ No. Activating the plugin does not move, rename, or alter any existing files. It
 
 Yes. All existing attachments appear in the Uncategorized view immediately after activation. You can move them into folders at any time.
 
-= Can I apply watermarks to images I already uploaded? =
-
-Yes, via the bulk-apply tool in the Watermark settings panel. This is a Pro feature.
-
-= Does the Replace Media feature break existing links? =
-
-No. When you replace an attachment, the plugin preserves the original attachment ID, URL, and all post relationships. Your existing links and embeds continue to work unchanged. This is a Pro feature.
-
 = Is SVG upload safe? =
 
 The plugin includes built-in SVG sanitization that strips potentially dangerous markup (scripts, external references, event handlers) before saving the file. Sanitization is on by default.
 
-= What watermark font formats are supported? =
-
-TTF, OTF, WOFF, and WOFF2. Several built-in system fonts (Sans Serif, Serif, Monospace, DejaVu Sans) are also available without uploading anything. Custom font upload is a Pro feature.
-
 = What happens to my data if I deactivate the plugin? =
 
 Deactivation does not remove any data. Your folders, settings, and media assignments remain intact. Data is only removed if you delete the plugin and have enabled "Delete data on uninstall" in the Tools settings (this option is off by default).
-
-= Can I restore original images after applying a watermark? =
-
-Yes (Pro). The plugin stores a backup of the original file in /uploads/pnpnm-originals/ before applying a watermark. You can restore any image to its original state from the Watermark settings at any time.
-
-= What happens to trashed media? =
-
-Trashed media is soft-deleted -- it is hidden from normal views but not permanently removed. You can browse, restore, or permanently delete trashed items from the Trash view at any time. This is a Pro feature.
 
 = Is the plugin compatible with Multisite? =
 
@@ -205,18 +184,27 @@ Yes, Multisite is fully supported.
 
 = Does this plugin work with Elementor, WooCommerce, or other page builders? =
 
-The media library integrates with the standard WordPress media picker used by all page builders. The Post-Type Folders feature (Pro) includes compatibility with Tutor LMS and is designed to support additional plugins over time.
+Yes, this plugin works with Elementor, WooCommerce, and others.
 
-== Screenshots ==
+= Can I apply watermarks to images I already uploaded? (Pro) =
 
-1. The main File Manager -- folder tree sidebar and media grid.
-2. Creating and nesting folders with the context menu.
-3. Breadcrumb navigation inside a deep folder hierarchy.
-4. Watermark settings -- configure text or image watermarks (Pro).
-5. Replace media -- upload a replacement file for any attachment (Pro).
-6. Trash view -- browse and restore soft-deleted media (Pro).
-7. Post-Type Folders -- organize custom post types into folder trees (Pro).
-8. Plugin settings -- general, display, advanced, and tools panels.
+Yes, via the bulk-apply tool in the Watermark settings panel. This is a Pro feature.
+
+= Does the Replace Media feature break existing links? (Pro) =
+
+No. When you replace an attachment, the plugin preserves the original attachment ID, URL, and all post relationships. Your existing links and embeds continue to work unchanged.
+
+= What watermark font formats are supported? (Pro) =
+
+TTF, OTF, WOFF, and WOFF2. Several built-in system fonts (Sans Serif, Serif, Monospace, DejaVu Sans) are also available without uploading anything. Custom font upload is a Pro feature.
+
+= Can I restore original images after applying a watermark? (Pro) =
+
+Yes. The plugin stores a backup of the original file in /uploads/pnpnm-originals/ before applying a watermark. You can restore any image to its original state from the Watermark settings at any time.
+
+= What happens to trashed media? (Pro) =
+
+Trashed media is soft-deleted -- it is hidden from normal views but not permanently removed. You can browse, restore, or permanently delete trashed items from the Trash view at any time.
 
 == Contributors ==
 
@@ -229,7 +217,12 @@ Contributions, bug reports, and feature suggestions are welcome on GitHub: https
 
 == Changelog ==
 
-= 1.0.1 - 2026-05-13 =
+= 1.0.2 - 2026-05-18 =
+* Fixed: Gutenberg and Classic editor sidebar issue
+* Fixed: Tutor LMS sidebar issue
+* Fixed: Elementor Sidebar responsive issue
+
+= 1.0.1 - 2026-05-17 =
 * Fixes a post-type library container timing issue. Update recommended for all Pro users using Post-Type Folders.
 * Added: Favorites -- mark and filter media items per user. (Pro)
 * Added: Automatic thumbnail generation on upload.
@@ -259,8 +252,8 @@ Contributions, bug reports, and feature suggestions are welcome on GitHub: https
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-Fixes a post-type library container timing issue. Update recommended for all Pro users using Post-Type Folders.
+= 1.0.2 =
+Fixes Gutenberg, Classic editor, Elementor sidebar, and Tutor LMS sidebar issues. Update recommended for all users.
 
 = 1.0.0 =
 Initial release -- no upgrade steps required.

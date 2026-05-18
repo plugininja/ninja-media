@@ -52,6 +52,14 @@ class PNPNMMedia {
                 wp.media.view.AttachmentsBrowser.prototype.on(
                     "ready",
                     function () {
+                        const frameState = this.controller?._state;
+                        if (
+                            frameState === "image-details" ||
+                            frameState === "edit-image"
+                        ) {
+                            return;
+                        }
+
                         $this.initTree();
 
                         if ($this.pageType !== "upload-list") {
@@ -461,6 +469,14 @@ class PNPNMMedia {
             wp.media.view.Modal = OriginalModal.extend({
                 open: function () {
                     OriginalModal.prototype.open.apply(this, arguments);
+
+                    const frameState = this.controller?._state;
+                    if (
+                        frameState === "image-details" ||
+                        frameState === "edit-image"
+                    ) {
+                        return;
+                    }
 
                     setTimeout(() => $this.initTree(), 0);
 

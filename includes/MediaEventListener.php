@@ -49,21 +49,6 @@ class MediaEventListener
         add_action('deleted_post_meta', [$this, 'onMetaDeleted'], 10, 3);
     }
 
-    public function addFavoriteStatus__premium_only(array $response, \WP_Post $attachment): array
-    {
-        $meta_key               = '_pnpnm_favorite_' . get_current_user_id();
-        $response['isFavorite'] = '1' === get_post_meta($attachment->ID, $meta_key, true);
-
-        return $response;
-    }
-
-    public function addWatermarkStatus__premium_only(array $response, \WP_Post $attachment): array
-    {
-        $response['isWatermarked'] = '1' === get_post_meta($attachment->ID, '_pnpnm_watermarked', true);
-
-        return $response;
-    }
-
     public function onMetaUpdatedOrAdded(int $metaId, int $objectId, string $metaKey): void
     {
         $hook = current_filter();

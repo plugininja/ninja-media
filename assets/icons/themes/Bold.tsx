@@ -183,7 +183,7 @@ const Bold = () => {
                     height="27.1875"
                 >
                     <div
-                        xmlns="http://www.w3.org/1999/xhtml"
+                        {...{ xmlns: "http://www.w3.org/1999/xhtml" }}
                         style={{
                             backdropFilter: "blur(5px)",
                             clipPath: "url(#bgblur_2_251_2863_clip_path)",
@@ -238,7 +238,7 @@ const Bold = () => {
                     height="27.1875"
                 >
                     <div
-                        xmlns="http://www.w3.org/1999/xhtml"
+                        {...{ xmlns: "http://www.w3.org/1999/xhtml" }}
                         style={{
                             backdropFilter: "blur(5px)",
                             clipPath: "url(#bgblur_2_251_2863_clip_path)",

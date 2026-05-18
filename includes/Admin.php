@@ -66,65 +66,6 @@ class Admin
         echo '<div id="pnpnm-admin" class="pnpnm-admin pnpnm-top-level-wrapper"></div>';
     }
 
-    public function renderPostTypeLibraryContainer__premium_only(): void
-    {
-        $screen = get_current_screen();
-
-        if (!$screen) {
-            return;
-        }
-
-        $postType = $this->resolveScreenPostType__premium_only($screen);
-
-        if (empty($postType) || !in_array($postType, $this->getEnabledPostTypes__premium_only(), true)) {
-            return;
-        }
-
-        $script = sprintf(
-            '(function() {
-                var wpbodyContent = document.getElementById("wpbody");
-                if (wpbodyContent) {
-                    var container = document.createElement("div");
-                    container.id = "pnpnm-post-type-library";
-                    container.className = "pnpnm-post-type-wrapper";
-                    container.setAttribute("data-post-type", %s);
-                    wpbodyContent.insertBefore(container, wpbodyContent.firstChild);
-                }
-            })();',
-            wp_json_encode($postType)
-        );
-
-        wp_add_inline_script('pnpnm-post-types', $script, 'before');
-    }
-
-    private function resolveScreenPostType__premium_only(\WP_Screen $screen): string
-    {
-        $postType = in_array($screen->base, ['edit', 'post'], true) ? $screen->post_type : '';
-
-        return (string) apply_filters('pnpnm_screen_post_type', $postType, $screen);
-    }
-
-    private function getEnabledPostTypes__premium_only(): array
-    {
-        $setting = get_option(PNPNM_OPTIONS_NAME, []);
-        $types   = $setting['general']['folder']['postTypeFolders'] ?? [];
-
-        return is_array($types) ? array_values(array_filter(array_map('sanitize_key', $types))) : [];
-    }
-
-    public function resolveThirdPartyScreenPostType__premium_only(string $postType, \WP_Screen $screen): string
-    {
-        if (!empty($postType)) {
-            return $postType;
-        }
-
-        $map = [
-            'toplevel_page_tutor' => 'courses',  // Tutor LMS
-        ];
-
-        return $map[$screen->id] ?? $postType;
-    }
-
     private static function addMenuPage($menu, $slug) {
         add_menu_page(
             __('Ninja Media', 'ninja-media'),

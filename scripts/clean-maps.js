@@ -33,6 +33,7 @@ const dsStores = globSync("**/.DS_Store", {
 });
 
 let deleted = 0;
+let truncated = 0;
 
 for (const file of [...targets, ...dsStores]) {
     const fullPath = path.resolve(rootDir, file);
@@ -40,8 +41,14 @@ for (const file of [...targets, ...dsStores]) {
         fs.rmSync(fullPath);
         deleted++;
     } catch {
-        // ignore files already removed
+        try {
+            fs.writeFileSync(fullPath, "");
+            truncated++;
+        } catch { /* ignore */ }
     }
 }
 
+if (truncated > 0) {
+    console.log(`⚠️   Truncated ${truncated} file(s) (mounted volume — could not delete)`);
+}
 console.log(`✅  Cleaned ${deleted} file(s) (*.map, .DS_Store)`);

@@ -91,30 +91,48 @@ export const media = baseApi.injectEndpoints({
                 { parentId },
                 { dispatch, queryFulfilled, getState },
             ) {
-                if (parentId) return;
-
                 try {
-                    await queryFulfilled;
+                    const { data: result } = await queryFulfilled;
+                    const newFolder = result?.data;
+
+                    if (!newFolder || parentId) return;
 
                     const state = getState() as any;
-                    const { folderSorting, order } = state.media;
+                    const { folderSorting, order, search } = state.media;
                     const isForceSorting =
                         state.settings?.data?.general?.folder?.forceSorting ??
                         false;
 
-                    if (!isForceSorting) return;
-
-                    dispatch(media.util.invalidateTags(["Folders"]));
-
-                    dispatch(
-                        media.endpoints.getFolders.initiate(
-                            {
-                                orderBy: folderSorting?.orderBy,
-                                order: order,
-                            },
-                            { forceRefetch: true },
-                        ),
-                    );
+                    if (isForceSorting) {
+                        dispatch(media.util.invalidateTags(["Folders"]));
+                        dispatch(
+                            media.endpoints.getFolders.initiate(
+                                {
+                                    orderBy: folderSorting?.orderBy,
+                                    order: order,
+                                },
+                                { forceRefetch: true },
+                            ),
+                        );
+                    } else {
+                        dispatch(
+                            media.util.updateQueryData(
+                                "getFolders",
+                                {
+                                    orderBy: folderSorting?.orderBy,
+                                    order: order,
+                                    search: search,
+                                },
+                                (draft) => {
+                                    if (draft?.data?.folders) {
+                                        draft.data.folders.unshift(newFolder);
+                                        draft.data.totalFolders =
+                                            (draft.data.totalFolders ?? 0) + 1;
+                                    }
+                                },
+                            ),
+                        );
+                    }
                 } catch {}
             },
         }),

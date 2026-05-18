@@ -16,12 +16,7 @@ class Enqueue
 {
     use Singleton;
 
-    public function __construct()
-    {
-        $this->doHooks();
-    }
-
-    private function doHooks(): void
+    public function doHooks(): void
     {
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueue']);
         add_action('wp_enqueue_scripts', [$this, 'frontendEnqueue']);
@@ -41,67 +36,58 @@ class Enqueue
         }
     }
 
-    private function style(string $handle, array $deps = [], $args = []): void
+    private function style(string $handle, array $deps = [], array $args = []): void
     {
-        $_args = [
+        $args = wp_parse_args($args, [
             'ver'     => PNPNM_VERSION,
             'folder'  => 'css',
             'type'    => 'enqueue',
             'nesting' => false,
-        ];
+        ]);
 
-        $args = wp_parse_args($args, $_args);
+        $folder   = $args['nesting'] ? "css/{$handle}" : $args['folder'];
+        $filePath = PNPNM_ASSETS . "/{$folder}/{$handle}.css";
 
-        if ($args['nesting']) {
-            $args['folder'] = "css/{$handle}";
-        }
-
-        $filePath = PNPNM_ASSETS . "/{$args['folder']}/{$handle}.css";
-
-        if ($args['type'] === 'enqueue') {
-            wp_enqueue_style("pnpnm-$handle", $filePath, $deps, $args['ver']);
-        } elseif ($args['type'] === 'register') {
-            wp_register_style("pnpnm-$handle", $filePath, $deps, $args['ver']);
+        if ('register' === $args['type']) {
+            wp_register_style("pnpnm-{$handle}", $filePath, $deps, $args['ver']);
+        } else {
+            wp_enqueue_style("pnpnm-{$handle}", $filePath, $deps, $args['ver']);
         }
     }
 
-    private function r_style(string $handle, array $deps = [], $args = []): void
+    private function r_style(string $handle, array $deps = [], array $args = []): void
     {
         $args['type'] = 'register';
         $this->style($handle, $deps, $args);
     }
 
-    private function script(string $handle, array $deps = [], $args = []): void
+    private function script(string $handle, array $deps = [], array $args = []): void
     {
-        $_args = [
+        $args = wp_parse_args($args, [
             'ver'       => PNPNM_VERSION,
             'folder'    => 'js',
             'in_footer' => true,
             'type'      => 'enqueue',
-        ];
-
-        $args = wp_parse_args($args, $_args);
+        ]);
 
         $assetsPath = PNPNM_PATH . "assets/{$args['folder']}/{$handle}.asset.php";
 
         if (file_exists($assetsPath)) {
-            $assets = include $assetsPath;
-            if (defined('WP_ENVIRONMENT_TYPE') && WP_ENVIRONMENT_TYPE === 'local') {
-                $args['ver'] = $assets['version'];
-            }
-            $deps = wp_parse_args($deps, $assets['dependencies']);
+            $asset = include $assetsPath;
+            $deps  = array_unique(array_merge($asset['dependencies'], $deps));
+
         }
 
         $filePath = PNPNM_ASSETS . "/{$args['folder']}/{$handle}.js";
 
-        if ($args['type'] === 'enqueue') {
-            wp_enqueue_script("pnpnm-{$handle}", $filePath, $deps, $args['ver'], $args['in_footer']);
-        } elseif ($args['type'] === 'register') {
+        if ('register' === $args['type']) {
             wp_register_script("pnpnm-{$handle}", $filePath, $deps, $args['ver'], $args['in_footer']);
+        } else {
+            wp_enqueue_script("pnpnm-{$handle}", $filePath, $deps, $args['ver'], $args['in_footer']);
         }
     }
 
-    private function r_script(string $handle, array $deps = [], $args = []): void
+    private function r_script(string $handle, array $deps = [], array $args = []): void
     {
         $args['type'] = 'register';
         $this->script($handle, $deps, $args);
@@ -109,43 +95,56 @@ class Enqueue
 
     public function adminEnqueue(string $hook): void
     {
-        if ('upload.php' === $hook || $this->isPluginPage($hook)) {
+        $isMediaPage    = 'upload.php' === $hook || $this->isPluginPage($hook);
+        $isPostEditor   = in_array($hook, ['post.php', 'post-new.php', 'site-editor.php', 'tutor-lms_page_create-course'], true);
+        $isPostTypePage = false;
+
+        if (! $isMediaPage && ! $isPostEditor && ! $isPostTypePage) {
+            return;
+        }
+
+        // Shared assets loaded in every admin context.
+        $this->style('media-library');
+        $this->style('admin');
+        $this->script('common', ['jquery', 'wp-util']);
+        $this->script('media-library', $isPostTypePage ? [] : ['media-views']);
+
+        $data = $this->getLocalizeData($hook);
+        $this->injectLocalizeData('pnpnm-media-library', $hook, $data);
+
+        if ($isMediaPage) {
             wp_enqueue_media();
-
-            $this->script('media-library', ['media-views'], []);
             $this->script('admin');
-            $this->script('common', ['jquery', 'wp-util']);
-
-            $this->style('media-library', [], []);
-            $this->style('admin');
-
-            $data = $this->getLocalizeData($hook, 'admin');
-
-            wp_add_inline_script('pnpnm-media-library', 'var pnpnm = ' . wp_json_encode($data) . ';', 'before');
-
-            wp_set_script_translations('pnpnm-media-library', 'ninja-media', PNPNM_PATH . 'languages');
-            wp_set_script_translations('pnpnm-admin', 'ninja-media', PNPNM_PATH . 'languages');
+            $this->setScriptTranslations('pnpnm-media-library', 'pnpnm-admin');
 
             return;
         }
 
-        // ── Tier 2 (premium): post-type folder sidebar pages ─────────────────
+        // Post / page classic editor.
+        $this->script('admin');
+        $this->setScriptTranslations('pnpnm-media-library');
+    }
 
-        // ── Tier 3: post/page editors — media modal sidebar support ──────────
-        // media-library.js hooks into wp.media.view.AttachmentsBrowser and
-        // wp.media.controller.FeaturedImage so the folder sidebar appears inside
-        // any media modal opened from a post or page editor.
-        if (in_array($hook, ['post.php', 'post-new.php'], true)) {
-            $this->script('media-library', ['media-views'], []);
-            $this->script('common', ['jquery', 'wp-util']);
+    /**
+     * Injects the pnpnm JS global before a given script handle.
+     * Builds localize data on demand when $data is not supplied.
+     */
+    private function injectLocalizeData(string $handle, string $hook = '', ?array $data = null): void
+    {
+        if (null === $data) {
+            $data = $this->getLocalizeData($hook);
+        }
 
-            $this->style('media-library', [], []);
+        wp_add_inline_script($handle, 'var pnpnm = ' . wp_json_encode($data) . ';', 'before');
+    }
 
-            $data = $this->getLocalizeData($hook, 'admin');
-
-            wp_add_inline_script('pnpnm-media-library', 'var pnpnm = ' . wp_json_encode($data) . ';', 'before');
-
-            wp_set_script_translations('pnpnm-media-library', 'ninja-media', PNPNM_PATH . 'languages');
+    /**
+     * Registers translation files for one or more script handles.
+     */
+    private function setScriptTranslations(string ...$handles): void
+    {
+        foreach ($handles as $handle) {
+            wp_set_script_translations($handle, 'ninja-media', PNPNM_PATH . 'languages');
         }
     }
 
@@ -164,15 +163,14 @@ class Enqueue
 
         $this->script('admin');
         $this->style('admin');
-        $this->script('media-library', ['media-views'], []);
-        $this->style('media-library', [], ['priority' => 5]);
+        $this->script('media-library', ['media-views']);
+        $this->style('media-library');
 
-        $data                = $this->getLocalizeData('', 'admin');
+        $data                = $this->getLocalizeData('');
         $data['isElementor'] = true;
 
         wp_add_inline_script('pnpnm-media-library', 'var pnpnm = ' . wp_json_encode($data) . ';', 'before');
-
-        wp_set_script_translations('pnpnm-media-library', 'ninja-media', PNPNM_PATH . 'languages');
+        $this->setScriptTranslations('pnpnm-media-library');
     }
 
     public function frontendEnqueue(): void
@@ -183,10 +181,9 @@ class Enqueue
         $data = $this->getLocalizeData('', 'frontend');
 
         wp_add_inline_script('pnpnm-media-library', 'var pnpnm = ' . wp_json_encode($data) . ';', 'before');
-        wp_add_inline_script('pnpnm-common', 'window.pnpnm = window.pnpnm || ' . wp_json_encode($data) . ';', 'before');
     }
 
-    private function getLocalizeData($hook = false, $script = 'admin'): array
+    private function getLocalizeData(string $hook = '', string $context = 'admin'): array
     {
         $data = [
             'ajaxUrl'    => esc_url(admin_url('admin-ajax.php')),
@@ -200,44 +197,22 @@ class Enqueue
             'pluginName' => PNPNM_NAME,
             'assetUrl'   => esc_url(PNPNM_ASSETS),
             'textDomain' => PNPNM_TEXTDOMAIN,
+            'isPro'      => false,
         ];
-
-        $data['isPro'] = false;
-        if (function_exists('pnpnm_fs') && pnpnm_fs()->can_use_premium_code__premium_only()) {
-            $data['isPro'] = true;
-        }
 
         if (is_admin()) {
             $data['defaultSettings'] = pnpnmGetDefaultSettings();
             $data['settings']        = Helpers::getSettings();
 
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen detection from current admin URL.
-            $action_param = isset($_GET['action']) ? sanitize_text_field(wp_unslash($_GET['action'])) : '';
-            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen detection from current admin URL.
-            $post_param   = isset($_GET['post']) ? absint(wp_unslash($_GET['post'])) : 0;
+            $data['isElementor'] = isset($_GET['action']) && 'elementor' === sanitize_text_field(wp_unslash($_GET['action']))
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen detection from current admin URL.
+                && isset($_GET['post']) && absint(wp_unslash($_GET['post'])) > 0;
 
-            $data['isElementor']        = $action_param === 'elementor' && $post_param > 0;
             $data['supportedPostTypes'] = pnpnmGetSupportedPostTypes();
 
-            if (function_exists('pnpnm_fs') && pnpnm_fs()->can_use_premium_code__premium_only()) {
-                $screen = function_exists('get_current_screen') ? get_current_screen() : null;
-                if ($screen) {
-                    $postType = in_array($screen->base, ['edit', 'post'], true) ? $screen->post_type : '';
-                    if (empty($postType)) {
-                        $postType = (string) apply_filters('pnpnm_screen_post_type', $postType, $screen);
-                    }
-
-                    if (! empty($postType)) {
-                        $data['currentPostType'] = $postType;
-
-                        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only folder selection from current admin URL.
-                        $folder_param              = isset($_GET['pnpnm_folder']) ? absint(wp_unslash($_GET['pnpnm_folder'])) : 0;
-                        $data['currentPostFolder'] = $folder_param ?: null;
-                    }
-                }
-            }
         }
 
-        return apply_filters('pnpnm_localize_data', $data, $script, $hook);
+        return apply_filters('pnpnm_localize_data', $data, $context, $hook);
     }
 }

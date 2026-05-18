@@ -4,7 +4,7 @@
  * Plugin Name:       Ninja Media
  * Plugin URI:        https://plugininja.com/ninja-media/
  * Description:       Ninja Media: a user-friendly WordPress plugin for managing and organizing media files with folders, SVG support, and bulk media tools.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Author:            PluginInja
@@ -44,7 +44,7 @@ if (function_exists(__NAMESPACE__ . '\\pnpnm_fs')) {
                 'is_premium'          => false,
                 'premium_suffix'      => "Premium",
                 'has_addons'                  => false,
-                'has_paid_plans'              => true,
+                'has_paid_plans'      => false,
                 'is_org_compliant'            => true,
                 'has_affiliation'             => 'selected',
                 'menu'                        => [

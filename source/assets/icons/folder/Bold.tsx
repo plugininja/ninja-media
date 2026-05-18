@@ -31,7 +31,7 @@ const Bold = ({ color }: { color?: string | null }) => {
                 height="27.1875"
             >
                 <div
-                    xmlns="http://www.w3.org/1999/xhtml"
+                    {...{ xmlns: "http://www.w3.org/1999/xhtml" }}
                     style={{
                         backdropFilter: "blur(5px)",
                         clipPath: "url(#bgblur_0_345_4067_clip_path)",
