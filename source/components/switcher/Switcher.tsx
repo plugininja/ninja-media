@@ -67,7 +67,7 @@ const Switcher: React.FC<SwitcherProps> = ({
                             {title}
                         </Text>
 
-                        <Status.Pro />
+                        <Status.Pro tooltipDisabled />
                     </InlineStack>
                 ) : (
                     <Text

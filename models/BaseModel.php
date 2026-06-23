@@ -843,9 +843,13 @@ abstract class BaseModel
         $thumb_src    = wp_get_attachment_image_src($attachmentId, $wp_size);
         $thumbnailUrl = $thumb_src ? $thumb_src[0] : $url;
 
-        $location = self::getAttachmentUsageLocations($attachmentId, $url);
+        $replacedAt = (string) get_post_meta($attachmentId, '_pnpnm_replaced_at', true);
+        if ($replacedAt !== '') {
+            $url          = add_query_arg('v', $replacedAt, $url);
+            $thumbnailUrl = add_query_arg('v', $replacedAt, $thumbnailUrl);
+        }
 
-        self::syncUsageFlag($attachmentId, $location);
+        $isUsed = get_post_meta($attachmentId, '_pnpnm_media_used', true) === '1';
 
         return [
             'id'           => $attachmentId,
@@ -856,87 +860,141 @@ abstract class BaseModel
             'size'         => (int) $fileSize,
             'createdAt'    => $post->post_date,
             'updatedAt'    => $post->post_modified,
-            'location'     => $location,
+            'location'     => $isUsed ? self::getLocationData($attachmentId) : [],
+            'alt'          => (string) get_post_meta($attachmentId, '_wp_attachment_image_alt', true),
+            'caption'      => $post->post_excerpt,
+            'description'  => $post->post_content,
             'isWatermarked' => metadata_exists('post', $attachmentId, '_pnpnm_watermarked')
                 && get_post_meta($attachmentId, '_pnpnm_watermarked', true) === '1',
             'isFavorite'    => get_post_meta($attachmentId, '_pnpnm_favorite_' . get_current_user_id(), true) === '1',
         ];
     }
 
-    public static function syncUsageFlag(int $attachmentId, ?array $locations = null): void
-    {
-        if ($locations === null) {
-            $url       = wp_get_attachment_url($attachmentId) ?: '';
-            $locations = self::getAttachmentUsageLocations($attachmentId, $url);
-        }
-
-        if (!empty($locations)) {
-            update_post_meta($attachmentId, '_pnpnm_media_used', '1');
-        } else {
-            delete_post_meta($attachmentId, '_pnpnm_media_used');
-        }
-    }
-
-    private static function getAttachmentUsageLocations(int $attachmentId, string $attachmentUrl): array
+    private static function getLocationData(int $attachmentId): array
     {
         global $wpdb;
 
-        $active_statuses = "'publish', 'draft', 'pending', 'private', 'future'";
-        $excluded_types = "'attachment', 'revision', 'nav_menu_item'";
+        $excluded_types    = "'attachment', 'revision', 'nav_menu_item'";
+        $excluded_statuses = "'trash', 'auto-draft'";
 
-        $featured_ids = array_map('absint', get_posts([
-            'post_type'        => 'any',
-            'post_status'      => ['publish', 'draft', 'pending', 'private', 'future'],
-            'posts_per_page'   => -1,
-            'suppress_filters' => false,
-            'meta_query'       => [[ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- required to find featured-image usage; no viable alternative.
-                'key'     => '_thumbnail_id',
-                'value'   => $attachmentId,
-                'compare' => '=',
-                'type'    => 'NUMERIC',
-            ]],
-            'fields' => 'ids',
-        ]));
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $active_statuses/$excluded_types are hardcoded string literals, not user input.
-        $class_ids = array_map('absint', (array) $wpdb->get_col(
-            $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_status IN ({$active_statuses}) AND post_type  NOT IN ({$excluded_types}) AND post_content LIKE %s", '%wp-image-' . $attachmentId . '%' )
+        $thumbnail_ids = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT p.ID FROM {$wpdb->postmeta} pm
+                 JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+                 WHERE pm.meta_key = '_thumbnail_id'
+                   AND pm.meta_value = %s
+                   AND p.post_status NOT IN ({$excluded_statuses})
+                   AND p.post_type NOT IN ({$excluded_types})
+                 LIMIT 20",
+                (string) $attachmentId
+            )
+        );
+
+        $content_ids = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT ID FROM {$wpdb->posts}
+                 WHERE post_status NOT IN ({$excluded_statuses})
+                   AND post_type NOT IN ({$excluded_types})
+                   AND post_content LIKE %s
+                 LIMIT 20",
+                '%wp-image-' . $attachmentId . '%'
+            )
+        );
+
+        // phpcs:enable
+
+        $all_ids = array_unique(array_merge(
+            array_map('intval', $thumbnail_ids ?: []),
+            array_map('intval', $content_ids ?: [])
         ));
-        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
-
-        $path_ids = [];
-        $rel_path = get_post_meta($attachmentId, '_wp_attached_file', true);
-
-        $search_val = ($rel_path !== '' && $rel_path !== false)
-            ? $rel_path
-            : $attachmentUrl;
-
-        if ($search_val !== '') {
-            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $active_statuses/$excluded_types are hardcoded string literals, not user input.
-            $path_ids = array_map('absint', (array) $wpdb->get_col(
-                $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_status IN ({$active_statuses}) AND post_type  NOT IN ({$excluded_types}) AND post_content LIKE %s", '%' . $wpdb->esc_like($search_val) . '%' )
-            ));
-            // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
-        }
 
         $locations = [];
-        $seen_ids  = [];
-
-        foreach (array_unique(array_merge($featured_ids, $class_ids, $path_ids)) as $post_id) {
-            if (in_array($post_id, $seen_ids, true)) {
+        foreach ($all_ids as $post_id) {
+            $post = get_post($post_id);
+            if (!$post) {
                 continue;
             }
-
-            $post_obj = get_post($post_id);
-            if ($post_obj) {
-                $locations[] = [
-                    'name' => $post_obj->post_title ?: __('(no title)', 'ninja-media'),
-                    'url'  => get_permalink($post_id) ?: '',
-                ];
-                $seen_ids[] = $post_id;
-            }
+            $locations[] = [
+                'name' => $post->post_title ?: "#{$post_id}",
+                'url'  => (string) (get_permalink($post_id) ?: ''),
+            ];
         }
 
         return $locations;
+    }
+
+    public static function syncUsageFlag(int $attachmentId): void
+    {
+        global $wpdb;
+
+        $posts    = $wpdb->posts;
+        $postmeta = $wpdb->postmeta;
+        $excluded_types   = "'attachment', 'revision', 'nav_menu_item'";
+        $excluded_statuses = "'trash', 'auto-draft'";
+
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- hardcoded exclusion lists, not user input.
+
+        $is_thumbnail = (bool) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT EXISTS(
+                    SELECT 1 FROM {$postmeta}
+                    WHERE meta_key = '_thumbnail_id'
+                      AND meta_value = %s
+                    LIMIT 1
+                )",
+                (string) $attachmentId
+            )
+        );
+
+        if ($is_thumbnail) {
+            update_post_meta($attachmentId, '_pnpnm_media_used', '1');
+            return;
+        }
+
+        $is_in_content = (bool) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT EXISTS(
+                    SELECT 1 FROM {$posts}
+                    WHERE post_status NOT IN ({$excluded_statuses})
+                      AND post_type NOT IN ({$excluded_types})
+                      AND post_content LIKE %s
+                    LIMIT 1
+                )",
+                '%wp-image-' . $attachmentId . '%'
+            )
+        );
+
+        if ($is_in_content) {
+            update_post_meta($attachmentId, '_pnpnm_media_used', '1');
+            return;
+        }
+
+        $rel_path = get_post_meta($attachmentId, '_wp_attached_file', true);
+
+        if ($rel_path !== '' && $rel_path !== false) {
+            $is_in_path = (bool) $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT EXISTS(
+                        SELECT 1 FROM {$posts}
+                        WHERE post_status NOT IN ({$excluded_statuses})
+                          AND post_type NOT IN ({$excluded_types})
+                          AND post_content LIKE %s
+                        LIMIT 1
+                    )",
+                    '%' . $wpdb->esc_like((string) $rel_path) . '%'
+                )
+            );
+
+            if ($is_in_path) {
+                update_post_meta($attachmentId, '_pnpnm_media_used', '1');
+                return;
+            }
+        }
+
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        delete_post_meta($attachmentId, '_pnpnm_media_used');
     }
 }

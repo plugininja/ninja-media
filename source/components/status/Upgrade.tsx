@@ -1,10 +1,10 @@
-import ProIcon from "~/assets/icons/ProIcon";
 import BlockStack from "../blockStack";
 import { __ } from "@wordpress/i18n";
 import DOCS from "~/constants/docs";
 import Text from "../text";
 import Card from "../card";
 import Icon from "../icon";
+import { iconProIcon as iconPro } from "~/utils/icons";
 
 const Upgrade = () => {
     return (
@@ -17,7 +17,7 @@ const Upgrade = () => {
                     height: "150px",
                 }}
             >
-                <ProIcon />
+                <img src={iconPro} alt="Upgrade to Pro" style={{ width: "100%", height: "100%" }} />
             </BlockStack>
 
             <Text

@@ -16,6 +16,7 @@ const entries = Object.fromEntries(
             ignore: [
                 "./source/utils/**/*.js",
                 "./source/hooks/**/*.js",
+                "./source/assets/js/**/*.js",
             ],
         })
         .map((file) => [
@@ -96,10 +97,17 @@ export default {
                 {
                     from: path.resolve(__dirname, "source/assets/icons"),
                     to: path.resolve(__dirname, "../assets/icons"),
+                    globOptions: {
+                        ignore: ["**/*.tsx", "**/*.ts"],
+                    },
                 },
                 {
                     from: path.resolve(__dirname, "source/assets/images"),
                     to: path.resolve(__dirname, "../assets/images"),
+                },
+                {
+                    from: path.resolve(__dirname, "source/assets/js"),
+                    to: path.resolve(__dirname, "../assets/js"),
                 },
             ],
         }),

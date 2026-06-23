@@ -1,13 +1,13 @@
 import { useFolderDragContext } from "~/shared/context/FolderDragContext";
-import { memo, useEffect, useLayoutEffect } from "@wordpress/element";
+import { memo, useEffect, useLayoutEffect, useRef } from "@wordpress/element";
 import { setFolders } from "~/redux/features/media/media";
 import SkeletonLoader from "~/components/skeletonLoader";
-import { useGetFoldersQuery } from "~/redux/api/media";
+import { useGetFoldersQuery, useLazyGetFolderQuery } from "~/redux/api/media";
 import GapDropZone from "~/shared/context/GapDropZone";
 import useScrollFade from "~/hooks/useScrollFade";
 import BlockStack from "~/components/blockStack";
 import { useAppDispatch } from "~/redux/hooks";
-import NotFound from "~/assets/icons/NotFound";
+import { iconNotFound } from "~/utils/icons";
 import FolderTreeNode from "./FolderTreeNode";
 import useSettings from "~/hooks/useSettings";
 import useMedia from "../hooks/useMedia";
@@ -16,6 +16,8 @@ import { Folder } from "~/types/folder";
 import Create from "../actions/Create";
 import Text from "~/components/text";
 import clsx from "clsx";
+
+const LS_KEY = "pnpnm-active-folder-id";
 
 const FolderTree = () => {
     const { data: dashBoardData } = useSettings();
@@ -36,6 +38,8 @@ const FolderTree = () => {
         search: search,
     });
 
+    const [getFolder] = useLazyGetFolderQuery();
+
     const { ref, showFade, checkFade } = useScrollFade();
 
     const { isFolderDragging, draggedFolderId, onRootDrop } =
@@ -44,6 +48,7 @@ const FolderTree = () => {
     const dispatch = useAppDispatch();
 
     const allFolders = folders["root"] ?? null;
+    const hasRestoredRef = useRef(false);
 
     const theme =
         dashBoardData?.display?.theme?.theme ??
@@ -51,6 +56,39 @@ const FolderTree = () => {
         "default";
 
     const loading = isLoading || isFetching;
+
+    useEffect(() => {
+        if (!hasRestoredRef.current) return;
+
+        if (activeFolder) {
+            localStorage.setItem(LS_KEY, String(activeFolder.id));
+        } else {
+            localStorage.removeItem(LS_KEY);
+        }
+    }, [activeFolder]);
+
+    useEffect(() => {
+        if (loading || hasRestoredRef.current) return;
+        hasRestoredRef.current = true;
+
+        if (activeFolder) return;
+
+        const savedId = localStorage.getItem(LS_KEY);
+        if (!savedId) return;
+
+        getFolder({ id: savedId })
+            .unwrap()
+            .then((res) => {
+                const folder = res?.data?.currentFolder;
+                if (!folder) return;
+                setMedia("activeFolder", folder);
+                window.pnpnmMedia?.initFilter([folder]);
+                window.pnpnmMedia?.setFolderFilter(savedId);
+            })
+            .catch(() => {
+                localStorage.removeItem(LS_KEY);
+            });
+    }, [loading]);
 
     useEffect(() => {
         setMedia("loading", loading);
@@ -93,7 +131,7 @@ const FolderTree = () => {
                 gap={10}
                 marginTop={20}
             >
-                <NotFound />
+                <img src={iconNotFound} alt="" />
 
                 <Text weight="medium" align="center">
                     Add your first folder
@@ -126,7 +164,7 @@ const FolderTree = () => {
                 gap={10}
                 marginTop={20}
             >
-                <NotFound />
+                <img src={iconNotFound} alt="" />
 
                 <Text weight="medium" align="center">
                     Folder not found

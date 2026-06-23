@@ -80,6 +80,7 @@
                     var minutes = Math.floor((remainingTimeInMs % (1000 * 60 * 60)) / (1000 * 60));
                     var seconds = Math.floor((remainingTimeInMs % (1000 * 60)) / 1000);
 
+
                     if (remainingTimeInMs < 1000) {
                         countdownElement.classList.add('hidden');
                         countdownTimeout = null;

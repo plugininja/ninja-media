@@ -9,12 +9,9 @@ use Pninja\NM\Models\Attachment;
 use Pninja\NM\Models\BaseModel;
 use Pninja\NM\Models\Folder;
 use Pninja\NM\Models\FolderRelationship;
-use Pninja\NM\UsageScanner;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-
-use function Pninja\NM\pnpnm_fs;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
@@ -171,7 +168,7 @@ class MediaLibrary extends BaseFolderController
 		register_rest_route($this->namespace, $this->rest_base . '/folder/(?P<id>\d+)/assign', [[
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [$this, 'assignMedia'],
-			'permission_callback' => [$this, 'checkReadPermission'],
+			'permission_callback' => [$this, 'checkPermission'],
 			'args'                => [
 				'attachments' => ['type' => 'array', 'required' => true, 'items' => ['type' => 'integer']],
 			],
@@ -215,14 +212,25 @@ class MediaLibrary extends BaseFolderController
 			],
 		]]);
 
+		register_rest_route($this->namespace, $this->rest_base . '/files/(?P<id>\d+)/metadata', [[
+			'methods'             => WP_REST_Server::EDITABLE,
+			'callback'            => [$this, 'updateFileMetadata'],
+			'permission_callback' => [$this, 'checkPermission'],
+			'args'                => [
+				'id'          => ['type' => 'integer', 'required' => true,  'sanitize_callback' => 'absint'],
+				'title'       => ['type' => 'string',  'required' => false, 'sanitize_callback' => 'sanitize_text_field'],
+				'alt'         => ['type' => 'string',  'required' => false, 'sanitize_callback' => 'sanitize_text_field'],
+				'caption'     => ['type' => 'string',  'required' => false, 'sanitize_callback' => 'sanitize_text_field'],
+				'description' => ['type' => 'string',  'required' => false, 'sanitize_callback' => 'sanitize_textarea_field'],
+			],
+		]]);
+
 	}
 
 	// ── Handlers ─────────────────────────────────────────────────────────
 
 	public function getTree(WP_REST_Request $request): WP_REST_Response
 	{
-		UsageScanner::getInstance()->maybeScheduleScan();
-
 		$orderBy = (string) $request->get_param('orderBy');
 		$order   = (string) $request->get_param('order');
 		$search  = trim((string) $request->get_param('search'));
@@ -297,6 +305,272 @@ class MediaLibrary extends BaseFolderController
 			'folders' => $folders,
 		], __('Folder retrieved successfully.', 'ninja-media'));
 	}
+
+	public function getUnusedAttachments(WP_REST_Request $request): WP_REST_Response
+	{
+		$attachments = Attachment::get('unused', true);
+
+		return $this->successResponse([
+			'attachments' => $attachments,
+			'totalFiles'  => count($attachments),
+		], __('Unused attachments retrieved successfully.', 'ninja-media'));
+	}
+
+	public function clearUnusedAttachments(WP_REST_Request $request): WP_REST_Response
+	{
+		$trash       = $request->get_param('trash');
+		$attachments = Attachment::get($trash ? 'trash' : 'unused');
+
+		return $this->successResponse([
+			'attachments' => $attachments,
+			'totalFiles'  => count($attachments),
+		], __('Unused attachments cleared successfully.', 'ninja-media'));
+	}
+
+	public function downloadFolder(WP_REST_Request $request): WP_REST_Response
+	{
+		$ids = $request->get_param('ids')
+			? array_map('intval', (array) $request->get_param('ids'))
+			: [(int) $request->get_param('id')];
+
+		if (!class_exists('ZipArchive')) {
+			return $this->errorResponse(__('ZIP functionality is not available on this server.', 'ninja-media'), 500);
+		}
+
+		$uploadDir = wp_upload_dir();
+		$tmpDir    = $uploadDir['basedir'] . '/pnpnm-tmp';
+		$zipName   = 'folders-' . implode('-', $ids) . '-' . time() . '.zip';
+		$zipPath   = $tmpDir . '/' . $zipName;
+		$zipUrl    = $uploadDir['baseurl'] . '/pnpnm-tmp/' . $zipName;
+
+		if (!wp_mkdir_p($tmpDir)) {
+			return $this->errorResponse(__('Failed to create temporary directory.', 'ninja-media'), 500);
+		}
+
+		$zip = new \ZipArchive();
+
+		if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+			return $this->errorResponse(__('Failed to create ZIP archive.', 'ninja-media'), 500);
+		}
+
+		$added       = 0;
+		$folderNames = [];
+
+		foreach ($ids as $folderId) {
+			$folder = $this->folderModel->findById($folderId);
+
+			if (is_wp_error($folder) || !$folder) {
+				continue;
+			}
+
+			$attachmentIds = $this->relationModel->getAttachmentIds($folderId);
+
+			if (is_wp_error($attachmentIds) || empty($attachmentIds)) {
+				continue;
+			}
+
+			$folderNames[] = $folder['name'];
+			$folderZipDir  = sanitize_file_name($folder['name']) . '/';
+
+			foreach ($attachmentIds as $attachmentId) {
+				$filePath = get_attached_file((int) $attachmentId);
+
+				if ($filePath && file_exists($filePath)) {
+					$zip->addFile($filePath, $folderZipDir . basename($filePath));
+					$added++;
+				}
+			}
+		}
+
+		$zip->close();
+
+		if ($added === 0) {
+			$this->getFilesystem()->delete($zipPath);
+
+			return $this->errorResponse(__('No accessible files found in the selected folders.', 'ninja-media'), 404);
+		}
+
+		$zipLabel = count($ids) === 1
+			? sanitize_file_name($folderNames[0] ?? 'folder')
+			: 'folders-' . implode('-', $ids);
+
+		return $this->successResponse([
+			'url'     => $zipUrl,
+			'name'    => $zipLabel . '.zip',
+			'folders' => $folderNames,
+			'count'   => $added,
+		], __('Download ready.', 'ninja-media'));
+	}
+
+	public function getTrashedAttachments(WP_REST_Request $request): WP_REST_Response
+	{
+		$ids = array_map('intval', (array) $request->get_param('ids'));
+
+		if (!Attachment::exists($ids)) {
+			return $this->errorResponse(__('Attachment not found.', 'ninja-media'), 404);
+		}
+
+		return $this->successResponse([
+			'attachments' => Attachment::get('trashed', false, $ids),
+		], __('Trashed attachments retrieved successfully.', 'ninja-media'));
+	}
+
+	public function trashAttachments(WP_REST_Request $request): WP_REST_Response
+	{
+		$ids = array_map('intval', (array) $request->get_param('ids'));
+
+		if (!Attachment::exists($ids)) {
+			return $this->errorResponse(__('Attachment not found.', 'ninja-media'), 404);
+		}
+
+		$folderIds = $this->collectFolderIds($ids);
+		$trashed   = [];
+
+		foreach ($ids as $id) {
+			$result = update_post_meta($id, '_pnpnm_media_trashed', '1');
+
+			if (is_wp_error($result)) {
+				return $this->errorResponse($result);
+			}
+
+			if ($result) {
+				$trashed[] = $id;
+			}
+		}
+
+		if (!empty($trashed)) {
+			$this->invalidateCache();
+		}
+
+		$data = [
+			'trashed'        => $trashed,
+			'folders'        => $this->buildFolderRemainingCounts($folderIds),
+			'uncategorized'  => Attachment::get('uncategorized', true),
+			'trash'          => Attachment::get('trash', true),
+			'unused'         => Attachment::get('unused', true),
+			'allFiles'       => Attachment::get('all', true),
+		];
+
+		$data['dynamicFolders'] = Attachment::countDynamicFolders__premium_only();
+
+		return $this->successResponse($data, __('Attachments moved to trash successfully.', 'ninja-media'));
+	}
+
+	public function restoreAttachments(WP_REST_Request $request): WP_REST_Response
+	{
+		$ids       = array_map('intval', (array) $request->get_param('ids'));
+		$folderIds = [];
+		$restored  = [];
+
+		foreach ($ids as $id) {
+			$folderId      = (int) get_post_meta($id, '_pnpnm_media_folder_id', true);
+			$isExistFolder = $folderId > 0 ? $this->folderModel->findById($folderId) : null;
+
+			if (is_wp_error($isExistFolder)) {
+				return $this->errorResponse($isExistFolder);
+			}
+
+			if (!$isExistFolder) {
+				delete_post_meta($id, '_pnpnm_media_folder_id');
+			}
+
+			if ($folderId > 0) {
+				$folderIds[$folderId] = true;
+			}
+		}
+
+		foreach ($ids as $id) {
+			$result = delete_post_meta($id, '_pnpnm_media_trashed');
+
+			if (is_wp_error($result)) {
+				return $this->errorResponse($result);
+			}
+
+			if ($result) {
+				$restored[] = $id;
+			}
+		}
+
+		if (!empty($restored)) {
+			$this->invalidateCache();
+		}
+
+		$data = [
+			'restored'       => $restored,
+			'count'          => count($restored),
+			'folders'        => $this->buildFolderRemainingCounts(array_keys($folderIds)),
+			'uncategorized'  => Attachment::get('uncategorized', true),
+			'allFiles'       => Attachment::get('all', true),
+			'trash'          => Attachment::get('trash', true),
+			'unused'         => Attachment::get('unused', true),
+		];
+
+		$data['dynamicFolders'] = Attachment::countDynamicFolders__premium_only();
+
+		return $this->successResponse($data, __('Attachments restored successfully.', 'ninja-media'));
+	}
+
+	public function toggleFavorite(WP_REST_Request $request): WP_REST_Response
+	{
+		$ids      = array_map('intval', (array) $request->get_param('ids'));
+		$favorite = (bool) $request->get_param('favorite');
+		$metaKey  = '_pnpnm_favorite_' . get_current_user_id();
+
+		if (!Attachment::exists($ids)) {
+			return $this->errorResponse(__('One or more attachments not found.', 'ninja-media'), 404);
+		}
+
+		foreach ($ids as $id) {
+			if ($favorite) {
+				update_post_meta($id, $metaKey, '1');
+			} else {
+				delete_post_meta($id, $metaKey);
+			}
+		}
+
+		do_action('pnpnm_after_toggle_favorite', $ids, $favorite, get_current_user_id());
+
+		$this->invalidateCache();
+
+		return $this->successResponse([
+			'ids'       => $ids,
+			'favorite'  => $favorite,
+			'favorites' => Attachment::get('favorites', true),
+		], $favorite
+			? __('Added to favorites.', 'ninja-media')
+			: __('Removed from favorites.', 'ninja-media')
+		);
+	}
+
+	public function duplicateAttachments(WP_REST_Request $request): WP_REST_Response
+	{
+		$ids        = array_map('intval', (array) $request->get_param('ids'));
+		$duplicated = [];
+
+		foreach ($ids as $id) {
+			$result = $this->attachmentModel->duplicateAttachments__premium_only([$id]);
+
+			if (is_wp_error($result)) {
+				return $this->errorResponse($result);
+			}
+
+			if (!empty($result)) {
+				$duplicated = array_merge($duplicated, $result);
+			}
+		}
+
+		if (!empty($duplicated)) {
+			$this->invalidateCache();
+		}
+
+		return $this->successResponse([
+			'duplicated' => $duplicated,
+			'total'      => count($duplicated),
+			'allFiles'   => Attachment::get('all', true),
+		], __('Attachments duplicated successfully.', 'ninja-media'));
+	}
+
+	// @end_fs_premium_only
 
 	public function createFolder(WP_REST_Request $request): WP_REST_Response
 	{
@@ -563,6 +837,45 @@ class MediaLibrary extends BaseFolderController
 		}
 
 		return array_keys($folderIds);
+	}
+
+	public function updateFileMetadata(WP_REST_Request $request): WP_REST_Response
+	{
+		$id          = absint($request->get_param('id'));
+		$post        = get_post($id);
+
+		if (!$post || 'attachment' !== $post->post_type) {
+			return $this->errorResponse(__('Attachment not found.', 'ninja-media'), 404);
+		}
+
+		$update = ['ID' => $id];
+
+		if (null !== $request->get_param('title')) {
+			$update['post_title'] = sanitize_text_field($request->get_param('title'));
+		}
+		if (null !== $request->get_param('caption')) {
+			$update['post_excerpt'] = sanitize_text_field($request->get_param('caption'));
+		}
+		if (null !== $request->get_param('description')) {
+			$update['post_content'] = sanitize_textarea_field($request->get_param('description'));
+		}
+
+		if (count($update) > 1) {
+			$result = wp_update_post($update, true);
+			if (is_wp_error($result)) {
+				return $this->errorResponse($result);
+			}
+		}
+
+		if (null !== $request->get_param('alt')) {
+			update_post_meta($id, '_wp_attachment_image_alt', sanitize_text_field($request->get_param('alt')));
+		}
+
+		do_action('pnpnm_file_metadata_updated', $id);
+
+		$formatted = BaseModel::formatAttachment($id);
+
+		return $this->successResponse($formatted, __('Metadata updated.', 'ninja-media'));
 	}
 
 	/**

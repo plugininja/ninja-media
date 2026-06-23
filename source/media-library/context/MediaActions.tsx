@@ -25,6 +25,7 @@ const ActionButtons = ({ attachmentId }: { attachmentId: number }) => {
             statusProps: {
                 default: true,
                 isPro: true,
+                proTooltipDisabled: true,
             },
             enabled: pnpnm?.settings?.general?.files?.replaceMedia ?? false,
             loading: replaceLoading,
@@ -37,6 +38,7 @@ const ActionButtons = ({ attachmentId }: { attachmentId: number }) => {
             statusProps: {
                 default: true,
                 isPro: true,
+                proTooltipDisabled: true,
             },
             enabled: pnpnm?.settings?.general?.files?.duplicateMedia ?? false,
             loading: false,
@@ -49,6 +51,7 @@ const ActionButtons = ({ attachmentId }: { attachmentId: number }) => {
             statusProps: {
                 default: true,
                 isPro: true,
+                proTooltipDisabled: true,
             },
             enabled: pnpnm?.settings?.watermark?.enabled ?? false,
             loading: false,
@@ -61,6 +64,7 @@ const ActionButtons = ({ attachmentId }: { attachmentId: number }) => {
             statusProps: {
                 default: true,
                 isPro: true,
+                proTooltipDisabled: true,
             },
             enabled: pnpnm?.settings?.watermark?.enabled ?? false,
             loading: false,
@@ -147,23 +151,48 @@ const ActionButtons = ({ attachmentId }: { attachmentId: number }) => {
     );
 };
 
+const getAttachmentId = (): number | null => {
+    // upload.php?item=12 — single attachment page
+    const fromUrl = window.location.search.match(/[?&]item=(\d+)/)?.[1];
+    if (fromUrl) return Number(fromUrl);
+
+    // Inside the WP media modal (post editor, etc.)
+    try {
+        const frame = (window as any).wp?.media?.frame;
+        const firstId = frame?.state()?.get?.("selection")?.first()?.id;
+        if (firstId) return Number(firstId);
+    } catch {}
+
+    return null;
+};
+
 const injectActionsButton = (details: Element) => {
     if (details.querySelector(".pnpnm-media-actions")) return;
 
-    const attachmentId = window.location.search.match(/[?&]item=(\d+)/)?.[1];
+    const attachmentId = getAttachmentId();
     if (!attachmentId) return;
-
-    const container = details.querySelector(".compat-item");
-    if (!container) return;
 
     const wrapper = document.createElement("div");
     wrapper.className = "pnpnm-media-actions pnpnm-top-level-wrapper";
-    container.appendChild(wrapper);
+
+    // .compat-item only exists when another plugin registers compat fields.
+    // Fall back to inserting before the .actions links row.
+    const compatItem = details.querySelector(".compat-item");
+    if (compatItem) {
+        compatItem.appendChild(wrapper);
+    } else {
+        const actions = details.querySelector(".actions");
+        if (actions) {
+            details.insertBefore(wrapper, actions);
+        } else {
+            details.appendChild(wrapper);
+        }
+    }
 
     createRoot(wrapper).render(
         <Provider store={store}>
             <CustomAlertProvider>
-                <ActionButtons attachmentId={Number(attachmentId)} />
+                <ActionButtons attachmentId={attachmentId} />
             </CustomAlertProvider>
         </Provider>,
     );

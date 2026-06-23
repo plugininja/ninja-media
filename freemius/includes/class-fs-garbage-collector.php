@@ -257,6 +257,7 @@
                     continue;
                 }
 
+
                 // If the product is active, we don't need to update the gc_timestamp.
                 if ( isset( $this->_storage_data[ $slug ]['last_load_timestamp'] ) ) {
                     continue;

@@ -2,22 +2,23 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ninja Media 1.0.2\n"
+"Project-Id-Version: Ninja Media 1.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninja-media\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-18T06:48:17+00:00\n"
+"POT-Creation-Date: 2026-06-23T12:25:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ninja-media\n"
 
 #. Plugin Name of the plugin
 #: ninja-media.php
-#: includes/Admin.php:136
-#: includes/Admin.php:137
+#: includes/Abilities.php:36
+#: includes/Admin.php:177
+#: includes/Admin.php:178
 #: includes/ReviewBanner.php:77
 msgid "Ninja Media"
 msgstr ""
@@ -42,20 +43,95 @@ msgstr ""
 msgid "https://plugininja.com/"
 msgstr ""
 
-#: includes/Admin.php:33
+#: includes/Abilities.php:47
+msgid "List Media Folders"
+msgstr ""
+
+#: includes/Abilities.php:48
+msgid "Returns all media library folders ordered by sort order."
+msgstr ""
+
+#: includes/Abilities.php:59
+msgid "Create Media Folder"
+msgstr ""
+
+#: includes/Abilities.php:60
+msgid "Creates a new folder in the media library."
+msgstr ""
+
+#: includes/Abilities.php:69
+msgid "Folder name."
+msgstr ""
+
+#: includes/Abilities.php:73
+msgid "Parent folder ID. Use 0 for root."
+msgstr ""
+
+#: includes/Abilities.php:83
+msgid "List Media Files"
+msgstr ""
+
+#: includes/Abilities.php:84
+msgid "Returns media files, optionally filtered by folder ID."
+msgstr ""
+
+#: includes/Abilities.php:93
+msgid "Folder ID to filter by. Omit to return all files."
+msgstr ""
+
+#: includes/Abilities.php:97
+msgid "Number of files to return (max 100)."
+msgstr ""
+
+#: includes/Abilities.php:102
+msgid "Page number."
+msgstr ""
+
+#: includes/Abilities.php:114
+msgid "Move Files to Folder"
+msgstr ""
+
+#: includes/Abilities.php:115
+msgid "Assigns one or more media files to a folder."
+msgstr ""
+
+#: includes/Abilities.php:125
+msgid "Array of attachment IDs to move."
+msgstr ""
+
+#: includes/Abilities.php:129
+msgid "Target folder ID."
+msgstr ""
+
+#: includes/Abilities.php:166
+msgid "Folder name is required."
+msgstr ""
+
+#: includes/Abilities.php:233
+#: includes/API/Controllers/Watermark__premium_only.php:189
+msgid "No attachment IDs provided."
+msgstr ""
+
+#: includes/Abilities.php:240
+msgid "Target folder not found."
+msgstr ""
+
+#: includes/Admin.php:48
 msgid "Settings"
 msgstr ""
 
-#: includes/Admin.php:38
+#: includes/Admin.php:53
 msgid "Watermark"
 msgstr ""
 
-#: includes/Admin.php:43
+#: includes/Admin.php:58
+#: includes/Admin.php:84
+#: includes/Admin.php:85
 msgid "File Manager"
 msgstr ""
 
-#: includes/Admin.php:167
-#: includes/Pninja.php:87
+#: includes/Admin.php:208
+#: includes/Pninja.php:99
 msgid "Media Library"
 msgstr ""
 
@@ -65,8 +141,8 @@ msgstr ""
 
 #: includes/API/BaseFolderController.php:75
 #: includes/API/BaseFolderController.php:129
-#: includes/API/Controllers/MediaLibrary.php:385
-#: includes/API/Controllers/MediaLibrary.php:797
+#: includes/API/Controllers/MediaLibrary.php:393
+#: includes/API/Controllers/MediaLibrary.php:800
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:357
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:461
 msgid "Folder not found."
@@ -88,125 +164,132 @@ msgstr ""
 msgid "Breadcrumbs retrieved successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:90
+#: includes/API/Controllers/MediaLibrary.php:87
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:98
 msgid "Root folders retrieved successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:372
+#: includes/API/Controllers/MediaLibrary.php:380
 msgid "Folders retrieved successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:422
+#: includes/API/Controllers/MediaLibrary.php:430
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:383
 msgid "Folder retrieved successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:433
+#: includes/API/Controllers/MediaLibrary.php:440
 msgid "Unused attachments retrieved successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:444
+#: includes/API/Controllers/MediaLibrary.php:451
 msgid "Unused attachments cleared successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:454
+#: includes/API/Controllers/MediaLibrary.php:461
 msgid "ZIP functionality is not available on this server."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:464
+#: includes/API/Controllers/MediaLibrary.php:471
 msgid "Failed to create temporary directory."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:470
+#: includes/API/Controllers/MediaLibrary.php:477
 msgid "Failed to create ZIP archive."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:507
+#: includes/API/Controllers/MediaLibrary.php:514
 msgid "No accessible files found in the selected folders."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:519
+#: includes/API/Controllers/MediaLibrary.php:526
 msgid "Download ready."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:527
-#: includes/API/Controllers/MediaLibrary.php:540
+#: includes/API/Controllers/MediaLibrary.php:534
+#: includes/API/Controllers/MediaLibrary.php:547
+#: includes/API/Controllers/MediaLibrary.php:999
 #: includes/API/Controllers/Media__premium_only.php:49
+#: includes/modules/ImageEditor/EditorREST.php:100
+#: includes/modules/ImageEditor/EditorREST.php:192
 msgid "Attachment not found."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:532
+#: includes/API/Controllers/MediaLibrary.php:539
 msgid "Trashed attachments retrieved successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:575
+#: includes/API/Controllers/MediaLibrary.php:580
 msgid "Attachments moved to trash successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:631
+#: includes/API/Controllers/MediaLibrary.php:634
 msgid "Attachments restored successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:641
+#: includes/API/Controllers/MediaLibrary.php:644
 msgid "One or more attachments not found."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:661
+#: includes/API/Controllers/MediaLibrary.php:664
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:515
 msgid "Added to favorites."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:662
+#: includes/API/Controllers/MediaLibrary.php:665
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:516
 msgid "Removed from favorites."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:691
+#: includes/API/Controllers/MediaLibrary.php:694
 msgid "Attachments duplicated successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:712
+#: includes/API/Controllers/MediaLibrary.php:715
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:412
 msgid "Folder created successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:751
+#: includes/API/Controllers/MediaLibrary.php:754
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:446
 msgid "Folders deleted successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:752
+#: includes/API/Controllers/MediaLibrary.php:755
 #: includes/API/Controllers/PostTypeLibrary__premium_only.php:447
 msgid "Folder deleted successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:780
+#: includes/API/Controllers/MediaLibrary.php:783
 msgid "Folders copied successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:781
+#: includes/API/Controllers/MediaLibrary.php:784
 msgid "Folder copied successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:803
+#: includes/API/Controllers/MediaLibrary.php:806
 msgid "You do not have permission to move one or more of the selected files."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:823
+#: includes/API/Controllers/MediaLibrary.php:826
 msgid "Media assigned successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:836
+#: includes/API/Controllers/MediaLibrary.php:839
 msgid "Invalid file extension filter."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:888
+#: includes/API/Controllers/MediaLibrary.php:891
 msgid "Attachments retrieved successfully."
 msgstr ""
 
-#: includes/API/Controllers/MediaLibrary.php:926
+#: includes/API/Controllers/MediaLibrary.php:931
 msgid "Attachments deleted successfully."
+msgstr ""
+
+#: includes/API/Controllers/MediaLibrary.php:1029
+msgid "Metadata updated."
 msgstr ""
 
 #: includes/API/Controllers/Media__premium_only.php:26
@@ -231,11 +314,11 @@ msgstr ""
 msgid "Failed to copy the uploaded file to its destination."
 msgstr ""
 
-#: includes/API/Controllers/Media__premium_only.php:152
+#: includes/API/Controllers/Media__premium_only.php:153
 msgid "Media replaced but could not retrieve attachment data."
 msgstr ""
 
-#: includes/API/Controllers/Media__premium_only.php:159
+#: includes/API/Controllers/Media__premium_only.php:173
 msgid "Media replaced successfully."
 msgstr ""
 
@@ -274,16 +357,12 @@ msgstr ""
 msgid "Number of images to process per batch."
 msgstr ""
 
-#: includes/API/Controllers/Tools.php:81
+#: includes/API/Controllers/Tools.php:82
 msgid "Failed to retrieve image count."
 msgstr ""
 
-#: includes/API/Controllers/Tools.php:148
+#: includes/API/Controllers/Tools.php:149
 msgid "Failed to generate thumbnails."
-msgstr ""
-
-#: includes/API/Controllers/Watermark__premium_only.php:189
-msgid "No attachment IDs provided."
 msgstr ""
 
 #. translators: %d = number of files restored
@@ -310,6 +389,98 @@ msgstr ""
 #: includes/API/Controllers/Watermark__premium_only.php:290
 #, php-format
 msgid "Font \"%s\" uploaded successfully."
+msgstr ""
+
+#: includes/Enqueue.php:285
+#: includes/Enqueue.php:301
+msgid "Optimizing…"
+msgstr ""
+
+#: includes/Enqueue.php:286
+#: includes/Enqueue.php:302
+msgid "Restoring…"
+msgstr ""
+
+#: includes/Enqueue.php:287
+#: includes/Enqueue.php:303
+msgid "Done"
+msgstr ""
+
+#: includes/Enqueue.php:288
+#: includes/Enqueue.php:304
+msgid "Error"
+msgstr ""
+
+#: includes/Enqueue.php:289
+#: includes/Enqueue.php:315
+msgid "Unsaved changes will be lost. Close anyway?"
+msgstr ""
+
+#: includes/Enqueue.php:290
+msgid "Saving…"
+msgstr ""
+
+#: includes/Enqueue.php:291
+msgid "Save As New"
+msgstr ""
+
+#: includes/Enqueue.php:292
+#: includes/modules/ImageToolsAdmin.php:306
+msgid "Replace Original"
+msgstr ""
+
+#: includes/Enqueue.php:293
+msgid "Download"
+msgstr ""
+
+#: includes/Enqueue.php:294
+msgid "View attachment"
+msgstr ""
+
+#: includes/Enqueue.php:305
+msgid "Saved"
+msgstr ""
+
+#: includes/Enqueue.php:306
+#: includes/modules/ImageOptimizer/OptimizerAdmin.php:114
+msgid "Optimize"
+msgstr ""
+
+#: includes/Enqueue.php:307
+#: includes/modules/ImageOptimizer/OptimizerAdmin.php:101
+msgid "Restore Original"
+msgstr ""
+
+#: includes/Enqueue.php:308
+msgid "Stripping metadata"
+msgstr ""
+
+#: includes/Enqueue.php:309
+msgid "processed"
+msgstr ""
+
+#: includes/Enqueue.php:310
+msgid "Already optimal — no change"
+msgstr ""
+
+#: includes/Enqueue.php:311
+#: includes/modules/ImageToolsAdmin.php:254
+msgid "All images are already optimized — nothing left to process."
+msgstr ""
+
+#: includes/Enqueue.php:312
+msgid "This will permanently remove metadata from all images. A backup will be kept if you have that option enabled. Continue?"
+msgstr ""
+
+#: includes/Enqueue.php:313
+#: includes/modules/ImageToolsAdmin.php:194
+#: includes/modules/ImageToolsAdmin.php:249
+msgid "Stop"
+msgstr ""
+
+#: includes/Enqueue.php:314
+#: includes/modules/ImageToolsAdmin.php:246
+msgid "Start Bulk Optimization"
 msgstr ""
 
 #: includes/FontManager__premium_only.php:97
@@ -388,10 +559,415 @@ msgstr ""
 msgid "An unknown error occurred during the font file upload."
 msgstr ""
 
+#: includes/ImageProcessor.php:191
+msgid "Default Featured Image"
+msgstr ""
+
+#: includes/ImageProcessor.php:198
+msgid "Default image"
+msgstr ""
+
+#: includes/ImageProcessor.php:219
+msgid "Select Default Featured Image"
+msgstr ""
+
+#: includes/ImageProcessor.php:220
+msgid "Use this image"
+msgstr ""
+
+#: includes/ImageProcessor.php:221
+#: includes/ImageProcessor.php:315
+msgid "Replace image"
+msgstr ""
+
+#: includes/ImageProcessor.php:222
+#: includes/ImageProcessor.php:315
+msgid "Select image"
+msgstr ""
+
+#: includes/ImageProcessor.php:294
+msgid "No custom image set — your site logo is used as the fallback. Select an image above to override it."
+msgstr ""
+
+#: includes/ImageProcessor.php:321
+msgid "Remove"
+msgstr ""
+
+#: includes/ImageProcessor.php:326
+msgid "Shown on any post or page that has no featured image. If no image is selected, your site logo is used automatically."
+msgstr ""
+
 #. translators: 1: file size, 2: allowed size
-#: includes/MediaLibrary.php:75
+#: includes/MediaLibrary.php:76
 #, php-format
 msgid "This file is %1$s. Files must be smaller than %2$s."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorAdmin.php:57
+msgid "Open in Image Editor"
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:43
+msgid "Attachment ID."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:77
+msgid "Default save mode: new or replace."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:83
+msgid "Default format: jpeg or png."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:108
+msgid "Attachment is not a supported image type."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:148
+msgid "Failed to write edited image file."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:210
+msgid "Failed to overwrite image file."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:246
+msgid "default_save_mode must be new or replace."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:253
+msgid "default_format must be jpeg or png."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:292
+msgid "Invalid base64 image data."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:296
+msgid "Image data exceeds 10 MB limit."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:316
+msgid "Source attachment ID."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:321
+msgid "Base64-encoded image data."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:327
+msgid "Output format: jpeg or png."
+msgstr ""
+
+#: includes/modules/ImageEditor/EditorREST.php:337
+msgid "Filename (without extension) for the new attachment."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:31
+#: includes/modules/ImageOptimizer/Optimizer.php:166
+msgid "GD library is not available."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:38
+#: includes/modules/ImageOptimizer/Optimizer.php:173
+msgid "Attachment file not found."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:43
+msgid "Only JPEG and PNG images are supported."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:74
+msgid "Failed to replace image with optimized version."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:115
+msgid "No backup file found for this image."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:120
+msgid "Attachment file path not found."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:124
+msgid "Failed to restore backup file."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:150
+msgid "Image restored successfully."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:178
+msgid "Only JPEG and PNG images support metadata stripping."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:191
+msgid "Failed to load JPEG for metadata stripping."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:197
+msgid "Failed to load PNG for metadata stripping."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:207
+msgid "Failed to save image after metadata stripping."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:410
+msgid "Failed to load JPEG image."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:419
+msgid "Failed to save optimized JPEG."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:428
+msgid "Failed to load PNG image."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:444
+msgid "Failed to save optimized PNG."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/Optimizer.php:488
+msgid "Failed to create backup of original image."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerAdmin.php:48
+msgid "Ninja Media — Image Optimizer requires the PHP GD extension, which is not currently available on your server. Please contact your host to enable it."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerAdmin.php:59
+msgid "Optimization"
+msgstr ""
+
+#. translators: %s is the percentage of file size saved after optimization.
+#: includes/modules/ImageOptimizer/OptimizerAdmin.php:86
+#, php-format
+msgid "%s%% saved"
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerAdmin.php:93
+msgid "&#10003; Already optimal"
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:55
+msgid "Attachment ID to optimize."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:70
+#: includes/modules/ImageOptimizer/OptimizerREST.php:121
+msgid "Offset for batch processing."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:85
+msgid "Attachment ID to restore."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:106
+msgid "Attachment ID to strip metadata from."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:146
+msgid "Quality must be between 60 and 100."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:153
+msgid "Type must be lossy or lossless."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:180
+#: includes/modules/ImageOptimizer/OptimizerREST.php:235
+msgid "Invalid or non-image attachment."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:358
+msgid "JPEG/PNG quality (60–100)."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:364
+msgid "Compression type: lossy or lossless."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:370
+msgid "Auto-optimize on upload."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:376
+msgid "Keep backup of original."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:382
+msgid "Convert to WebP after optimization."
+msgstr ""
+
+#: includes/modules/ImageOptimizer/OptimizerREST.php:388
+msgid "Strip hidden metadata (EXIF/IPTC/XMP) on optimize."
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:37
+#: includes/modules/ImageToolsAdmin.php:38
+#: includes/modules/ImageToolsAdmin.php:60
+msgid "Image Tools"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:47
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:65
+msgid "Image Optimizer"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:69
+msgid "Image Editor Settings"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:100
+msgid "Optimizer Settings"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:105
+msgid "Quality"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:112
+msgid "60–100. Lower = smaller file, lower quality."
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:117
+msgid "Compression Type"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:122
+msgid "Lossy"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:125
+msgid "Lossless"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:131
+msgid "Auto-optimize on Upload"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:136
+msgid "Automatically optimize new images when uploaded"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:141
+msgid "Keep Original Backup"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:146
+msgid "Save a backup of the original image so you can restore it later"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:151
+msgid "Convert to WebP"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:156
+msgid "Generate a .webp copy alongside each optimized image (requires GD WebP support)"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:161
+#: includes/modules/ImageToolsAdmin.php:186
+msgid "Strip Hidden Metadata"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:166
+msgid "Remove EXIF, IPTC, and XMP metadata from images during optimization"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:169
+msgid "Metadata is stripped automatically when images are re-encoded via GD. This reduces file size and removes GPS coordinates, camera info, and other embedded data."
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:177
+#: includes/modules/ImageToolsAdmin.php:326
+msgid "Save Settings"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:187
+msgid "Remove EXIF, IPTC, XMP, and other hidden data from all images in your library. This is irreversible unless you have Keep Original Backup enabled."
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:191
+msgid "Strip Metadata from All Images"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:200
+#: includes/modules/ImageToolsAdmin.php:259
+msgid "Starting…"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:209
+msgid "Attachment ID"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:210
+msgid "Size Before"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:211
+msgid "Size After"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:212
+msgid "Bytes Saved"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:223
+msgid "Bulk Optimizer"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:227
+msgid "Total images:"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:231
+msgid "Optimized:"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:235
+msgid "Unoptimized:"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:239
+msgid "Total savings:"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:268
+msgid "Filename"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:269
+msgid "Original Size"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:270
+msgid "Optimized Size"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:271
+msgid "Savings"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:293
+msgid "Image Editor Defaults"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:298
+msgid "Default Save Mode"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:303
+msgid "Save as New Attachment"
+msgstr ""
+
+#: includes/modules/ImageToolsAdmin.php:313
+msgid "Default Export Format"
 msgstr ""
 
 #. translators: %d: Number of days the plugin has been active
@@ -416,7 +992,7 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: includes/SvgSupport.php:93
+#: includes/SvgSupport.php:83
 msgid "SVG file could not be sanitized and was rejected for security reasons."
 msgstr ""
 
@@ -441,12 +1017,12 @@ msgid "PHP version %s or higher is required."
 msgstr ""
 
 #. translators: %s: file path
-#: models/Attachment.php:515
+#: models/Attachment.php:458
 #, php-format
 msgid "Failed to copy attachment file: %s"
 msgstr ""
 
-#: models/Attachment.php:527
+#: models/Attachment.php:470
 msgid "(Copy)"
 msgstr ""
 
@@ -527,6 +1103,6 @@ msgstr ""
 msgid "Failed to insert record at index %d"
 msgstr ""
 
-#: models/BaseModel.php:933
-msgid "(no title)"
+#: source/media-library/media-library.js:522
+msgid "Load More"
 msgstr ""

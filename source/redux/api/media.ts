@@ -1,4 +1,5 @@
 import { ServerResponse } from "~/types/response";
+import { File, FileMetadataPayload } from "~/types/file";
 import { Folder } from "~/types/folder";
 import { baseApi } from "./base";
 import {
@@ -251,6 +252,18 @@ export const media = baseApi.injectEndpoints({
             },
         }),
 
+        updateFileMetadata: builder.mutation<
+            ServerResponse<File>,
+            FileMetadataPayload
+        >({
+            query: ({ id, ...body }) => ({
+                url: `media-library/files/${id}/metadata`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ["Files"],
+        }),
+
     }),
 });
 
@@ -266,4 +279,5 @@ export const {
     useDeleteFolderMutation,
     useRestoreFileMutation,
     useDeleteFileMutation,
+    useUpdateFileMetadataMutation,
 } = media;

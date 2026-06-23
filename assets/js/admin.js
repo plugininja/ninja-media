@@ -926,7 +926,9 @@ const FileContext = ({
         } else if (item?.key === "get") {
           return bulkSelect ? false : true;
         } else if (item?.key === "edit") {
-          return false;
+          if (menuKey === "trash" || bulkSelect) return false;
+          const ext = (props?.files?.[0]?.extension || "").toLowerCase();
+          return ["jpg", "jpeg", "png", "gif", "webp"].includes(ext);
         } else if (item?.key === "download") {
           return bulkSelect ? false : true;
         } else if (item?.key === "duplicate") {
@@ -1028,23 +1030,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useViewDetails: () => (/* binding */ useViewDetails)
 /* harmony export */ });
-/* harmony import */ var _components_alert_Alert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ~/components/alert/Alert */ "./source/components/alert/Alert.tsx");
-/* harmony import */ var _hooks_useFileActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../hooks/useFileActions */ "./source/admin/files/hooks/useFileActions.ts");
-/* harmony import */ var _utils_functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ~/utils/functions */ "./source/utils/functions.ts");
-/* harmony import */ var _components_inlineStack__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ~/components/inlineStack */ "./source/components/inlineStack/index.ts");
-/* harmony import */ var _components_blockStack__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ~/components/blockStack */ "./source/components/blockStack/index.ts");
-/* harmony import */ var _components_iconButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ~/components/iconButton */ "./source/components/iconButton/index.ts");
-/* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ~/components/tooltip */ "./source/components/tooltip/index.ts");
-/* harmony import */ var _Delete__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Delete */ "./source/admin/files/components/Delete.tsx");
-/* harmony import */ var _components_avatar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ~/components/avatar */ "./source/components/avatar/index.ts");
-/* harmony import */ var _hooks_useFile__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../hooks/useFile */ "./source/admin/files/hooks/useFile.ts");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _components_card__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ~/components/card */ "./source/components/card/index.ts");
-/* harmony import */ var _components_text__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ~/components/text */ "./source/components/text/index.ts");
-/* harmony import */ var _components_icon__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ~/components/icon */ "./source/components/icon/index.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_alert_Alert__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ~/components/alert/Alert */ "./source/components/alert/Alert.tsx");
+/* harmony import */ var _redux_api_media__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ~/redux/api/media */ "./source/redux/api/media.ts");
+/* harmony import */ var _hooks_useFileActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../hooks/useFileActions */ "./source/admin/files/hooks/useFileActions.ts");
+/* harmony import */ var _utils_functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ~/utils/functions */ "./source/utils/functions.ts");
+/* harmony import */ var _components_inlineStack__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ~/components/inlineStack */ "./source/components/inlineStack/index.ts");
+/* harmony import */ var _components_blockStack__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ~/components/blockStack */ "./source/components/blockStack/index.ts");
+/* harmony import */ var _components_iconButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ~/components/iconButton */ "./source/components/iconButton/index.ts");
+/* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ~/components/tooltip */ "./source/components/tooltip/index.ts");
+/* harmony import */ var _Delete__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Delete */ "./source/admin/files/components/Delete.tsx");
+/* harmony import */ var _components_avatar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ~/components/avatar */ "./source/components/avatar/index.ts");
+/* harmony import */ var _components_button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ~/components/button */ "./source/components/button/index.ts");
+/* harmony import */ var _components_input__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ~/components/input */ "./source/components/input/index.ts");
+/* harmony import */ var _hooks_useFile__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../hooks/useFile */ "./source/admin/files/hooks/useFile.ts");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _components_card__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ~/components/card */ "./source/components/card/index.ts");
+/* harmony import */ var _components_text__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ~/components/text */ "./source/components/text/index.ts");
+/* harmony import */ var _components_icon__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ~/components/icon */ "./source/components/icon/index.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__);
 
 const FileDetails = ({
   onClose
@@ -1052,13 +1059,16 @@ const FileDetails = ({
   const {
     setFile,
     detailsFile
-  } = (0,_hooks_useFile__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  } = (0,_hooks_useFile__WEBPACK_IMPORTED_MODULE_13__["default"])();
   const {
     getFileLink,
-  } = (0,_hooks_useFileActions__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  } = (0,_hooks_useFileActions__WEBPACK_IMPORTED_MODULE_3__["default"])();
   const {
     openDeleteFile
-  } = (0,_Delete__WEBPACK_IMPORTED_MODULE_7__.useDeleteFile)();
+  } = (0,_Delete__WEBPACK_IMPORTED_MODULE_9__.useDeleteFile)();
+  const [updateMetadata, {
+    isLoading: isSaving
+  }] = (0,_redux_api_media__WEBPACK_IMPORTED_MODULE_2__.useUpdateFileMetadataMutation)();
   const {
     id,
     name,
@@ -1067,24 +1077,61 @@ const FileDetails = ({
     size,
     location,
     createdAt,
-    updatedAt
+    updatedAt,
+    alt,
+    caption,
+    description
   } = detailsFile || {};
+  const [metaTitle, setMetaTitle] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(name ?? "");
+  const [metaAlt, setMetaAlt] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(alt ?? "");
+  const [metaCaption, setMetaCaption] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(caption ?? "");
+  const [metaDesc, setMetaDesc] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(description ?? "");
+  const [saveStatus, setSaveStatus] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)("idle");
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setMetaTitle(name ?? "");
+    setMetaAlt(alt ?? "");
+    setMetaCaption(caption ?? "");
+    setMetaDesc(description ?? "");
+    setSaveStatus("idle");
+  }, [id]);
   const handleClose = () => {
     setFile("detailsFile", null);
     onClose();
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_card__WEBPACK_IMPORTED_MODULE_11__["default"], {
+  const handleSave = async () => {
+    if (!id) return;
+    setSaveStatus("idle");
+    try {
+      await updateMetadata({
+        id,
+        title: metaTitle,
+        alt: metaAlt,
+        caption: metaCaption,
+        description: metaDesc
+      }).unwrap();
+      setSaveStatus("success");
+      setTimeout(() => setSaveStatus("idle"), 2500);
+    } catch {
+      setSaveStatus("error");
+    }
+  };
+  const openImageEditor = () => {
+    const editorUrl = `${pnpnm?.siteUrl ?? ""}/wp-admin/post.php?post=${id}&action=edit&open_pnpnm_editor=${id}`;
+    window.open(editorUrl, "_blank");
+  };
+  const isImage = ["jpg", "jpeg", "png", "gif", "webp", "avif"].includes((extension ?? "").toLowerCase());
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_card__WEBPACK_IMPORTED_MODULE_15__["default"], {
     padding: 0,
     background: "white",
     borderStyle: "none",
     rounded: "md",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_5__["default"], {
       align: "between",
       gap: 10,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
         size: "sm",
-        children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Media Details", "ninja-media"), " ", id]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_iconButton__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Media Details", "ninja-media"), " ", id]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_iconButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
         variant: "error",
         size: "microsmall",
         name: "close",
@@ -1093,15 +1140,15 @@ const FileDetails = ({
         },
         onClick: handleClose
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_card__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_card__WEBPACK_IMPORTED_MODULE_15__["default"], {
       marginTop: 15,
       padding: 0,
       background: "extralight",
       rounded: "md",
       style: {
-        height: "300px"
+        height: "220px"
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_avatar__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_avatar__WEBPACK_IMPORTED_MODULE_10__["default"], {
         src: `${url}?v=${updatedAt}`,
         alt: name,
         width: "100%",
@@ -1110,32 +1157,33 @@ const FileDetails = ({
         objectFit: "contain",
         showSpinner: true
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_5__["default"], {
       gap: 20,
       wrap: false,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        marginTop: 10,
+      style: {
+        marginTop: 10
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
         gap: 5,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           size: "sm",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Name:", "ninja-media")
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Name:", "ninja-media")
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           size: "sm",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Type:", "ninja-media")
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Type:", "ninja-media")
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           size: "sm",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Size:", "ninja-media")
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Size:", "ninja-media")
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           size: "sm",
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Date:", "ninja-media")
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Date:", "ninja-media")
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        marginTop: 10,
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
         gap: 5,
         style: {
           minWidth: 0
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           color: "descgray",
           size: "sm",
           wrap: false,
@@ -1144,66 +1192,153 @@ const FileDetails = ({
             minWidth: 0
           },
           children: name
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           color: "descgray",
           size: "sm",
           children: extension
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           color: "descgray",
           size: "sm",
-          children: (0,_utils_functions__WEBPACK_IMPORTED_MODULE_2__.formatFileSize)(size ?? 0)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: (0,_utils_functions__WEBPACK_IMPORTED_MODULE_4__.formatFileSize)(size ?? 0)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
           color: "descgray",
           size: "sm",
           children: createdAt
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      marginTop: 20,
-      gap: location?.length === 0 ? 0 : 10,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      marginTop: 15,
+      gap: location?.length === 0 ? 0 : 8,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
         size: "sm",
-        children: location?.length === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Location not Found", "ninja-media") : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Location:", "ninja-media")
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_blockStack__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        children: location?.length === 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Location not Found", "ninja-media") : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Location:", "ninja-media")
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_blockStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
         gap: 5,
         style: {
           marginLeft: 10
         },
         children: location?.map(({
-          name,
-          url
-        }, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          name: locName,
+          url: locUrl
+        }, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_5__["default"], {
           gap: 10,
           wrap: false,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
             color: "descgray",
             size: "sm",
             wrap: false,
             children: [index + 1, "."]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
             color: "descgray",
             size: "sm",
             wrap: false,
-            children: name
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_13__["default"], {
+            children: locName
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_17__["default"], {
             name: "open_in_new",
             color: "primary",
             style: {
               cursor: "pointer"
             },
-            onClick: () => window.open(url, "_blank")
+            onClick: () => window.open(locUrl, "_blank")
           })]
         }, index))
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      marginTop: 18,
+      gap: 10,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
+        size: "sm",
+        style: {
+          fontWeight: 600
+        },
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Metadata", "ninja-media")
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_input__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Title", "ninja-media"),
+        value: metaTitle,
+        size: "small",
+        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Image title", "ninja-media"),
+        onChange: v => setMetaTitle(String(v))
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_input__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Alt Text", "ninja-media"),
+        value: metaAlt,
+        size: "small",
+        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Describe the image for accessibility", "ninja-media"),
+        onChange: v => setMetaAlt(String(v))
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_input__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Caption", "ninja-media"),
+        value: metaCaption,
+        size: "small",
+        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Short caption shown below the image", "ninja-media"),
+        onChange: v => setMetaCaption(String(v))
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+        style: {
+          display: "flex",
+          flexDirection: "column",
+          gap: 4
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
+          style: {
+            fontSize: 13,
+            fontWeight: 500
+          },
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Description", "ninja-media")
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("textarea", {
+          rows: 3,
+          value: metaDesc,
+          placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Longer description of the image", "ninja-media"),
+          onChange: e => setMetaDesc(e.target.value),
+          style: {
+            width: "100%",
+            boxSizing: "border-box",
+            padding: "6px 10px",
+            fontSize: 13,
+            borderRadius: 4,
+            border: "1px solid #dcdcde",
+            resize: "vertical",
+            fontFamily: "inherit"
+          }
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        align: "between",
+        gap: 10,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          variant: "primary",
+          size: "small",
+          loading: isSaving,
+          onClick: handleSave,
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Save Metadata", "ninja-media")
+        }), saveStatus === "success" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          size: "sm",
+          color: "success",
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("✓ Saved", "ninja-media")
+        }), saveStatus === "error" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          size: "sm",
+          color: "error",
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Save failed", "ninja-media")
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_5__["default"], {
       marginTop: 20,
       gap: 15,
       align: "end",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        title: pnpnm?.isPro ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Download", "ninja-media") : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Premium Only", "ninja-media"),
+      children: [isImage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Open in Image Editor", "ninja-media"),
         arrow: true,
         wrap: "no-wrap",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_17__["default"], {
+          name: "edit",
+          color: "primary",
+          fontSize: "xl",
+          style: {
+            cursor: "pointer"
+          },
+          onClick: openImageEditor
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        title: pnpnm?.isPro ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Download", "ninja-media") : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Premium Only", "ninja-media"),
+        arrow: true,
+        wrap: "no-wrap",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_17__["default"], {
           name: "download",
           color: "primary",
           fontSize: "2xl",
@@ -1213,11 +1348,11 @@ const FileDetails = ({
           onClick: () => {
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Copy URL", "ninja-media"),
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Copy URL", "ninja-media"),
         arrow: true,
         wrap: "no-wrap",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_17__["default"], {
           name: "link",
           color: "primary",
           fontSize: "2xl",
@@ -1226,11 +1361,11 @@ const FileDetails = ({
           },
           onClick: () => getFileLink(detailsFile)
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Open in Media Library", "ninja-media"),
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Open in Media Library", "ninja-media"),
         arrow: true,
         wrap: "no-wrap",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_17__["default"], {
           name: "open_in_new",
           color: "primary",
           fontSize: "xl",
@@ -1239,11 +1374,11 @@ const FileDetails = ({
           },
           onClick: () => window.open(`${pnpnm?.siteUrl}/wp-admin/upload.php?item=${id}`, "_blank")
         })
-      }), detailsFile?.location?.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_10__.__)("Delete", "ninja-media"),
+      }), detailsFile?.location?.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_14__.__)("Delete", "ninja-media"),
         arrow: true,
         wrap: "no-wrap",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_icon__WEBPACK_IMPORTED_MODULE_17__["default"], {
           name: "delete",
           color: "error",
           fontSize: "xl",
@@ -1260,7 +1395,7 @@ const useViewDetails = () => {
   const {
     showAlert,
     closeAlert
-  } = (0,_components_alert_Alert__WEBPACK_IMPORTED_MODULE_0__.useCustomAlert)();
+  } = (0,_components_alert_Alert__WEBPACK_IMPORTED_MODULE_1__.useCustomAlert)();
   const openViewDetails = () => {
     showAlert({
       id: "view-details-modal",
@@ -1270,7 +1405,7 @@ const useViewDetails = () => {
       allowEscapeKey: false,
       width: "600px",
       height: "fit-content",
-      html: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(FileDetails, {
+      html: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(FileDetails, {
         onClose: () => closeAlert("view-details-modal")
       })
     });
@@ -1515,14 +1650,18 @@ const FileLists = ({
                 placement: "right-center",
                 right: 1
               },
-              onClick: () => {
+              onClick: e => {
+                e.stopPropagation();
               },
               children: "Trash"
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_button__WEBPACK_IMPORTED_MODULE_11__["default"], {
               variant: "error",
               size: "supersmall",
               startIcon: "delete",
-              onClick: () => openDeleteFile(ids),
+              onClick: e => {
+                e.stopPropagation();
+                openDeleteFile(ids);
+              },
               children: "Delete"
             })
           })]
@@ -1603,6 +1742,7 @@ const FileLocations = ({
     },
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"], {
       arrow: true,
+      placement: "bottom",
       background: "white",
       shadow: true,
       style: {
@@ -1653,7 +1793,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_files__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ~/constants/files */ "./source/constants/files.ts");
 /* harmony import */ var _components_blockStack__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ~/components/blockStack */ "./source/components/blockStack/index.ts");
 /* harmony import */ var _redux_hooks__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ~/redux/hooks */ "./source/redux/hooks.ts");
-/* harmony import */ var _assets_icons_NotFound__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ~/assets/icons/NotFound */ "./source/assets/icons/NotFound.tsx");
+/* harmony import */ var _utils_icons__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ~/utils/icons */ "./source/utils/icons.ts");
 /* harmony import */ var _components_selectBox__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ~/components/selectBox */ "./source/components/selectBox/index.ts");
 /* harmony import */ var _components_gridStack__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ~/components/gridStack */ "./source/components/gridStack/index.ts");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-UVKPFVEO.mjs");
@@ -1811,7 +1951,10 @@ const FilesContainer = () => {
         style: {
           marginTop: "50px"
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_assets_icons_NotFound__WEBPACK_IMPORTED_MODULE_12__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_19__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("img", {
+          src: _utils_icons__WEBPACK_IMPORTED_MODULE_12__.iconNotFound,
+          alt: ""
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_19__["default"], {
           size: "xl",
           weight: "semibold",
           align: "center",
@@ -2527,26 +2670,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _components_FileDetails__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/FileDetails */ "./source/admin/files/components/FileDetails.tsx");
-/* harmony import */ var _components_Delete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Delete */ "./source/admin/files/components/Delete.tsx");
-/* harmony import */ var _useFileActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./useFileActions */ "./source/admin/files/hooks/useFileActions.ts");
-/* harmony import */ var _useFile__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./useFile */ "./source/admin/files/hooks/useFile.ts");
-/* harmony import */ var _shared_hooks_useReplaceMedia_premium_only__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ~/shared/hooks/useReplaceMedia__premium_only */ "./source/shared/hooks/useReplaceMedia__premium_only.ts");
+/* harmony import */ var _components_alert_Alert__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ~/components/alert/Alert */ "./source/components/alert/Alert.tsx");
+/* harmony import */ var _components_Delete__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Delete */ "./source/admin/files/components/Delete.tsx");
+/* harmony import */ var _useFileActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./useFileActions */ "./source/admin/files/hooks/useFileActions.ts");
+/* harmony import */ var _useFile__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./useFile */ "./source/admin/files/hooks/useFile.ts");
+/* harmony import */ var _redux_hooks__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ~/redux/hooks */ "./source/redux/hooks.ts");
+/* harmony import */ var _redux_features_file_file__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ~/redux/features/file/file */ "./source/redux/features/file/file.ts");
+/* harmony import */ var _shared_hooks_useReplaceMedia_premium_only__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ~/shared/hooks/useReplaceMedia__premium_only */ "./source/shared/hooks/useReplaceMedia__premium_only.ts");
 
 const useFileContext = () => {
   const {
-    setFile
-  } = (0,_useFile__WEBPACK_IMPORTED_MODULE_3__["default"])();
+    setFile,
+    detailsFile
+  } = (0,_useFile__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  const dispatch = (0,_redux_hooks__WEBPACK_IMPORTED_MODULE_5__.useAppDispatch)();
   const {
     getFileLink,
     restoreFile,
-  } = (0,_useFileActions__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  } = (0,_useFileActions__WEBPACK_IMPORTED_MODULE_3__["default"])();
   const {
     openViewDetails
   } = (0,_components_FileDetails__WEBPACK_IMPORTED_MODULE_0__.useViewDetails)();
+  const {
+    showAlert
+  } = (0,_components_alert_Alert__WEBPACK_IMPORTED_MODULE_1__.useCustomAlert)();
 
   const {
     openDeleteFile
-  } = (0,_components_Delete__WEBPACK_IMPORTED_MODULE_1__.useDeleteFile)();
+  } = (0,_components_Delete__WEBPACK_IMPORTED_MODULE_2__.useDeleteFile)();
   const handleFileContext = ({
     key,
     files
@@ -2564,6 +2715,7 @@ const useFileContext = () => {
         getFileLink(files[0]);
         return;
       case "edit":
+        window.open(`${pnpnm?.siteUrl}/wp-admin/post.php?post=${ids[0]}&action=edit&open_pnpnm_editor=${ids[0]}`, "_blank");
         return;
       case "download":
         return;
@@ -2785,11 +2937,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ~/hooks/useSettings */ "./source/hooks/useSettings.ts");
 /* harmony import */ var _components_switcher__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ~/components/switcher */ "./source/components/switcher/index.ts");
 /* harmony import */ var _components_field__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ~/components/field */ "./source/components/field/index.ts");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _constants_docs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ~/constants/docs */ "./source/constants/docs.ts");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _components_input__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ~/components/input */ "./source/components/input/index.ts");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _constants_docs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ~/constants/docs */ "./source/constants/docs.ts");
+/* harmony import */ var _components_status__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ~/components/status */ "./source/components/status/index.ts");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
 
 const Advanced = () => {
   const {
@@ -2801,6 +2955,7 @@ const Advanced = () => {
     organization,
     imageProcessing
   } = data?.advanced || {};
+
   const {
     contextMenu,
     undoActions
@@ -2814,134 +2969,185 @@ const Advanced = () => {
   } = organization || {};
   const {
     convertWebp,
-    thumbnailGenerator
+    thumbnailGenerator,
+    defaultFeaturedImage
   } = imageProcessing || {};
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_components_pageContainer__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Actions", "ninja-media"),
-      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Control interactive behaviours such as the context menu and undo prompts.", "ninja-media"),
-      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_7__["default"]?.documentation?.main,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_pageContainer__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Actions", "ninja-media"),
+      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Control interactive behaviours such as the context menu and undo prompts.", "ninja-media"),
+      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_8__["default"]?.documentation?.main,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Enable or disable the context menu in the media library.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Enable context menu", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Enable or disable the context menu in the media library.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Enable context menu", "ninja-media"),
           checked: contextMenu,
           onChange: () => setSettings("advanced.action.contextMenu", !contextMenu)
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Show a temporary undo prompt after deleting a folder, giving you a few seconds to reverse the action.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Undo after folder delete", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Show a temporary undo prompt after deleting a folder, giving you a few seconds to reverse the action.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Undo after folder delete", "ninja-media"),
           checked: undoActions,
           onChange: () => setSettings("advanced.action.undoActions", !undoActions)
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Organization", "ninja-media"),
-      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Set up dynamic folders, uncategorized grouping, and automatic upload sorting to keep your library tidy.", "ninja-media"),
-      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_7__["default"]?.documentation?.main,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Organization", "ninja-media"),
+      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Set up dynamic folders, uncategorized grouping, and automatic upload sorting to keep your library tidy.", "ninja-media"),
+      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_8__["default"]?.documentation?.main,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         statusProps: {
           isPro: true,
           ownUi: false
         },
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Add smart virtual folders that group media automatically by type, date, or other criteria — no manual sorting needed.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Dynamic folders", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Add smart virtual folders that group media automatically by type, date, or other criteria — no manual sorting needed.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Dynamic folders", "ninja-media"),
           isPro: true,
           checked: dynamicFolders,
           onChange: () => {
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Collect all files that haven't been assigned to any folder into a dedicated Uncategorized group.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Group uncategorized files", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Collect all files that haven't been assigned to any folder into a dedicated Uncategorized group.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Group uncategorized files", "ninja-media"),
           checked: uncategorized,
           onChange: () => setSettings("advanced.organization.uncategorized", !uncategorized)
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         statusProps: {
           isPro: true,
           ownUi: false
         },
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Mark your favorite media files for quick access and easy organization.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Mark as favorite", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Mark your favorite media files for quick access and easy organization.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Mark as favorite", "ninja-media"),
           isPro: true,
           checked: favorites,
           onChange: () => {
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         statusProps: {
           isPro: true,
           ownUi: false
         },
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Identify media files that are no longer attached to any post or page and collect them into a Used Files folder.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Used files", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Identify media files that are no longer attached to any post or page and collect them into a Used Files folder.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Used files", "ninja-media"),
           isPro: true,
           checked: used,
           onChange: () => {
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         statusProps: {
           isPro: true,
           ownUi: false
         },
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Identify media files that are no longer attached to any post or page and collect them into an Unused Files folder.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Unused files", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Identify media files that are no longer attached to any post or page and collect them into an Unused Files folder.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Unused files", "ninja-media"),
           isPro: true,
           checked: unused,
           onChange: () => {
           }
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Image Processing", "ninja-media"),
-      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Control how images are processed when uploaded to the media library.", "ninja-media"),
-      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_7__["default"]?.documentation?.main,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Image Processing", "ninja-media"),
+      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Control how images are processed when uploaded to the media library.", "ninja-media"),
+      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_8__["default"]?.documentation?.main,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         statusProps: {
           isPro: true,
           ownUi: false
         },
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Automatically convert uploaded images to WebP format to reduce file size and improve page load speed.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Convert to WebP on upload", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Automatically convert uploaded images to WebP format to reduce file size and improve page load speed.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Convert to WebP on upload", "ninja-media"),
           isPro: true,
           checked: convertWebp,
           onChange: () => {
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Automatically generate all registered thumbnail sizes when a new image is uploaded.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Automatically generate all registered thumbnail sizes when a new image is uploaded.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
           id: "thumbnailGenerator",
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Thumbnail generator", "ninja-media"),
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Thumbnail generator", "ninja-media"),
           checked: thumbnailGenerator,
           onChange: () => setSettings("advanced.imageProcessing.thumbnailGenerator", !thumbnailGenerator)
         }),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"].SubField, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"].SubField, {
           depend: !thumbnailGenerator,
           dependOn: "thumbnailGenerator",
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Regenerate Existing Thumbnails", "ninja-media"),
-          description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)("Regenerate all thumbnail sizes for images already in your media library. Large libraries may take a moment — processing happens in small batches.", "ninja-media"),
-          secondaryAction: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_ThumbnailGenerator__WEBPACK_IMPORTED_MODULE_0__["default"], {})
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Regenerate Existing Thumbnails", "ninja-media"),
+          description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Regenerate all thumbnail sizes for images already in your media library. Large libraries may take a moment — processing happens in small batches.", "ninja-media"),
+          secondaryAction: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_ThumbnailGenerator__WEBPACK_IMPORTED_MODULE_0__["default"], {})
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        background: "extralight",
+        description: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+          children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Show a fallback image on any post or page that has no featured image set. Choose the image in ", "ninja-media"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
+            href: pnpnm.ajaxUrl.replace("admin-ajax.php", "options-media.php"),
+            target: "_blank",
+            rel: "noreferrer",
+            style: {
+              color: "var(--pnpnm-primary)"
+            },
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("WP Settings → Media", "ninja-media")
+          }), "."]
+        }),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Default featured image", "ninja-media"),
+          checked: defaultFeaturedImage,
+          onChange: () => setSettings("advanced.imageProcessing.defaultFeaturedImage", !defaultFeaturedImage)
         })
       })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_field__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("CDN", "ninja-media"),
+      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Serve plugin assets through a Content Delivery Network for faster load times worldwide.", "ninja-media"),
+      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_8__["default"]?.documentation?.main,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        statusProps: {
+          isPro: true,
+          ownUi: false
+        },
+        background: "extralight",
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("CDN Base URL", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)("Enter your CDN base URL. All plugin assets will be served through this URL instead of your server.", "ninja-media"),
+        secondaryAction: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_status__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          isPro: true,
+          ownUi: false,
+          proTooltipDisabled: true,
+          style: {
+            width: "100%",
+            maxWidth: "380px"
+          },
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_input__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            type: "text",
+            size: "small",
+            fullWidth: true,
+            placeholder: "https://cdn.example.com",
+            value: cdnBaseUrl,
+            disabled: !pnpnm?.isPro,
+            onChange: value => {
+            }
+          })
+        })
+      })
     })]
   });
 };
@@ -3110,38 +3316,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _assets_icons_themes_Plugininja__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ~/assets/icons/themes/Plugininja */ "./source/assets/icons/themes/Plugininja.tsx");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_settingsField__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ~/components/settingsField */ "./source/components/settingsField/index.ts");
-/* harmony import */ var _components_pageContainer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ~/components/pageContainer */ "./source/components/pageContainer/index.ts");
-/* harmony import */ var _assets_icons_themes_Awesome__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ~/assets/icons/themes/Awesome */ "./source/assets/icons/themes/Awesome.tsx");
-/* harmony import */ var _assets_icons_themes_NinjaDefault__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ~/assets/icons/themes/NinjaDefault */ "./source/assets/icons/themes/NinjaDefault.tsx");
-/* harmony import */ var _components_inlineStack__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ~/components/inlineStack */ "./source/components/inlineStack/index.ts");
-/* harmony import */ var _components_colorPicker__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ~/components/colorPicker */ "./source/components/colorPicker/index.ts");
-/* harmony import */ var _components_description__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ~/components/description */ "./source/components/description/index.ts");
-/* harmony import */ var _components_blockStack__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ~/components/blockStack */ "./source/components/blockStack/index.ts");
-/* harmony import */ var _hooks_useDebounce__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ~/hooks/useDebounce */ "./source/hooks/useDebounce.ts");
-/* harmony import */ var _assets_icons_themes_Bold__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ~/assets/icons/themes/Bold */ "./source/assets/icons/themes/Bold.tsx");
-/* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ~/hooks/useSettings */ "./source/hooks/useSettings.ts");
-/* harmony import */ var _components_switcher__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ~/components/switcher */ "./source/components/switcher/index.ts");
-/* harmony import */ var _components_status__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ~/components/status */ "./source/components/status/index.ts");
-/* harmony import */ var _components_slider__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ~/components/slider */ "./source/components/slider/index.ts");
-/* harmony import */ var _components_field__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ~/components/field */ "./source/components/field/index.ts");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var _components_text__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ~/components/text */ "./source/components/text/index.ts");
-/* harmony import */ var _components_card__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ~/components/card */ "./source/components/card/index.ts");
-/* harmony import */ var _constants_docs__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ~/constants/docs */ "./source/constants/docs.ts");
-/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__);
+/* harmony import */ var _utils_icons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ~/utils/icons */ "./source/utils/icons.ts");
+/* harmony import */ var _components_svgIcon_SvgIcon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ~/components/svgIcon/SvgIcon */ "./source/components/svgIcon/SvgIcon.tsx");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_settingsField__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ~/components/settingsField */ "./source/components/settingsField/index.ts");
+/* harmony import */ var _components_pageContainer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ~/components/pageContainer */ "./source/components/pageContainer/index.ts");
+/* harmony import */ var _components_inlineStack__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ~/components/inlineStack */ "./source/components/inlineStack/index.ts");
+/* harmony import */ var _components_colorPicker__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ~/components/colorPicker */ "./source/components/colorPicker/index.ts");
+/* harmony import */ var _components_description__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ~/components/description */ "./source/components/description/index.ts");
+/* harmony import */ var _components_blockStack__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ~/components/blockStack */ "./source/components/blockStack/index.ts");
+/* harmony import */ var _hooks_useDebounce__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ~/hooks/useDebounce */ "./source/hooks/useDebounce.ts");
+/* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ~/hooks/useSettings */ "./source/hooks/useSettings.ts");
+/* harmony import */ var _components_switcher__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ~/components/switcher */ "./source/components/switcher/index.ts");
+/* harmony import */ var _components_status__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ~/components/status */ "./source/components/status/index.ts");
+/* harmony import */ var _components_slider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ~/components/slider */ "./source/components/slider/index.ts");
+/* harmony import */ var _components_field__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ~/components/field */ "./source/components/field/index.ts");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _components_text__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ~/components/text */ "./source/components/text/index.ts");
+/* harmony import */ var _components_card__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ~/components/card */ "./source/components/card/index.ts");
+/* harmony import */ var _constants_docs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ~/constants/docs */ "./source/constants/docs.ts");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! clsx */ "./node_modules/clsx/dist/clsx.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__);
 
 const Display = () => {
   const {
     data,
     setSettings
-  } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_12__["default"])();
+  } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_10__["default"])();
   const {
     theme: themeValue,
     settings
@@ -3154,39 +3358,40 @@ const Display = () => {
   const {
     perPage,
     detailsHover,
-    breadcrumbNavigation
+    breadcrumbNavigation,
+    lightbox
   } = settings || {};
-  const [color, setColor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(colorValue || "#4D49FC");
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  const [color, setColor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(colorValue || "#4D49FC");
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (colorValue) {
       setColor(colorValue);
     }
   }, [colorValue]);
-  (0,_hooks_useDebounce__WEBPACK_IMPORTED_MODULE_10__["default"])(() => {
+  (0,_hooks_useDebounce__WEBPACK_IMPORTED_MODULE_9__["default"])(() => {
     setSettings("display.theme.color", color);
     const root = document.documentElement;
     if (root && colorValue) {
       root.style.setProperty("--pnpnm-primary", color);
     }
   }, [color], 800);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_pageContainer__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_16__["default"], {
-      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Theme", "ninja-media"),
-      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Choose the visual style and accent color for the media library interface.", "ninja-media"),
-      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_20__["default"]?.documentation?.main,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_pageContainer__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_14__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Theme", "ninja-media"),
+      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Choose the visual style and accent color for the media library interface.", "ninja-media"),
+      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_18__["default"]?.documentation?.main,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_settingsField__WEBPACK_IMPORTED_MODULE_3__["default"], {
         background: "extralight",
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Select Theme", "ninja-media"),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_description__WEBPACK_IMPORTED_MODULE_8__["default"], {
-          text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Choose a visual style for the folder sidebar and media browser.", "ninja-media")
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Select Theme", "ninja-media"),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_description__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Choose a visual style for the folder sidebar and media browser.", "ninja-media")
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_5__["default"], {
           gap: 20,
           children: THEMES?.map(({
             key,
             title,
             icon,
             statusProps
-          }, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_card__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          }, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_card__WEBPACK_IMPORTED_MODULE_17__["default"], {
             statusProps: {
               ...statusProps,
               ownUi: false,
@@ -3202,10 +3407,10 @@ const Display = () => {
               height: "200px",
               cursor: "pointer"
             },
-            className: (0,clsx__WEBPACK_IMPORTED_MODULE_21__["default"])("pnpnm-theme-preview", theme === key && "pnpnm-theme-preview--active"),
+            className: (0,clsx__WEBPACK_IMPORTED_MODULE_19__["default"])("pnpnm-theme-preview", theme === key && "pnpnm-theme-preview--active"),
             onClick: () => {
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_card__WEBPACK_IMPORTED_MODULE_19__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_card__WEBPACK_IMPORTED_MODULE_17__["default"], {
               padding: 0,
               background: "white",
               rounded: "sm",
@@ -3218,7 +3423,7 @@ const Display = () => {
               },
               className: "pnpnm-theme-preview__icon",
               children: icon
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_5__["default"], {
               align: "center",
               blockAlign: "end",
               gap: 10,
@@ -3230,22 +3435,24 @@ const Display = () => {
                 right: 0,
                 padding: 8
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_18__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_text__WEBPACK_IMPORTED_MODULE_16__["default"], {
                 color: theme === key ? "primary" : "descgray",
                 size: "sm",
                 children: title
-              }), statusProps?.isPro && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_status__WEBPACK_IMPORTED_MODULE_14__["default"].Pro, {})]
+              }), statusProps?.isPro && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_status__WEBPACK_IMPORTED_MODULE_12__["default"].Pro, {
+                tooltipDisabled: true
+              })]
             })]
           }, key ?? index))
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_settingsField__WEBPACK_IMPORTED_MODULE_3__["default"], {
         background: "extralight",
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Media Library Color", "ninja-media"),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_description__WEBPACK_IMPORTED_MODULE_8__["default"], {
-          text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Set the primary accent color used throughout the media library interface.", "ninja-media")
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Media Library Color", "ninja-media"),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_description__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Set the primary accent color used throughout the media library interface.", "ninja-media")
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_8__["default"], {
           gap: 5,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_colorPicker__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_colorPicker__WEBPACK_IMPORTED_MODULE_6__["default"], {
             defaultColor: "#4D49FC",
             selectedColor: color,
             onChange: c => {
@@ -3254,7 +3461,7 @@ const Display = () => {
                 setSettings("display.theme.firstTime", false);
               }
             }
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_colorPicker__WEBPACK_IMPORTED_MODULE_7__["default"].ColorBox, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_colorPicker__WEBPACK_IMPORTED_MODULE_6__["default"].ColorBox, {
             colors: ["#4d49fc", "#2271B1", "#00ac47", "#dd115c", "#0048BC", "#001941", "#000E25", "#0072A8", "#007AFF", "#22BC00", "#6800C8"],
             selectedColor: color,
             onSelect: c => {
@@ -3266,14 +3473,14 @@ const Display = () => {
           })]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_16__["default"], {
-      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("View Settings", "ninja-media"),
-      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Adjust how many items appear per page, thumbnail sizes, and hover preview behavior.", "ninja-media"),
-      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_20__["default"]?.documentation?.main,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_components_field__WEBPACK_IMPORTED_MODULE_14__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("View Settings", "ninja-media"),
+      description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Adjust how many items appear per page, thumbnail sizes, and hover preview behavior.", "ninja-media"),
+      docLink: _constants_docs__WEBPACK_IMPORTED_MODULE_18__["default"]?.documentation?.main,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_3__["default"], {
         background: "extralight",
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Items per page", "ninja-media"),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_slider__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Items per page", "ninja-media"),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_slider__WEBPACK_IMPORTED_MODULE_13__["default"], {
           min: 20,
           max: 500,
           defaultValue: 80,
@@ -3281,27 +3488,35 @@ const Display = () => {
           value: perPage || 80,
           onChange: value => setSettings("display.settings.perPage", Number(value))
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_3__["default"], {
         statusProps: {
           isPro: true,
           ownUi: false
         },
         background: "extralight",
         description: "Show file name, type, and size as a tooltip when hovering over a media item.",
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_13__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Show media details on hover", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Show media details on hover", "ninja-media"),
           isPro: true,
           checked: detailsHover,
           onChange: () => {
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_3__["default"], {
         background: "extralight",
-        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Show a clickable folder trail above the media grid so you can navigate back up through nested folders.", "ninja-media"),
-        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_13__["default"], {
-          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Breadcrumb navigation", "ninja-media"),
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Show a clickable folder trail above the media grid so you can navigate back up through nested folders.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Breadcrumb navigation", "ninja-media"),
           checked: breadcrumbNavigation,
           onChange: () => setSettings("display.settings.breadcrumbNavigation", !breadcrumbNavigation)
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_settingsField__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        background: "extralight",
+        description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Open images in a full-screen lightbox viewer with prev/next navigation and keyboard support.", "ninja-media"),
+        action: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_switcher__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Lightbox", "ninja-media"),
+          checked: lightbox ?? false,
+          onChange: () => setSettings("display.settings.lightbox", !(lightbox ?? false))
         })
       })]
     })]
@@ -3310,26 +3525,34 @@ const Display = () => {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Display);
 const THEMES = [{
   key: "default",
-  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Default", "ninja-media"),
-  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_assets_icons_themes_NinjaDefault__WEBPACK_IMPORTED_MODULE_5__["default"], {})
+  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Default", "ninja-media"),
+  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_svgIcon_SvgIcon__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    src: _utils_icons__WEBPACK_IMPORTED_MODULE_0__.iconThemeDefault
+  })
 }, {
   key: "bold",
-  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Bold", "ninja-media"),
-  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_assets_icons_themes_Bold__WEBPACK_IMPORTED_MODULE_11__["default"], {}),
+  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Bold", "ninja-media"),
+  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_svgIcon_SvgIcon__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    src: _utils_icons__WEBPACK_IMPORTED_MODULE_0__.iconThemeBold
+  }),
   statusProps: {
     isPro: true
   }
 }, {
   key: "plugininja",
-  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Plugininja", "ninja-media"),
-  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_assets_icons_themes_Plugininja__WEBPACK_IMPORTED_MODULE_0__["default"], {}),
+  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Plugininja", "ninja-media"),
+  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_svgIcon_SvgIcon__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    src: _utils_icons__WEBPACK_IMPORTED_MODULE_0__.iconThemePlugininja
+  }),
   statusProps: {
     isPro: true
   }
 }, {
   key: "awesome",
-  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_17__.__)("Awesome", "ninja-media"),
-  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_assets_icons_themes_Awesome__WEBPACK_IMPORTED_MODULE_4__["default"], {}),
+  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_15__.__)("Awesome", "ninja-media"),
+  icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_svgIcon_SvgIcon__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    src: _utils_icons__WEBPACK_IMPORTED_MODULE_0__.iconThemeAwesome
+  }),
   statusProps: {
     isPro: true
   }
@@ -4930,7 +5153,7 @@ const Preview = () => {
   const spacingX = tile?.spacingX ?? 20;
   const spacingY = tile?.spacingY ?? 20;
   const diagonal = tile?.diagonal ?? false;
-  const resolvedContent = (content ?? "").replace("{site_name}", "My Site").replace("{year}", String(new Date().getFullYear())).replace("{author}", "Admin").replace("{filename}", "photo").replace("{date}", new Date().toISOString().slice(0, 10));
+  const resolvedContent = (content ?? "").replaceAll("{site_name}", "My Site").replaceAll("{site_url}", window.location.origin).replaceAll("{year}", String(new Date().getFullYear())).replaceAll("{date}", new Date().toISOString().slice(0, 10)).replaceAll("{author}", "Admin").replaceAll("{filename}", "photo");
   const tileOpts = isTiled ? type === "image" && imageUrl ? {
     type: "image",
     imageUrl,
@@ -5562,7 +5785,7 @@ const Text = () => {
   } = text || {};
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_pageContainer__WEBPACK_IMPORTED_MODULE_2__["default"], {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_settingsField__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_13__.__)("Title", "ninja-media"),
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_13__.__)("Watermark Text", "ninja-media"),
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_blockStack__WEBPACK_IMPORTED_MODULE_6__["default"], {
         gap: 10,
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_input__WEBPACK_IMPORTED_MODULE_12__["default"], {
@@ -5570,7 +5793,7 @@ const Text = () => {
           value: content ?? "",
           onChange: value => setSettings("watermark.text.content", String(value))
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_description__WEBPACK_IMPORTED_MODULE_5__["default"], {
-          text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_13__.__)("Enter the title for the watermark text.", "ninja-media")
+          text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_13__.__)("Supports dynamic tags: {site_name}, {site_url}, {year}, {date}, {author}, {filename}", "ninja-media")
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_inlineStack__WEBPACK_IMPORTED_MODULE_4__["default"], {
         gap: 10,
@@ -5668,1358 +5891,6 @@ const FONT_OPTIONS = [{
   name: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_13__.__)("DejaVu Sans (Unicode)", "ninja-media"),
   value: "DejaVu Sans"
 }];
-
-/***/ },
-
-/***/ "./source/assets/icons/NotFound.tsx"
-/*!******************************************!*\
-  !*** ./source/assets/icons/NotFound.tsx ***!
-  \******************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-const NotFound = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-    width: "105",
-    height: "100",
-    viewBox: "0 0 105 100",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("g", {
-      "clip-path": "url(#clip0_473_461)",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        opacity: "0.25",
-        d: "M94.1124 77.006C93.426 77.738 92.5956 78.4016 91.5912 78.9716L90.9804 83.9024C90.7488 85.7768 89.1576 87.1832 87.2688 87.1832H15.9816C14.0268 87.1832 12.4032 85.6772 12.2532 83.7284L11.736 77H11.1048C8.0376 77 5.262 78.2432 3.252 80.252C1.2432 82.262 0 85.0388 0 88.1048C0 94.2368 4.9716 99.2084 11.1048 99.2084H93.8016C96.8688 99.2084 99.6444 97.9652 101.654 95.9564C103.663 93.9464 104.906 91.1708 104.906 88.1048C104.906 82.076 100.103 77.1692 94.1136 77.0048L94.1124 77.006Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        opacity: "0.5",
-        d: "M33.6087 77.6181C33.6087 78.5097 32.8875 79.2321 31.9959 79.2321H20.7855C19.9443 79.2321 19.2435 78.5853 19.1775 77.7465L18.7695 72.6345C18.6963 71.6973 19.4367 70.8933 20.3775 70.8933H31.9947C32.8863 70.8933 33.6075 71.6157 33.6075 72.5073V77.6181H33.6087ZM43.9371 65.3721C43.9371 66.2625 43.2159 66.9849 42.3243 66.9849H19.8999C19.0587 66.9849 18.3603 66.3393 18.2919 65.4993L17.8863 60.3885C17.8107 59.4489 18.5523 58.6473 19.4931 58.6473H42.3255C43.2171 58.6473 43.9383 59.3697 43.9383 60.2601V65.3721H43.9371ZM91.4967 42.1965H70.8987C70.2195 42.1965 69.5751 42.0129 69.0171 41.6877C68.1699 41.1969 67.5255 40.3761 67.2723 39.3765L64.1319 27.0153C63.7095 25.3569 62.2179 24.1953 60.5067 24.1953H26.2575C27.1971 26.5749 25.2783 30.4377 20.8803 31.2213C20.3115 31.3221 19.7247 31.3389 19.1451 31.2837C17.7003 31.1445 14.9115 30.5985 13.7487 28.4493C12.9531 26.9769 13.0839 25.4313 13.7163 24.1953H11.2371C9.05672 24.1953 7.33952 26.0505 7.50632 28.2237L11.7999 84.0417C11.9499 85.9905 13.5735 87.4965 15.5283 87.4965H86.8143C88.7031 87.4965 90.2943 86.0889 90.5259 84.2157L91.1367 79.2849C89.2887 80.3337 86.8599 81.0669 83.7015 81.3369C63.0063 83.1069 56.5887 63.1869 58.4691 57.4329C60.3507 51.6777 67.3227 54.2241 71.4171 58.4301C75.5115 62.6349 81.9051 69.8901 86.8227 69.2997C91.7427 68.7105 92.9163 64.8849 92.9163 64.8849L93.7791 57.9201L95.2047 46.4013C95.4807 44.1693 93.7407 42.2013 91.4931 42.2013L91.4967 42.1965Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        opacity: "0.35",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M33.6086 77.6178C33.6086 78.5094 32.8874 79.2318 31.9958 79.2318H20.7854C19.9442 79.2318 19.2434 78.585 19.1774 77.7462L18.7694 72.6342C18.6962 71.697 19.4366 70.893 20.3774 70.893H31.9946C32.8862 70.893 33.6074 71.6154 33.6074 72.507V77.6178H33.6086ZM43.937 65.3718C43.937 66.2622 43.2158 66.9846 42.3242 66.9846H19.8998C19.0586 66.9846 18.3602 66.339 18.2918 65.499L17.8862 60.3882C17.8106 59.4486 18.5522 58.647 19.493 58.647H42.3254C43.217 58.647 43.9382 59.3694 43.9382 60.2598V65.3718H43.937Z",
-          fill: "#2271B1"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M31.9958 79.4718H20.7854C19.8254 79.4718 19.0142 78.7218 18.9386 77.7654L18.5306 72.6534C18.4898 72.1386 18.6674 71.6274 19.0178 71.2482C19.367 70.8702 19.8626 70.653 20.3774 70.653H31.9946C33.0158 70.653 33.8474 71.4846 33.8474 72.507V77.6178C33.8474 78.6402 33.017 79.4718 31.9946 79.4718H31.9958ZM20.3786 71.1342C19.9922 71.1342 19.6346 71.2914 19.3706 71.5746C19.1078 71.859 18.9794 72.2298 19.0094 72.6162L19.4174 77.727C19.4738 78.4362 20.075 78.9918 20.7866 78.9918H31.997C32.7542 78.9918 33.3698 78.375 33.3698 77.6178V72.507C33.3698 71.7498 32.7542 71.133 31.997 71.133H20.3798L20.3786 71.1342ZM42.3242 67.2246H19.8998C18.941 67.2246 18.1298 66.4758 18.053 65.5182L17.6474 60.4074C17.6066 59.8938 17.783 59.3814 18.1322 59.0034C18.4814 58.6254 18.977 58.4082 19.493 58.4082H42.3254C43.3466 58.4082 44.1782 59.2386 44.1782 60.261V65.373C44.1782 66.3942 43.3478 67.2258 42.3254 67.2258L42.3242 67.2246ZM19.4918 58.8882C19.1042 58.8882 18.7466 59.0454 18.4838 59.3298C18.221 59.6142 18.0938 59.9838 18.1238 60.3702L18.5294 65.481C18.587 66.1902 19.1882 66.7458 19.8986 66.7458H42.323C43.0802 66.7458 43.6958 66.1302 43.6958 65.373V60.261C43.6958 59.5038 43.0802 58.8882 42.323 58.8882H19.4906H19.4918Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M86.8156 87.7351H15.5296C13.4632 87.7351 11.7208 86.1199 11.5612 84.0595L7.2676 28.2415C7.1824 27.1399 7.564 26.0419 8.3152 25.2319C9.0664 24.4207 10.1308 23.9551 11.2372 23.9551H14.1088L13.93 24.3043C13.2652 25.6015 13.276 27.0703 13.9588 28.3339C15.0556 30.3619 17.6932 30.9019 19.1668 31.0435C19.7452 31.0987 20.3068 31.0783 20.8372 30.9835C22.9432 30.6091 24.6832 29.4403 25.612 27.7783C26.2732 26.5951 26.4304 25.2883 26.0344 24.2827L25.9048 23.9551H60.5068C62.3284 23.9551 63.9148 25.1887 64.3648 26.9563L67.5052 39.3175C67.7356 40.2235 68.3308 41.0119 69.1384 41.4811C69.6736 41.7931 70.282 41.9575 70.8988 41.9575H91.4968C92.6368 41.9575 93.724 42.4471 94.4788 43.3015C95.2336 44.1559 95.5864 45.2947 95.4472 46.4275L93.1564 64.9327L93.1504 64.9531C93.1384 64.9927 91.8724 68.9347 86.8552 69.5359C82.2796 70.0831 76.606 64.1719 72.4624 59.8543C72.04 59.4139 71.6332 58.9915 71.248 58.5955C68.2768 55.5427 64.3708 53.8363 61.75 54.4447C60.2788 54.7867 59.2516 55.8163 58.6996 57.5059C57.7876 60.2959 58.9312 67.2007 63.4528 72.9067C66.8116 77.1451 73.048 82.0075 83.6824 81.0967C86.6332 80.8447 89.1016 80.1643 91.0192 79.0759L91.4344 78.8407L90.7648 84.2455C90.5188 86.2363 88.8208 87.7375 86.8144 87.7375L86.8156 87.7351ZM11.2372 24.4339C10.2508 24.4339 9.3376 24.8323 8.6668 25.5559C7.9972 26.2795 7.6696 27.2191 7.7452 28.2031L12.0388 84.0211C12.178 85.8343 13.7116 87.2539 15.5284 87.2539H86.8144C88.5784 87.2539 90.0724 85.9339 90.2884 84.1831L90.8428 79.7143C88.9288 80.7067 86.5372 81.3307 83.7244 81.5719C82.8304 81.6487 81.9652 81.6847 81.1312 81.6847C71.8444 81.6847 66.226 77.1751 63.0772 73.2019C60.4564 69.8947 59.1892 66.5467 58.588 64.3207C57.8452 61.5727 57.7168 58.9675 58.2448 57.3535C58.8448 55.5187 60.0196 54.3511 61.6432 53.9743C64.8832 53.2219 69.0724 55.6675 71.5936 58.2583C71.98 58.6543 72.3868 59.0779 72.8104 59.5195C76.8844 63.7639 82.4632 69.5755 86.7988 69.0559C91.3384 68.5123 92.5912 65.1043 92.686 64.8259L94.972 46.3639C95.0956 45.3679 94.7848 44.3659 94.1212 43.6147C93.4576 42.8635 92.5012 42.4327 91.4992 42.4327H70.9012C70.1992 42.4327 69.5068 42.2455 68.8996 41.8915C67.9816 41.3587 67.3048 40.4623 67.042 39.4315L63.9016 27.0703C63.5068 25.5163 62.1112 24.4315 60.5092 24.4315H26.5936C26.896 25.5139 26.6956 26.8243 26.0344 28.0099C25.036 29.7979 23.1736 31.0531 20.9248 31.4539C20.3512 31.5559 19.7464 31.5775 19.1248 31.5187C17.5552 31.3675 14.7436 30.7831 13.54 28.5595C12.8416 27.2671 12.7744 25.7827 13.3432 24.4315H11.2408L11.2372 24.4339Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        opacity: "0.35",
-        d: "M69.0168 41.6877C68.1696 41.1969 67.5252 40.3761 67.272 39.3765L64.1316 27.0153C63.7092 25.3569 62.2176 24.1953 60.5064 24.1953H26.418C27.252 19.7673 28.626 15.3573 30.6588 11.8005C30.6588 11.8005 29.9208 1.57047 32.676 2.01327C35.43 2.45487 37.5936 6.89967 37.5936 6.89967C37.5936 6.89967 41.6256 4.57047 47.1348 5.25927C52.644 5.94687 54.7584 6.89967 54.7584 6.89967C54.7584 6.89967 57.414 0.362066 59.8728 1.99887C62.3316 3.63567 62.0376 11.5545 62.0376 11.5545C62.0376 11.5545 69.5424 29.7993 69.018 41.6889L69.0168 41.6877Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M69.2391 42.0942L68.8959 41.895C67.9779 41.3622 67.3011 40.4658 67.0383 39.435L63.8979 27.0738C63.5031 25.5198 62.1075 24.435 60.5055 24.435H26.1279L26.1819 24.1506C27.0951 19.3026 28.5579 15.015 30.4143 11.7438C30.3567 10.8858 29.9319 3.6894 31.6671 2.0994C31.9707 1.821 32.3223 1.713 32.7147 1.7754C35.2275 2.1786 37.2075 5.6418 37.6971 6.5706C38.6247 6.0918 42.3039 4.4118 47.1663 5.0202C51.7167 5.5878 53.9523 6.3294 54.6315 6.5874C55.0347 5.6562 56.6643 2.1498 58.5243 1.5762C59.0463 1.4154 59.5455 1.4898 60.0075 1.797C62.4699 3.4362 62.3043 10.7562 62.2803 11.5098C62.7075 12.5646 69.7659 30.1914 69.2583 41.697L69.2403 42.093L69.2391 42.0942ZM26.7075 23.9538H60.5055C62.3271 23.9538 63.9135 25.1874 64.3635 26.955L67.5039 39.3162C67.7007 40.0878 68.1615 40.7742 68.7915 41.2506C69.1143 29.5422 61.8879 11.8242 61.8147 11.6442L61.7943 11.5962L61.7967 11.5446C61.7991 11.4666 62.0583 3.741 59.7387 2.1978C59.3979 1.971 59.0463 1.9182 58.6623 2.0358C56.7747 2.6166 54.9963 6.945 54.9795 6.9894L54.8859 7.2198L54.6591 7.1178C54.6387 7.1082 52.4979 6.171 47.1039 5.4978C41.7459 4.827 37.7523 7.0842 37.7127 7.107L37.4895 7.2354L37.3767 7.0038C37.3551 6.9606 35.2347 2.667 32.6367 2.2494C32.3943 2.211 32.1831 2.277 31.9899 2.4534C30.6315 3.6978 30.7407 9.609 30.8967 11.7822L30.9015 11.8554L30.8655 11.919C29.0547 15.0882 27.6183 19.245 26.7063 23.955L26.7075 23.9538Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        opacity: "0.35",
-        d: "M20.8792 31.2201C20.3104 31.3209 19.7236 31.3377 19.144 31.2825C17.6992 31.1433 14.9104 30.5973 13.7476 28.4481C12.952 26.9757 13.0828 25.4301 13.7152 24.1941C14.3584 22.9413 15.5164 22.0077 16.7536 21.7941C19.2088 21.3705 24.4048 21.2541 25.984 23.6697C26.0908 23.8341 26.182 24.0105 26.2552 24.1941C27.1948 26.5737 25.276 30.4365 20.878 31.2201H20.8792Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M19.7954 31.5538C19.5734 31.5538 19.349 31.543 19.121 31.5214C17.5514 31.3702 14.7398 30.7858 13.5362 28.5622C12.7766 27.157 12.7634 25.525 13.5014 24.085C14.1866 22.7506 15.4166 21.7822 16.7126 21.5578C18.7574 21.205 24.443 20.8738 26.1854 23.5378C26.3006 23.7154 26.399 23.905 26.4794 24.1042C26.9294 25.2442 26.7614 26.7034 26.0306 28.0114C25.0322 29.7994 23.1698 31.0546 20.921 31.4554C20.5574 31.5202 20.1806 31.5526 19.7954 31.5526V31.5538ZM19.703 21.7954C18.641 21.7954 17.6198 21.889 16.7942 22.0306C15.6446 22.2298 14.5466 23.101 13.9286 24.3034C13.2638 25.6006 13.2746 27.0694 13.9586 28.333C15.0554 30.361 17.693 30.901 19.1666 31.0426C19.745 31.0978 20.3066 31.0774 20.837 30.9826C22.943 30.6082 24.683 29.4394 25.6118 27.7774C26.273 26.5942 26.4302 25.2874 26.0342 24.2818C25.967 24.1126 25.8818 23.9506 25.7846 23.7994C24.7946 22.285 22.1426 21.7942 19.7042 21.7942L19.703 21.7954Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M18.0204 31.3578C17.904 31.3578 17.802 31.2726 17.784 31.1539L17.0664 26.4703C17.046 26.3395 17.136 26.2171 17.2668 26.1967C17.3976 26.1775 17.52 26.2662 17.5404 26.397L18.258 31.0806C18.2784 31.2114 18.1884 31.3338 18.0576 31.3542C18.0456 31.3566 18.0336 31.3567 18.0204 31.3567V31.3578ZM21.4632 31.3338C21.3348 31.3338 21.228 31.2318 21.2232 31.1034L21.048 26.4439C21.0432 26.3119 21.1464 26.2002 21.2784 26.1954C21.408 26.1906 21.522 26.2938 21.5268 26.4258L21.702 31.0854C21.7068 31.2174 21.6036 31.3291 21.4716 31.3338C21.468 31.3338 21.4656 31.3338 21.462 31.3338H21.4632ZM24.168 30.039C24.0468 30.039 23.9424 29.9466 23.9292 29.823C23.8176 28.7334 23.556 26.1858 23.556 26.0754C23.556 25.9434 23.664 25.8354 23.796 25.8354C23.928 25.8354 24.0336 25.941 24.036 26.0706C24.0432 26.211 24.2604 28.3602 24.4068 29.7738C24.42 29.9058 24.324 30.0235 24.1932 30.0367C24.1848 30.0367 24.1764 30.0378 24.168 30.0378V30.039Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M39.24 20.0637C40.1228 20.0637 40.8384 19.2486 40.8384 18.2432C40.8384 17.2379 40.1228 16.4229 39.24 16.4229C38.3572 16.4229 37.6416 17.2379 37.6416 18.2432C37.6416 19.2486 38.3572 20.0637 39.24 20.0637Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M52.6453 20.0637C53.528 20.0637 54.2437 19.2486 54.2437 18.2432C54.2437 17.2379 53.528 16.4229 52.6453 16.4229C51.7625 16.4229 51.0469 17.2379 51.0469 18.2432C51.0469 19.2486 51.7625 20.0637 52.6453 20.0637Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M32.7723 10.8162C32.7723 10.8162 32.4279 5.15936 33.4119 5.79896C34.3959 6.43856 35.8215 7.91336 35.8215 7.91336L32.7723 10.815V10.8162ZM56.2827 8.28176C56.2827 8.28176 59.0859 4.96256 59.4303 5.35616C59.7747 5.74976 59.7255 10.3242 59.7255 10.3242L56.2827 8.28296V8.28176Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        opacity: "0.35",
-        d: "M91.1391 79.2823C89.2911 80.3311 86.8623 81.0643 83.7039 81.3343C63.0087 83.1043 56.5911 63.1843 58.4715 57.4303C60.3531 51.6751 67.3251 54.2215 71.4195 58.4275C75.5139 62.6323 81.9075 69.8875 86.8251 69.2971C91.7451 68.7079 92.9187 64.8823 92.9187 64.8823L93.7815 57.9175C93.7815 57.9175 101.404 73.4623 91.1379 79.2847L91.1391 79.2823Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M81.1316 81.686C71.8448 81.686 66.2264 77.1764 63.0776 73.2032C60.4568 69.896 59.1896 66.548 58.5884 64.322C57.8456 61.574 57.7172 58.9688 58.2452 57.3548C58.8452 55.52 60.02 54.3512 61.6436 53.9756C64.8836 53.2232 69.0728 55.6688 71.594 58.2596C71.9804 58.6556 72.3872 59.0792 72.8108 59.5208C76.8848 63.7652 82.4636 69.5768 86.7992 69.0572C91.3388 68.5136 92.5916 65.1056 92.6864 64.8272L93.6451 57.086L94.0004 57.8096C94.0196 57.8492 95.93 61.784 96.5504 66.3836C96.9164 69.098 96.77 71.5136 96.1136 73.5608C95.288 76.1372 93.6548 78.1328 91.2584 79.4912C89.2796 80.6144 86.7452 81.3152 83.726 81.5732C82.832 81.65 81.9668 81.686 81.1328 81.686H81.1316ZM62.8784 54.3212C62.4824 54.3212 62.1044 54.3608 61.7504 54.4436C60.2792 54.7856 59.252 55.8152 58.7 57.5048C57.788 60.2948 58.9316 67.1996 63.4532 72.9056C66.5336 76.7936 72.038 81.206 81.1376 81.206C81.9572 81.206 82.8044 81.17 83.684 81.0956C86.6348 80.8436 89.1032 80.1632 91.0208 79.0748C95.1824 76.7144 96.8828 72.47 96.0751 66.4592C95.6276 63.1328 94.4936 60.1568 93.9164 58.7996L93.1567 64.9328L93.1507 64.9532C93.1388 64.9928 91.8716 68.9348 86.8556 69.536C82.28 70.0856 76.6064 64.172 72.4628 59.8544C72.0404 59.414 71.6336 58.9916 71.2484 58.5956C68.678 55.9556 65.4104 54.3224 62.8784 54.3224V54.3212Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        opacity: "0.5",
-        d: "M78.6328 0.612967L87.736 1.93657C93.3328 2.75017 97.21 7.94737 96.3964 13.5442C95.5828 19.141 90.3856 23.0182 84.7888 22.2046L78.4828 21.2878L75.1384 24.0538C74.7364 24.3862 74.1316 24.0886 74.1496 23.5666L74.254 20.5654C69.4444 19.1494 66.2812 14.3782 67.024 9.27217C67.8376 3.67537 73.0348 -0.201835 78.6316 0.611765L78.6328 0.612967Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M74.7565 24.4342C74.6293 24.4342 74.5021 24.4054 74.3809 24.3454C74.0785 24.1966 73.8985 23.8954 73.9093 23.5582L74.0077 20.7418C71.6869 20.0134 69.6853 18.4882 68.3557 16.4338C66.9793 14.305 66.4213 11.7502 66.7873 9.23861C67.1905 6.46781 68.6473 4.02101 70.8913 2.34701C73.1353 0.673011 75.8965 -0.0277883 78.6673 0.375412L87.7705 1.69901C90.5413 2.10221 92.9881 3.55901 94.6621 5.80301C96.3361 8.04701 97.0357 10.8082 96.6337 13.579C96.2305 16.3498 94.7737 18.7966 92.5297 20.4706C90.2857 22.1446 87.5245 22.8454 84.7537 22.4422L78.5533 21.541L75.2917 24.2398C75.1357 24.3694 74.9473 24.4354 74.7565 24.4354V24.4342ZM77.1373 0.743811C74.9977 0.743811 72.9241 1.42781 71.1781 2.73101C69.0373 4.32821 67.6465 6.66341 67.2625 9.30701C66.5509 14.1994 69.5857 18.9406 74.3221 20.335L74.5009 20.3878L74.3905 23.575C74.3857 23.7226 74.4613 23.8498 74.5933 23.9146C74.7253 23.9794 74.8729 23.9626 74.9869 23.869L78.4129 21.0346L84.8245 21.967C87.4669 22.351 90.1033 21.6838 92.2441 20.0866C94.3849 18.4894 95.7757 16.1542 96.1597 13.5106C96.5437 10.867 95.8765 8.23181 94.2793 6.09101C92.6821 3.95021 90.3469 2.55941 87.7033 2.17421L78.6001 0.850611C78.1117 0.779811 77.6245 0.74501 77.1397 0.74501L77.1373 0.743811Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M77.5371 9.47161L77.1915 11.8476C76.9323 13.6332 77.1027 15.0528 77.7039 16.1064C78.3063 17.16 79.3191 17.79 80.7435 17.9976C82.1511 18.2028 83.2947 17.8944 84.1743 17.0748C85.0551 16.2552 85.6287 14.9808 85.8987 13.2504L86.2443 10.8744C86.5071 9.07081 86.3319 7.64762 85.7199 6.60602C85.1079 5.56322 84.0975 4.93921 82.6911 4.73401C81.2835 4.52881 80.1411 4.83602 79.2615 5.65322C78.3819 6.47042 77.8071 7.74362 77.5383 9.47282L77.5371 9.47161ZM80.1339 9.60721C80.2899 8.53681 80.5491 7.77721 80.9127 7.33201C81.2763 6.88561 81.7683 6.70922 82.3899 6.79922C83.0115 6.88922 83.4039 7.18322 83.6235 7.68962C83.8431 8.19602 83.8887 8.94482 83.7639 9.93602L83.3067 13.0776C83.1531 14.1312 82.8963 14.8932 82.5351 15.3636C82.1739 15.8328 81.6771 16.0224 81.0435 15.93C80.4171 15.8388 80.0007 15.528 79.7943 14.9964C79.5879 14.4648 79.5519 13.692 79.6875 12.678L80.1339 9.60602V9.60721Z",
-        fill: "#2271B1"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M15.9188 12.8286C14.8112 12.8286 13.91 11.9274 13.91 10.8198C13.91 9.71224 14.8112 8.81104 15.9188 8.81104C17.0264 8.81104 17.9276 9.71224 17.9276 10.8198C17.9276 11.9274 17.0264 12.8286 15.9188 12.8286ZM15.9188 9.28984C15.0752 9.28984 14.39 9.97624 14.39 10.8186C14.39 11.661 15.0764 12.3474 15.9188 12.3474C16.7612 12.3474 17.4476 11.661 17.4476 10.8186C17.4476 9.97624 16.7612 9.28984 15.9188 9.28984ZM82.772 32.4714C82.0544 32.4714 81.4712 31.8882 81.4712 31.1706C81.4712 30.453 82.0544 29.8698 82.772 29.8698C83.4896 29.8698 84.0728 30.453 84.0728 31.1706C84.0728 31.8882 83.4896 32.4714 82.772 32.4714ZM82.772 30.351C82.3196 30.351 81.9512 30.7194 81.9512 31.1718C81.9512 31.6242 82.3196 31.9926 82.772 31.9926C83.2244 31.9926 83.5928 31.6242 83.5928 31.1718C83.5928 30.7194 83.2244 30.351 82.772 30.351ZM5.50282 67.2246C4.66402 67.2246 3.98242 66.5418 3.98242 65.7042C3.98242 64.8666 4.66522 64.1838 5.50282 64.1838C6.34042 64.1838 7.02322 64.8666 7.02322 65.7042C7.02322 66.5418 6.34042 67.2246 5.50282 67.2246ZM5.50282 64.6626C4.92922 64.6626 4.46242 65.1294 4.46242 65.703C4.46242 66.2766 4.92922 66.7434 5.50282 66.7434C6.07642 66.7434 6.54322 66.2766 6.54322 65.703C6.54322 65.1294 6.07642 64.6626 5.50282 64.6626ZM45.3836 95.403C44.4536 95.403 43.6976 94.647 43.6976 93.717C43.6976 92.787 44.4536 92.031 45.3836 92.031C46.3136 92.031 47.0696 92.787 47.0696 93.717C47.0696 94.647 46.3136 95.403 45.3836 95.403ZM45.3836 92.511C44.7188 92.511 44.1776 93.0522 44.1776 93.717C44.1776 94.3818 44.7188 94.923 45.3836 94.923C46.0484 94.923 46.5896 94.3818 46.5896 93.717C46.5896 93.0522 46.0484 92.511 45.3836 92.511Z",
-        fill: "#2271B1"
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("defs", {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "clip0_473_461",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          width: "105",
-          height: "100",
-          fill: "white"
-        })
-      })
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NotFound);
-
-/***/ },
-
-/***/ "./source/assets/icons/ProIcon.tsx"
-/*!*****************************************!*\
-  !*** ./source/assets/icons/ProIcon.tsx ***!
-  \*****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-const ProIcon = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-    width: "256",
-    height: "256",
-    viewBox: "0 0 256 256",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-      d: "M111.313 16.1431C120.617 7.14228 135.383 7.14228 144.687 16.1431L151.211 22.4547C156.532 27.6017 163.93 30.0055 171.26 28.9688L180.248 27.6974C193.065 25.8845 205.011 34.5636 207.248 47.3143L208.816 56.2553C210.095 63.5467 214.668 69.8398 221.207 73.3094L229.226 77.564C240.661 83.6313 245.224 97.6745 239.539 109.305L235.552 117.46C232.301 124.111 232.301 131.889 235.552 138.54L239.539 146.695C245.224 158.325 240.661 172.369 229.226 178.436L221.207 182.691C214.668 186.16 210.095 192.453 208.816 199.745L207.248 208.686C205.011 221.436 193.065 230.116 180.248 228.303L171.26 227.031C163.93 225.994 156.532 228.398 151.211 233.545L144.687 239.857C135.383 248.858 120.617 248.858 111.313 239.857L104.789 233.545C99.4682 228.398 92.0701 225.994 84.7404 227.031L75.7523 228.303C62.9346 230.116 50.9887 221.436 48.752 208.686L47.1837 199.745C45.9046 192.453 41.3324 186.16 34.7931 182.691L26.7744 178.436C15.3389 172.369 10.776 158.325 16.4612 146.695L20.4477 138.54C23.6988 131.889 23.6988 124.111 20.4477 117.46L16.4612 109.305C10.776 97.6745 15.3389 83.6313 26.7744 77.564L34.7931 73.3094C41.3324 69.8398 45.9046 63.5467 47.1837 56.2553L48.752 47.3143C50.9887 34.5636 62.9346 25.8845 75.7523 27.6974L84.7404 28.9688C92.0701 30.0055 99.4682 27.6017 104.789 22.4547L111.313 16.1431Z",
-      fill: "var(--pnpnm-primary)"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-      d: "M53.6656 114.787C53.493 115.731 53.1459 116.556 52.6241 117.26C52.1048 117.951 51.4162 118.456 50.5585 118.774C49.6876 119.089 48.6423 119.135 47.4225 118.912L38.7265 117.323L39.0284 115.671L47.7441 117.263C48.636 117.426 49.3903 117.415 50.0071 117.229C50.6262 117.031 51.1148 116.693 51.473 116.216C51.8312 115.74 52.0726 115.16 52.1972 114.478C52.3242 113.783 52.3033 113.156 52.1344 112.596C51.9655 112.037 51.6255 111.561 51.1142 111.17C50.6029 110.778 49.9013 110.501 49.0094 110.338L40.2937 108.745L40.5956 107.093L49.2917 108.682C50.5115 108.904 51.4729 109.317 52.176 109.92C52.866 110.521 53.3305 111.242 53.5695 112.086C53.8085 112.929 53.8405 113.83 53.6656 114.787ZM54.7191 108.07L41.4604 103.575L42.9245 99.2566C43.2798 98.2085 43.7477 97.4098 44.3281 96.8604C44.9003 96.2941 45.5303 95.9516 46.2181 95.8328C46.9103 95.7015 47.6289 95.7621 48.3739 96.0146C49.0937 96.2587 49.6946 96.6454 50.1768 97.1749C50.6507 97.6875 50.9509 98.3384 51.0776 99.1275C51.2043 99.9167 51.0878 100.842 50.7282 101.902L49.8035 104.63L55.2585 106.479L54.7191 108.07ZM48.4587 104.174L49.377 101.465C49.7366 100.405 49.7598 99.5677 49.4467 98.9548C49.1336 98.3418 48.5919 97.9047 47.8217 97.6436C47.0009 97.3653 46.2925 97.3785 45.6964 97.6833C45.0877 97.9838 44.6035 98.6644 44.2439 99.7251L43.3257 102.434L48.4587 104.174ZM61.0611 93.2747C60.4499 94.4296 59.6483 95.3027 58.6565 95.8941C57.6529 96.4793 56.5459 96.7608 55.3356 96.7388C54.1254 96.7168 52.8839 96.3689 51.6111 95.6953C50.3502 95.028 49.3644 94.197 48.6538 93.2024C47.9494 92.196 47.5632 91.1015 47.4951 89.919C47.4332 88.7247 47.7267 87.5147 48.3753 86.2891C49.1113 84.8985 50.0615 83.9155 51.2259 83.34C52.3786 82.7583 53.6187 82.6528 54.9461 83.0235L54.0386 84.7382C53.2089 84.5102 52.4138 84.5872 51.6535 84.9693C50.8931 85.3513 50.2541 86.0314 49.7364 87.0095C49.2562 87.9169 49.0414 88.8215 49.0921 89.7233C49.1373 90.6071 49.4403 91.4313 50.0012 92.1957C50.562 92.9602 51.3669 93.62 52.4157 94.1751C53.4645 94.7302 54.4686 95.0278 55.428 95.0679C56.3755 95.1018 57.2212 94.9006 57.9649 94.4645C58.7148 94.0167 59.3144 93.3685 59.7634 92.52C60.462 91.2001 60.6001 89.9985 60.1778 88.9151C59.7556 87.8318 58.9035 86.8905 57.6218 86.0915L55.732 89.6622L54.5653 89.0447L57.2597 83.9538L63.8709 87.4528L63.1505 88.8139L61.0521 87.8617C61.3794 88.4121 61.611 88.9721 61.7469 89.5419C61.8773 90.0936 61.8936 90.6756 61.796 91.2876C61.6865 91.8935 61.4416 92.5558 61.0611 93.2747ZM64.5025 86.3912L53.3124 77.978L56.0287 74.3652C56.6857 73.4913 57.3718 72.8894 58.0868 72.5596C58.7912 72.2218 59.4887 72.1039 60.1793 72.2061C60.8698 72.3082 61.5241 72.5917 62.1422 73.0564C62.7391 73.5051 63.1837 74.0563 63.4763 74.71C63.7769 75.353 63.864 76.0691 63.7378 76.8583C63.6115 77.6475 63.2158 78.4843 62.5508 79.3689L60.8922 81.5749L65.5121 85.0484L64.5025 86.3912ZM68.9495 80.4765L62.095 79.1764L63.2248 77.6737L70.1394 78.8939L68.9495 80.4765ZM59.8371 80.7817L61.4717 78.6076C62.1127 77.755 62.3736 76.9753 62.2545 76.2685C62.1433 75.5511 61.7627 74.948 61.1126 74.4592C60.4518 73.9624 59.7814 73.767 59.1013 73.8728C58.4185 73.96 57.7446 74.4459 57.0796 75.3304L55.457 77.4885L59.8371 80.7817ZM70.2817 78.5989L64.1199 65.01L65.3867 63.7596L78.8794 70.1132L77.6125 71.3636L66.2213 65.8865L71.5344 77.3625L70.2817 78.5989ZM69.4326 74.3788L68.8189 73.0737L73.3312 68.6201L74.6282 69.2509L69.4326 74.3788ZM79.3881 69.697L71.2515 58.3042L74.6042 55.9097C75.9388 54.9566 77.2013 54.4072 78.3917 54.2616C79.5851 54.0973 80.6941 54.2966 81.7186 54.8593C82.7462 55.4034 83.6862 56.2722 84.5386 57.4657C85.3755 58.6375 85.8846 59.7977 86.0659 60.9462C86.258 62.087 86.0828 63.1953 85.5403 64.2709C85.0086 65.3388 84.0754 66.3493 82.7409 67.3025L79.3881 69.697ZM79.9416 67.5813L81.8946 66.1864C83.0014 65.396 83.7524 64.5893 84.1477 63.7663C84.5352 62.9324 84.6298 62.0784 84.4315 61.2042C84.2254 60.3192 83.7891 59.4101 83.1227 58.477C82.4408 57.5222 81.7146 56.8037 80.9443 56.3216C80.174 55.8395 79.3316 55.6465 78.4171 55.7425C77.5027 55.8386 76.492 56.2818 75.3853 57.0722L73.4323 58.4671L79.9416 67.5813ZM89.5749 62.5053L83.2091 50.0363L90.922 46.0985L91.5495 47.3276L85.3328 50.5015L87.5518 54.8478L93.2341 51.9468L93.8525 53.1581L88.1702 56.0591L90.4437 60.5123L96.6604 57.3385L97.2879 58.5675L89.5749 62.5053ZM108.26 54.6868L105.661 40.9299L107.312 40.6182L116.725 50.2589L114.643 39.2338L116.294 38.922L118.892 52.6788L117.241 52.9906L107.828 43.3499L109.91 54.375L108.26 54.6868ZM126.512 52.6109C125.166 52.6325 123.974 52.3516 122.938 51.7681C121.915 51.1711 121.108 50.3373 120.518 49.2666C119.94 48.1824 119.64 46.9204 119.617 45.4806C119.594 44.0541 119.854 42.7964 120.396 41.7076C120.952 40.6052 121.732 39.7392 122.735 39.1097C123.752 38.48 124.933 38.1544 126.28 38.1328C127.653 38.1108 128.851 38.3982 129.874 38.9953C130.897 39.5923 131.697 40.4329 132.275 41.5171C132.866 42.5878 133.172 43.8363 133.195 45.2628C133.218 46.7026 132.952 47.9737 132.396 49.0761C131.854 50.165 131.081 51.0241 130.077 51.6536C129.074 52.2698 127.885 52.5889 126.512 52.6109ZM126.488 51.1311C127.502 51.1149 128.384 50.874 129.137 50.4085C129.903 49.9295 130.486 49.2601 130.885 48.4003C131.298 47.5269 131.495 46.4902 131.475 45.2904C131.456 44.0905 131.226 43.0674 130.786 42.221C130.359 41.3611 129.755 40.7107 128.975 40.2698C128.207 39.8288 127.317 39.6163 126.304 39.6326C125.304 39.6486 124.421 39.8895 123.655 40.3551C122.903 40.8206 122.32 41.49 121.907 42.3634C121.508 43.2233 121.317 44.2531 121.337 45.453C121.356 46.6528 121.579 47.6827 122.006 48.5426C122.447 49.389 123.05 50.0394 123.818 50.4938C124.598 50.9347 125.488 51.1471 126.488 51.1311ZM136.098 52.803L134.833 38.3411L136.604 38.6642L137.421 51.0114L142.94 39.8201L144.789 40.1576L145.914 52.6016L151.085 41.3064L152.856 41.6295L146.487 54.6985L144.598 54.3538L143.391 42.3624L137.948 53.1404L136.098 52.803ZM163.094 60.7862L169.063 49.6673L165.38 47.6901L166.033 46.4742L174.879 51.2233L174.226 52.4392L170.543 50.462L164.574 61.5809L163.094 60.7862ZM173.057 67.5568C171.982 66.7466 171.214 65.793 170.755 64.6961C170.315 63.5965 170.19 62.4429 170.382 61.2353C170.593 60.0251 171.131 58.8448 171.997 57.6946C172.856 56.555 173.833 55.7223 174.93 55.1966C176.046 54.6682 177.193 54.4639 178.372 54.5836C179.561 54.7114 180.693 55.1804 181.769 55.9906C182.866 56.8168 183.635 57.7797 184.075 58.8793C184.515 59.9789 184.63 61.1338 184.42 62.344C184.228 63.5516 183.703 64.7252 182.845 65.8648C181.978 67.015 180.987 67.8543 179.872 68.3827C178.774 68.9085 177.637 69.1115 176.458 68.9917C175.288 68.8613 174.154 68.383 173.057 67.5568ZM173.948 66.3746C174.757 66.9843 175.602 67.3367 176.481 67.4318C177.38 67.5243 178.251 67.3541 179.095 66.9211C179.957 66.4856 180.749 65.7885 181.471 64.83C182.193 63.8715 182.64 62.923 182.813 61.9847C183.004 61.0438 182.927 60.1596 182.582 59.3322C182.248 58.5129 181.676 57.7984 180.866 57.1887C180.068 56.5871 179.223 56.2347 178.333 56.1315C177.453 56.0364 176.582 56.2066 175.72 56.6422C174.876 57.0751 174.093 57.7709 173.371 58.7294C172.649 59.6879 172.193 60.6377 172.001 61.5786C171.829 62.5169 171.906 63.4011 172.232 64.2311C172.577 65.0585 173.149 65.773 173.948 66.3746ZM186.486 79.5944L197.786 71.3297L202.898 78.3196L201.784 79.1343L197.664 73.5003L193.725 76.3812L197.491 81.5308L196.393 82.3337L192.627 77.1841L188.591 80.1358L192.712 85.7697L191.598 86.5844L186.486 79.5944ZM192.073 87.185L200.318 87.6099L204.402 80.5531L205.302 82.2264L202.018 87.8992L208.486 88.1445L209.376 89.8002L201.184 89.3469L197.056 96.4498L196.156 94.7765L199.484 89.0576L192.973 88.8583L192.073 87.185ZM197.503 97.4324L210.641 92.5971L212.216 96.8765C212.599 97.915 212.736 98.8304 212.63 99.6225C212.541 100.423 212.266 101.085 211.806 101.61C211.35 102.147 210.753 102.551 210.015 102.823C209.301 103.085 208.591 103.162 207.883 103.053C207.192 102.952 206.55 102.635 205.955 102.1C205.361 101.566 204.87 100.773 204.483 99.7224L203.489 97.0196L198.083 99.009L197.503 97.4324ZM204.821 96.5292L205.809 99.2132C206.196 100.264 206.704 100.93 207.332 101.21C207.961 101.49 208.657 101.49 209.421 101.209C210.234 100.909 210.777 100.454 211.049 99.8422C211.333 99.226 211.282 98.3923 210.896 97.3412L209.908 94.6572L204.821 96.5292ZM201.053 107.294L214.725 104.281L216.589 112.738L215.241 113.035L213.739 106.219L208.973 107.269L210.346 113.499L209.018 113.792L207.645 107.561L202.762 108.637L204.264 115.454L202.917 115.751L201.053 107.294ZM203.163 117.205L217.121 116.127L217.469 120.633C217.554 121.723 217.436 122.628 217.118 123.348C216.812 124.067 216.366 124.617 215.78 124.996C215.195 125.376 214.516 125.595 213.745 125.655C213.001 125.712 212.303 125.592 211.651 125.295C211.001 125.011 210.462 124.531 210.036 123.855C209.609 123.179 209.353 122.29 209.268 121.186L209.055 118.435L203.292 118.88L203.163 117.205ZM203.733 124.583L209.737 121.03L209.882 122.904L203.885 126.557L203.733 124.583ZM210.371 118.333L210.581 121.045C210.663 122.108 210.982 122.866 211.539 123.318C212.096 123.783 212.78 123.984 213.591 123.922C214.415 123.858 215.048 123.562 215.488 123.033C215.943 122.516 216.128 121.706 216.043 120.603L215.835 117.911L210.371 118.333ZM203.955 128.485L217.952 128.758L217.919 130.437L203.922 130.165L203.955 128.485ZM203.796 132.548L217.694 134.233L216.652 142.83L215.282 142.664L216.122 135.734L211.277 135.147L210.51 141.481L209.159 141.317L209.927 134.984L204.963 134.382L204.124 141.311L202.754 141.145L203.796 132.548ZM202.518 142.515L216.024 146.202L215.581 147.823L202.793 152.065L213.617 155.019L213.174 156.64L199.668 152.953L200.111 151.332L212.899 147.09L202.075 144.136L202.518 142.515ZM196.462 159.707C197.036 158.474 197.807 157.531 198.773 156.878C199.745 156.243 200.834 155.912 202.038 155.884C203.254 155.863 204.515 156.156 205.82 156.764C207.126 157.372 208.155 158.146 208.909 159.086C209.675 160.031 210.121 161.077 210.248 162.225C210.382 163.39 210.162 164.59 209.587 165.822C208.912 167.273 208.018 168.291 206.907 168.876C205.796 169.461 204.552 169.588 203.177 169.257L203.963 167.571C204.839 167.743 205.65 167.643 206.397 167.271C207.157 166.904 207.773 166.212 208.246 165.197C208.668 164.291 208.823 163.407 208.709 162.545C208.608 161.689 208.249 160.896 207.632 160.168C207.028 159.445 206.182 158.83 205.094 158.323C204.006 157.816 202.985 157.561 202.031 157.558C201.088 157.56 200.251 157.795 199.518 158.263C198.797 158.736 198.226 159.426 197.804 160.332C197.331 161.347 197.186 162.258 197.369 163.064C197.564 163.876 198.004 164.559 198.687 165.113L197.902 166.799C196.799 165.976 196.115 164.951 195.848 163.724C195.582 162.496 195.786 161.157 196.462 159.707ZM193.69 166.067L205.358 173.803L200.572 181.021L199.422 180.258L203.279 174.441L199.212 171.744L195.687 177.061L194.553 176.31L198.079 170.992L193.911 168.229L190.054 174.047L188.904 173.284L193.69 166.067ZM181.148 182.222L190.316 192.803L186.869 195.789C186.033 196.514 185.225 196.966 184.447 197.147C183.667 197.346 182.95 197.323 182.297 197.078C181.633 196.842 181.044 196.426 180.529 195.831C180.031 195.257 179.708 194.62 179.56 193.919C179.41 193.237 179.48 192.524 179.769 191.779C180.059 191.034 180.627 190.295 181.474 189.561L183.65 187.676L179.879 183.322L181.148 182.222ZM184.58 188.749L182.419 190.622C181.572 191.355 181.129 192.065 181.089 192.752C181.05 193.44 181.296 194.09 181.829 194.705C182.396 195.36 183.014 195.707 183.682 195.745C184.359 195.794 185.121 195.451 185.968 194.718L188.129 192.845L184.58 188.749ZM173.215 189L180.824 200.751L177.03 203.208C176.112 203.802 175.261 204.131 174.476 204.194C173.699 204.269 173.003 204.14 172.39 203.806C171.777 203.472 171.26 202.981 170.84 202.332C170.434 201.705 170.206 201.034 170.157 200.32C170.096 199.613 170.26 198.91 170.651 198.213C171.041 197.515 171.701 196.866 172.629 196.264L174.946 194.764L171.805 189.913L173.215 189ZM167.003 193.022L172.991 196.602L171.413 197.624L165.341 194.098L167.003 193.022ZM175.664 195.872L173.38 197.351C172.485 197.931 171.972 198.573 171.84 199.277C171.698 199.989 171.847 200.686 172.289 201.369C172.739 202.063 173.301 202.477 173.976 202.612C174.647 202.765 175.447 202.541 176.376 201.94L178.642 200.472L175.664 195.872ZM164.178 194.764L170.093 207.453L162.244 211.112L161.661 209.861L167.988 206.912L165.926 202.489L160.143 205.184L159.569 203.952L165.351 201.256L163.239 196.724L156.912 199.673L156.329 198.423L164.178 194.764ZM155.297 198.842L159.042 212.332L157.154 212.856L149.778 204.754L147.615 215.505L145.707 216.034L141.962 202.545L143.58 202.095L146.523 212.694L148.556 202.748L149.77 202.411L156.61 209.852L153.678 199.292L155.297 198.842ZM140.057 202.993L142.06 216.849L140.397 217.09L138.395 203.233L140.057 202.993ZM131.081 203.417C132.04 203.383 132.92 203.546 133.72 203.905C134.506 204.264 135.146 204.829 135.64 205.599C136.134 206.382 136.403 207.393 136.447 208.632L136.755 217.467L135.076 217.526L134.767 208.671C134.735 207.765 134.563 207.03 134.25 206.468C133.923 205.905 133.489 205.5 132.946 205.253C132.404 205.005 131.786 204.893 131.094 204.917C130.387 204.942 129.779 205.096 129.269 205.381C128.758 205.666 128.366 206.1 128.093 206.683C127.82 207.266 127.7 208.011 127.731 208.917L128.041 217.772L126.362 217.83L126.053 208.996C126.01 207.756 126.207 206.729 126.646 205.913C127.084 205.111 127.69 204.502 128.463 204.088C129.236 203.675 130.108 203.451 131.081 203.417ZM124.686 203.832L122.747 217.697L120.806 217.425L117.268 207.055L111.001 216.054L109.04 215.78L110.98 201.915L112.643 202.147L111.12 213.041L116.947 204.728L118.195 204.903L121.504 214.453L123.022 203.599L124.686 203.832ZM99.7263 198.473L93.8089 211.161L86.0874 207.56L86.6707 206.309L92.8696 209.2L94.9492 204.741L89.6746 202.281L90.2495 201.049L95.524 203.509L98.2038 197.763L99.7263 198.473ZM91.0379 194.338L83.4883 206.128L76.1954 201.458L76.9395 200.296L82.8177 204.06L85.4492 199.95L80.0764 196.51L80.8097 195.364L86.1826 198.805L88.8789 194.594L83.0007 190.83L83.7449 189.668L91.0379 194.338ZM83.1912 189.371L70.1797 196.674L68.8255 195.519L74.0006 181.532L75.3549 182.687L70.873 194.505L81.8522 188.229L83.1912 189.371ZM79.0593 190.579L77.8115 191.302L72.988 187.187L73.5055 185.841L79.0593 190.579ZM72.3169 179.416L62.9053 187.823L65.69 190.94L64.6609 191.86L57.9721 184.372L59.0013 183.453L61.786 186.57L71.1976 178.163L72.3169 179.416ZM65.3029 170.027C65.8345 170.827 66.157 171.661 66.2706 172.53C66.3768 173.388 66.2315 174.229 65.8348 175.054C65.427 175.885 64.7068 176.644 63.6743 177.331L56.3129 182.225L55.3828 180.826L62.7607 175.921C63.5157 175.419 64.0508 174.887 64.3658 174.325C64.6734 173.752 64.7906 173.17 64.7174 172.578C64.6441 171.986 64.4156 171.402 64.0317 170.825C63.6404 170.236 63.1898 169.799 62.6798 169.514C62.1699 169.228 61.5949 169.122 60.9551 169.196C60.3153 169.269 59.6178 169.556 58.8628 170.058L51.4848 174.964L50.5547 173.565L57.916 168.67C58.9486 167.984 59.9271 167.613 60.8517 167.559C61.7652 167.512 62.6007 167.709 63.3582 168.15C64.1158 168.591 64.764 169.217 65.3029 170.027ZM61.4177 164.495L48.7392 170.433L46.8222 166.34C46.3585 165.35 46.1487 164.461 46.1927 163.675C46.2247 162.895 46.4477 162.223 46.8617 161.661C47.2758 161.099 47.833 160.654 48.5333 160.326C49.2095 160.01 49.9049 159.875 50.6194 159.924C51.3283 159.96 52.0016 160.218 52.6395 160.7C53.2773 161.182 53.8308 161.924 54.3002 162.926L55.4708 165.425L60.7052 162.974L61.4177 164.495ZM58.2792 157.794L53.9164 163.238L53.1191 161.536L57.4394 156.001L58.2792 157.794ZM54.2754 165.985L53.1218 163.522C52.6694 162.556 52.1031 161.96 51.423 161.734C50.7371 161.495 50.026 161.549 49.2894 161.894C48.5408 162.244 48.0537 162.745 47.8283 163.395C47.5851 164.039 47.6982 164.862 48.1675 165.864L49.3127 168.309L54.2754 165.985ZM56.9388 154.759L43.5623 158.891L41.0066 150.617L42.3251 150.209L44.385 156.879L49.0477 155.438L47.1649 149.343L48.4643 148.941L50.3471 155.037L55.1244 153.561L53.0645 146.892L54.3831 146.485L56.9388 154.759ZM53.4674 140.492C53.6404 141.504 53.6069 142.416 53.3669 143.228C53.127 144.04 52.7132 144.706 52.1257 145.226C51.5382 145.746 50.8107 146.08 49.9433 146.228L49.6468 144.493C50.1857 144.401 50.6638 144.191 51.0811 143.862C51.4853 143.536 51.7849 143.113 51.9801 142.593C52.1598 142.062 52.189 141.441 52.0677 140.731C51.9622 140.114 51.7738 139.605 51.5025 139.205C51.2158 138.794 50.876 138.507 50.483 138.344C50.0877 138.168 49.6666 138.119 49.2197 138.195C48.6809 138.287 48.2674 138.479 47.9793 138.772C47.6757 139.054 47.4525 139.41 47.3096 139.84C47.1667 140.27 47.0613 140.762 46.9935 141.315C46.9102 141.856 46.8249 142.426 46.7374 143.022C46.5559 144.176 46.2329 145.056 45.7685 145.663C45.3041 146.27 44.6316 146.649 43.751 146.799C43.0019 146.927 42.3156 146.869 41.692 146.624C41.0662 146.365 40.5406 145.941 40.1151 145.351C39.6742 144.75 39.3774 144.003 39.2247 143.109C39.0742 142.228 39.1082 141.438 39.3267 140.738C39.543 140.025 39.9088 139.435 40.4242 138.968C40.9265 138.503 41.5522 138.207 42.3013 138.079L42.5978 139.814C42.2166 139.879 41.8589 140.041 41.5246 140.301C41.1903 140.561 40.9397 140.915 40.7727 141.363C40.5904 141.8 40.5509 142.321 40.6542 142.926C40.7264 143.427 40.8882 143.859 41.1396 144.222C41.3756 144.574 41.677 144.834 42.0437 145.001C42.4083 145.155 42.8271 145.192 43.3002 145.111C43.7471 145.035 44.0928 144.881 44.3373 144.65C44.5796 144.405 44.769 144.089 44.9055 143.7C45.0266 143.301 45.1245 142.845 45.1991 142.331C45.2737 141.818 45.359 141.249 45.4551 140.624C45.564 139.915 45.7389 139.277 45.9799 138.708C46.2055 138.128 46.5433 137.651 46.9933 137.277C47.441 136.889 48.0526 136.629 48.8281 136.497C49.4852 136.384 50.1398 136.455 50.7919 136.709C51.4285 136.952 51.9893 137.383 52.4741 138.004C52.9589 138.625 53.29 139.454 53.4674 140.492Z",
-      fill: "white"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-      d: "M91.214 155.096V163.789C91.214 165.38 92.5042 166.67 94.0957 166.67H163.544C165.135 166.67 166.425 165.38 166.425 163.789V155.096H91.214ZM176.675 103.49C176.167 103.165 175.57 103.006 174.968 103.038C174.366 103.069 173.789 103.289 173.318 103.665L152.338 120.449C151.843 120.845 151.493 121.393 151.341 122.009C151.189 122.624 151.244 123.272 151.498 123.853C151.818 124.584 151.982 125.373 151.981 126.171C151.981 129.369 149.379 131.971 146.182 131.971C142.984 131.971 140.382 129.369 140.382 126.171C140.382 124.29 141.304 122.517 142.847 121.429C143.41 121.031 143.813 120.445 143.981 119.777C144.149 119.108 144.072 118.401 143.764 117.785L131.397 93.0522C131.158 92.5734 130.79 92.1708 130.335 91.8894C129.879 91.608 129.355 91.459 128.819 91.459C128.284 91.459 127.76 91.608 127.304 91.8894C126.849 92.1708 126.481 92.5734 126.242 93.0522L113.875 117.785C113.567 118.402 113.49 119.108 113.658 119.777C113.826 120.445 114.229 121.032 114.792 121.429C116.335 122.517 117.257 124.29 117.257 126.171C117.257 129.369 114.655 131.971 111.457 131.971C108.259 131.971 105.658 129.369 105.658 126.171C105.658 125.367 105.82 124.587 106.141 123.853C106.395 123.272 106.45 122.624 106.298 122.009C106.146 121.393 105.795 120.845 105.301 120.449L84.3213 103.665C83.8504 103.289 83.2733 103.069 82.6712 103.038C82.069 103.006 81.4722 103.165 80.9647 103.49C80.4573 103.816 80.0647 104.292 79.8424 104.853C79.6201 105.413 79.5791 106.029 79.7254 106.614L90.4048 149.333H167.234L177.914 106.614C178.06 106.029 178.019 105.413 177.797 104.853C177.575 104.292 177.182 103.816 176.675 103.49Z",
-      fill: "#010019"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-      d: "M163.786 153.637V161.33C163.786 162.369 162.943 163.212 161.904 163.212H92.4561C91.4171 163.212 90.5743 162.369 90.5742 161.33V153.637H163.786ZM127.18 90C127.529 90 127.873 90.0975 128.17 90.2812C128.467 90.4649 128.707 90.7277 128.863 91.04L141.229 115.773C141.431 116.176 141.482 116.637 141.372 117.073C141.262 117.51 140.999 117.893 140.631 118.152C138.823 119.427 137.743 121.504 137.743 123.712C137.743 127.462 140.792 130.512 144.542 130.512C148.175 130.512 151.151 127.65 151.333 124.062L151.342 123.712C151.343 122.893 151.195 122.082 150.906 121.317L150.774 120.993C150.609 120.614 150.573 120.191 150.672 119.789C150.771 119.387 151 119.029 151.323 118.771L172.304 101.987C172.611 101.741 172.988 101.598 173.381 101.577C173.774 101.557 174.164 101.66 174.495 101.873C174.826 102.086 175.083 102.397 175.229 102.763C175.374 103.129 175.4 103.531 175.305 103.913L164.814 145.873H89.5459L79.0566 103.913C78.9611 103.531 78.9876 103.129 79.1328 102.763C79.278 102.397 79.534 102.086 79.8652 101.873C80.1965 101.66 80.5864 101.557 80.9795 101.577C81.3727 101.598 81.7502 101.741 82.0576 101.987L103.036 118.771C103.359 119.03 103.588 119.387 103.688 119.789C103.787 120.191 103.751 120.615 103.585 120.994C103.209 121.854 103.019 122.771 103.019 123.712C103.019 127.462 106.068 130.512 109.818 130.512C113.568 130.511 116.617 127.462 116.617 123.712C116.617 121.504 115.537 119.427 113.729 118.152C113.362 117.893 113.098 117.511 112.988 117.074C112.878 116.638 112.93 116.176 113.131 115.773L125.497 91.04C125.653 90.7277 125.893 90.4649 126.19 90.2812C126.488 90.0976 126.83 90.0001 127.18 90Z",
-      fill: "#F9F9FF",
-      stroke: "#010019",
-      "stroke-width": "2"
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProIcon);
-
-/***/ },
-
-/***/ "./source/assets/icons/themes/Awesome.tsx"
-/*!************************************************!*\
-  !*** ./source/assets/icons/themes/Awesome.tsx ***!
-  \************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-const Awesome = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-    width: "300",
-    height: "220",
-    viewBox: "0 0 300 220",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("g", {
-      "clip-path": "url(#clip0_251_3065)",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "220",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "900",
-        transform: "translate(0 -68)",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask0_251_3065",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "19",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "19",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask0_251_3065)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.75 34.8333V27.4615C21.75 27.223 21.8033 26.9971 21.91 26.7838C22.0168 26.5703 22.1643 26.3945 22.3525 26.2565L27.0963 22.6827C27.3594 22.4819 27.6603 22.3815 27.9988 22.3815C28.3372 22.3815 28.6389 22.4819 28.9037 22.6827L33.6475 26.2565C33.8357 26.3945 33.9832 26.5703 34.09 26.7838C34.1967 26.9971 34.25 27.223 34.25 27.4615V34.8333C34.25 35.1742 34.1269 35.4677 33.8806 35.714C33.6344 35.9602 33.3408 36.0833 33 36.0833H30.3398C30.1263 36.0833 29.9474 36.0111 29.8031 35.8667C29.6587 35.7224 29.5865 35.5435 29.5865 35.33V31.2596C29.5865 31.0463 29.5143 30.8674 29.37 30.7229C29.2257 30.5786 29.0468 30.5065 28.8333 30.5065H27.1667C26.9532 30.5065 26.7743 30.5786 26.63 30.7229C26.4857 30.8674 26.4135 31.0463 26.4135 31.2596V35.33C26.4135 35.5435 26.3413 35.7224 26.1969 35.8667C26.0526 36.0111 25.8737 36.0833 25.6602 36.0833H23C22.6592 36.0833 22.3656 35.9602 22.1194 35.714C21.8731 35.4677 21.75 35.1742 21.75 34.8333Z",
-          fill: "#ADACFF"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 29C42 25.6863 44.6863 23 48 23H95C98.3137 23 101 25.6863 101 29C101 32.3137 98.3137 35 95 35H48C44.6863 35 42 32.3137 42 29Z",
-        fill: "#ADACFF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask1_251_3065",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "55",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "55",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask1_251_3065)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5897 71.25C21.1687 71.25 20.8124 71.1042 20.5208 70.8125C20.2291 70.5208 20.0833 70.1645 20.0833 69.7435V60.2565C20.0833 59.8355 20.2291 59.4792 20.5208 59.1875C20.8124 58.8958 21.1687 58.75 21.5897 58.75H26.1649L27.8316 60.4167H34.4101C34.8311 60.4167 35.1874 60.5625 35.4791 60.8542C35.7708 61.1458 35.9166 61.5022 35.9166 61.9231V63.8077C35.9166 64.063 35.8014 64.2476 35.5712 64.3615C35.341 64.4752 35.1164 64.4589 34.8974 64.3125C34.4849 64.0839 34.049 63.909 33.5897 63.7877C33.1303 63.6665 32.6569 63.6058 32.1697 63.6058C30.6228 63.6058 29.3073 64.1478 28.2235 65.2317C27.1396 66.3154 26.5976 67.6308 26.5976 69.1779C26.5976 69.3799 26.6062 69.581 26.6233 69.7813C26.6403 69.9815 26.6756 70.1784 26.7291 70.3719C26.7826 70.593 26.7449 70.7946 26.6162 70.9767C26.4874 71.1589 26.3125 71.25 26.0914 71.25H21.5897ZM29.5112 71.8221C28.7814 71.0924 28.4166 70.2072 28.4166 69.1667C28.4166 68.1261 28.7814 67.241 29.5112 66.5113C30.2409 65.7815 31.126 65.4167 32.1666 65.4167C33.2071 65.4167 34.0923 65.7815 34.822 66.5113C35.5517 67.241 35.9166 68.1261 35.9166 69.1667C35.9166 70.2072 35.5517 71.0924 34.822 71.8221C34.0923 72.5518 33.2071 72.9167 32.1666 72.9167C31.126 72.9167 30.2409 72.5518 29.5112 71.8221ZM32.4262 71.3654C32.4988 71.2928 32.5351 71.2063 32.5351 71.1058V68.8942C32.5351 68.7938 32.4988 68.7072 32.4262 68.6346C32.3535 68.5619 32.267 68.5256 32.1666 68.5256C32.0662 68.5256 31.9796 68.5619 31.907 68.6346C31.8344 68.7072 31.798 68.7938 31.798 68.8942V71.1058C31.798 71.2063 31.8344 71.2928 31.907 71.3654C31.9796 71.4381 32.0662 71.4744 32.1666 71.4744C32.267 71.4744 32.3535 71.4381 32.4262 71.3654ZM32.4583 67.5673C32.5416 67.484 32.5833 67.3867 32.5833 67.2756C32.5833 67.1645 32.5416 67.0673 32.4583 66.984C32.3749 66.9006 32.2777 66.859 32.1666 66.859C32.0555 66.859 31.9583 66.9006 31.8749 66.984C31.7916 67.0673 31.7499 67.1645 31.7499 67.2756C31.7499 67.3867 31.7916 67.484 31.8749 67.5673C31.9583 67.6506 32.0555 67.6923 32.1666 67.6923C32.2777 67.6923 32.3749 67.6506 32.4583 67.5673Z",
-          fill: "#323152",
-          "fill-opacity": "0.25"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 65C42 61.6863 44.6863 59 48 59H156C159.314 59 162 61.6863 162 65C162 68.3137 159.314 71 156 71H48C44.6863 71 42 68.3137 42 65Z",
-        fill: "#323152",
-        "fill-opacity": "0.25"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 90H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask2_251_3065",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "104",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "104",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask2_251_3065)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.9327 117.013C24.5097 117.013 23.3045 116.519 22.3173 115.532C21.3302 114.545 20.8367 113.34 20.8367 111.917C20.8367 110.494 21.3302 109.289 22.3173 108.301C23.3045 107.314 24.5097 106.821 25.9327 106.821C27.3558 106.821 28.5609 107.314 29.5481 108.301C30.5352 109.289 31.0288 110.494 31.0288 111.917C31.0288 112.512 30.9289 113.08 30.7292 113.622C30.5293 114.164 30.2627 114.635 29.9294 115.035L34.7244 119.83C34.8398 119.946 34.8988 120.091 34.9015 120.265C34.9041 120.44 34.8451 120.588 34.7244 120.708C34.6037 120.829 34.4573 120.889 34.2852 120.889C34.1133 120.889 33.9669 120.829 33.8463 120.708L29.0513 115.913C28.6346 116.257 28.1554 116.527 27.6138 116.721C27.0721 116.916 26.5117 117.013 25.9327 117.013ZM25.9327 115.763C27.0065 115.763 27.9159 115.39 28.661 114.645C29.4063 113.9 29.779 112.99 29.779 111.917C29.779 110.843 29.4063 109.934 28.661 109.188C27.9159 108.443 27.0065 108.07 25.9327 108.07C24.859 108.07 23.9495 108.443 23.2044 109.188C22.4591 109.934 22.0865 110.843 22.0865 111.917C22.0865 112.99 22.4591 113.9 23.2044 114.645C23.9495 115.39 24.859 115.763 25.9327 115.763Z",
-          fill: "#323152",
-          "fill-opacity": "0.25"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 114C42 110.686 44.6863 108 48 108H99C102.314 108 105 110.686 105 114C105 117.314 102.314 120 99 120H48C44.6863 120 42 117.314 42 114Z",
-        fill: "#323152",
-        "fill-opacity": "0.25"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 138H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("g", {
-        "clip-path": "url(#clip1_251_3065)",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.0677 156.002C25.3208 156.01 25.5301 156.105 25.6862 156.284C25.7382 156.344 25.7722 156.417 25.7994 156.491L26.1771 157.521C26.2544 157.681 26.3707 157.831 26.4763 157.94C26.6107 158.078 26.8139 158.155 27.0928 158.155H34.9999C35.5522 158.155 36 158.603 35.9999 159.156L35.9989 167.848C35.9845 168.373 35.8389 168.706 35.5531 169.001C35.2517 169.312 34.8155 169.463 34.2677 169.463H21.7323C21.1851 169.463 20.7488 169.312 20.4475 169.001C20.1461 168.69 20 168.239 20 167.674V157.002C20 156.449 20.4478 156.002 21.0001 156.002L25.0677 156.002Z",
-          fill: "#6095ED"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.0677 156.001C25.3208 156.009 25.5301 156.103 25.6862 156.283C25.7382 156.342 25.7722 156.415 25.7994 156.489L26.1771 157.519C26.2544 157.679 26.3707 157.829 26.4763 157.938C26.6107 158.077 26.8139 158.154 27.0928 158.154H34.9999C35.5522 158.154 35.9999 158.602 35.9999 159.154L35.9989 167.222C35.9845 167.747 35.8389 168.166 35.5531 168.461C35.2517 168.772 34.8155 168.923 34.2677 168.923H21.7323C21.1851 168.923 20.7488 168.772 20.4475 168.461C20.1461 168.15 20 167.699 20 167.134V157C20 156.448 20.4478 156 21.0001 156L25.0677 156.001Z",
-          fill: "#A0C4FF"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 163C42 159.686 44.6863 157 48 157H95C98.3137 157 101 159.686 101 163C101 166.314 98.3137 169 95 169H48C44.6863 169 42 166.314 42 163Z",
-        fill: "#ADACFF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("g", {
-        "clip-path": "url(#clip2_251_3065)",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.0677 192.002C25.3208 192.01 25.5301 192.105 25.6862 192.284C25.7382 192.344 25.7722 192.417 25.7994 192.491L26.1771 193.521C26.2544 193.681 26.3707 193.831 26.4763 193.94C26.6107 194.078 26.8139 194.155 27.0928 194.155H34.9999C35.5522 194.155 36 194.603 35.9999 195.156L35.9989 203.848C35.9845 204.373 35.8389 204.706 35.5531 205.001C35.2517 205.312 34.8155 205.463 34.2677 205.463H21.7323C21.1851 205.463 20.7488 205.312 20.4475 205.001C20.1461 204.69 20 204.239 20 203.674V193.002C20 192.449 20.4478 192.002 21.0001 192.002L25.0677 192.002Z",
-          fill: "#6095ED"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.0677 192.001C25.3208 192.009 25.5301 192.103 25.6862 192.283C25.7382 192.342 25.7722 192.415 25.7994 192.489L26.1771 193.519C26.2544 193.679 26.3707 193.829 26.4763 193.938C26.6107 194.077 26.8139 194.154 27.0928 194.154H34.9999C35.5522 194.154 35.9999 194.602 35.9999 195.154L35.9989 203.222C35.9845 203.747 35.8389 204.166 35.5531 204.461C35.2517 204.772 34.8155 204.923 34.2677 204.923H21.7323C21.1851 204.923 20.7488 204.772 20.4475 204.461C20.1461 204.15 20 203.699 20 203.134V193C20 192.448 20.4478 192 21.0001 192L25.0677 192.001Z",
-          fill: "#A0C4FF"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 199C42 195.686 44.6863 193 48 193H156C159.314 193 162 195.686 162 199C162 202.314 159.314 205 156 205H48C44.6863 205 42 202.314 42 199Z",
-        fill: "#323152",
-        "fill-opacity": "0.25"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("defs", {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "clip0_251_3065",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          width: "300",
-          height: "220",
-          fill: "white"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "clip1_251_3065",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          width: "16",
-          height: "14",
-          fill: "white",
-          transform: "translate(20 156)"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "clip2_251_3065",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          width: "16",
-          height: "14",
-          fill: "white",
-          transform: "translate(20 192)"
-        })
-      })]
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Awesome);
-
-/***/ },
-
-/***/ "./source/assets/icons/themes/Bold.tsx"
-/*!*********************************************!*\
-  !*** ./source/assets/icons/themes/Bold.tsx ***!
-  \*********************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-const Bold = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-    width: "300",
-    height: "220",
-    viewBox: "0 0 300 220",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("g", {
-      "clip-path": "url(#clip0_251_2863)",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "220",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "900",
-        transform: "translate(0 -68)",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask0_251_2863",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "19",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "19",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask0_251_2863)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.75 34.8333V27.4615C21.75 27.223 21.8033 26.9971 21.91 26.7838C22.0168 26.5703 22.1643 26.3945 22.3525 26.2565L27.0963 22.6827C27.3594 22.4819 27.6603 22.3815 27.9988 22.3815C28.3372 22.3815 28.6389 22.4819 28.9037 22.6827L33.6475 26.2565C33.8357 26.3945 33.9832 26.5703 34.09 26.7838C34.1967 26.9971 34.25 27.223 34.25 27.4615V34.8333C34.25 35.1742 34.1269 35.4677 33.8806 35.714C33.6344 35.9602 33.3408 36.0833 33 36.0833H30.3398C30.1263 36.0833 29.9474 36.0111 29.8031 35.8667C29.6587 35.7224 29.5865 35.5435 29.5865 35.33V31.2596C29.5865 31.0463 29.5143 30.8674 29.37 30.7229C29.2257 30.5786 29.0468 30.5065 28.8333 30.5065H27.1667C26.9532 30.5065 26.7743 30.5786 26.63 30.7229C26.4857 30.8674 26.4135 31.0463 26.4135 31.2596V35.33C26.4135 35.5435 26.3413 35.7224 26.1969 35.8667C26.0526 36.0111 25.8737 36.0833 25.6602 36.0833H23C22.6592 36.0833 22.3656 35.9602 22.1194 35.714C21.8731 35.4677 21.75 35.1742 21.75 34.8333Z",
-          fill: "#ADACFF"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 29C42 25.6863 44.6863 23 48 23H95C98.3137 23 101 25.6863 101 29C101 32.3137 98.3137 35 95 35H48C44.6863 35 42 32.3137 42 29Z",
-        fill: "#ADACFF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask1_251_2863",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "55",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "55",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask1_251_2863)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5898 71.25C21.1689 71.25 20.8125 71.1042 20.5209 70.8125C20.2292 70.5208 20.0834 70.1645 20.0834 69.7435V60.2565C20.0834 59.8355 20.2292 59.4792 20.5209 59.1875C20.8125 58.8958 21.1689 58.75 21.5898 58.75H26.165L27.8317 60.4167H34.4102C34.8312 60.4167 35.1875 60.5625 35.4792 60.8542C35.7709 61.1458 35.9167 61.5022 35.9167 61.9231V63.8077C35.9167 64.063 35.8016 64.2476 35.5713 64.3615C35.3412 64.4752 35.1166 64.4589 34.8975 64.3125C34.485 64.0839 34.0491 63.909 33.5898 63.7877C33.1304 63.6665 32.6571 63.6058 32.1698 63.6058C30.6229 63.6058 29.3075 64.1478 28.2236 65.2317C27.1397 66.3154 26.5977 67.6308 26.5977 69.1779C26.5977 69.3799 26.6063 69.581 26.6234 69.7813C26.6405 69.9815 26.6757 70.1784 26.7292 70.3719C26.7827 70.593 26.745 70.7946 26.6163 70.9767C26.4875 71.1589 26.3126 71.25 26.0915 71.25H21.5898ZM29.5113 71.8221C28.7816 71.0924 28.4167 70.2072 28.4167 69.1667C28.4167 68.1261 28.7816 67.241 29.5113 66.5113C30.241 65.7815 31.1262 65.4167 32.1667 65.4167C33.2073 65.4167 34.0924 65.7815 34.8221 66.5113C35.5518 67.241 35.9167 68.1261 35.9167 69.1667C35.9167 70.2072 35.5518 71.0924 34.8221 71.8221C34.0924 72.5518 33.2073 72.9167 32.1667 72.9167C31.1262 72.9167 30.241 72.5518 29.5113 71.8221ZM32.4263 71.3654C32.4989 71.2928 32.5352 71.2063 32.5352 71.1058V68.8942C32.5352 68.7938 32.4989 68.7072 32.4263 68.6346C32.3537 68.5619 32.2671 68.5256 32.1667 68.5256C32.0663 68.5256 31.9798 68.5619 31.9071 68.6346C31.8345 68.7072 31.7982 68.7938 31.7982 68.8942V71.1058C31.7982 71.2063 31.8345 71.2928 31.9071 71.3654C31.9798 71.4381 32.0663 71.4744 32.1667 71.4744C32.2671 71.4744 32.3537 71.4381 32.4263 71.3654ZM32.4584 67.5673C32.5417 67.484 32.5834 67.3867 32.5834 67.2756C32.5834 67.1645 32.5417 67.0673 32.4584 66.984C32.375 66.9006 32.2778 66.859 32.1667 66.859C32.0556 66.859 31.9584 66.9006 31.875 66.984C31.7917 67.0673 31.75 67.1645 31.75 67.2756C31.75 67.3867 31.7917 67.484 31.875 67.5673C31.9584 67.6506 32.0556 67.6923 32.1667 67.6923C32.2778 67.6923 32.375 67.6506 32.4584 67.5673Z",
-          fill: "#323152",
-          "fill-opacity": "0.25"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 65C42 61.6863 44.6863 59 48 59H156C159.314 59 162 61.6863 162 65C162 68.3137 159.314 71 156 71H48C44.6863 71 42 68.3137 42 65Z",
-        fill: "#323152",
-        "fill-opacity": "0.25"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 90H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask2_251_2863",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "104",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "104",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask2_251_2863)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.9327 117.013C24.5097 117.013 23.3045 116.519 22.3173 115.532C21.3302 114.545 20.8367 113.34 20.8367 111.917C20.8367 110.494 21.3302 109.289 22.3173 108.301C23.3045 107.314 24.5097 106.821 25.9327 106.821C27.3558 106.821 28.5609 107.314 29.5481 108.301C30.5352 109.289 31.0288 110.494 31.0288 111.917C31.0288 112.512 30.9289 113.08 30.7292 113.622C30.5293 114.164 30.2627 114.635 29.9294 115.035L34.7244 119.83C34.8398 119.946 34.8988 120.091 34.9015 120.265C34.9041 120.44 34.8451 120.588 34.7244 120.708C34.6037 120.829 34.4573 120.889 34.2852 120.889C34.1133 120.889 33.9669 120.829 33.8463 120.708L29.0513 115.913C28.6346 116.257 28.1554 116.527 27.6138 116.721C27.0721 116.916 26.5117 117.013 25.9327 117.013ZM25.9327 115.763C27.0065 115.763 27.9159 115.39 28.661 114.645C29.4063 113.9 29.779 112.99 29.779 111.917C29.779 110.843 29.4063 109.934 28.661 109.188C27.9159 108.443 27.0065 108.07 25.9327 108.07C24.859 108.07 23.9495 108.443 23.2044 109.188C22.4591 109.934 22.0865 110.843 22.0865 111.917C22.0865 112.99 22.4591 113.9 23.2044 114.645C23.9495 115.39 24.859 115.763 25.9327 115.763Z",
-          fill: "#323152",
-          "fill-opacity": "0.25"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 114C42 110.686 44.6863 108 48 108H99C102.314 108 105 110.686 105 114C105 117.314 102.314 120 99 120H48C44.6863 120 42 117.314 42 114Z",
-        fill: "#323152",
-        "fill-opacity": "0.25"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 138H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M26.7125 158.344L25.4563 157.409C25.1594 157.191 24.8032 157.072 24.4344 157.072H20.9875C20.4688 157.072 20.05 157.491 20.05 158.009V168.931H32.6813C33.1532 168.931 33.5375 168.547 33.5375 168.075V159.619C33.5375 159.1 33.1188 158.681 32.6 158.681H27.7344C27.3657 158.681 27.0063 158.563 26.7125 158.344Z",
-        fill: "url(#paint0_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M33.5188 159.706V163.769L20.0156 168.928V159.706H33.5188Z",
-        fill: "url(#paint1_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "21.95",
-        y: "159.491",
-        width: "10.3125",
-        height: "7.1875",
-        rx: "1",
-        fill: "url(#paint2_linear_251_2863)",
-        "fill-opacity": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("foreignObject", {
-        x: "11.325",
-        y: "150.116",
-        width: "30.3125",
-        height: "27.1875",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-          xmlns: "http://www.w3.org/1999/xhtml",
-          style: {
-            backdropFilter: "blur(5px)",
-            clipPath: "url(#bgblur_2_251_2863_clip_path)",
-            height: "100%",
-            width: "100%"
-          }
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        "data-figma-bg-blur-radius": "10",
-        d: "M21.7216 160.116H31.2408C31.4603 160.116 31.6375 160.325 31.6375 160.584V166.834C31.6375 167.094 31.4603 167.303 31.2408 167.303H21.7216C21.5021 167.303 21.325 167.094 21.325 166.834V160.584C21.325 160.325 21.5021 160.116 21.7216 160.116Z",
-        fill: "url(#paint3_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M22.6813 161.878L20.05 168.928H32.8875C33.2782 168.928 33.6282 168.684 33.7657 168.319L35.9219 162.531C36.15 161.919 35.6969 161.266 35.0438 161.266H23.5594C23.1688 161.269 22.8188 161.509 22.6813 161.878Z",
-        fill: "url(#paint4_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 163C42 159.686 44.6863 157 48 157H95C98.3137 157 101 159.686 101 163C101 166.314 98.3137 169 95 169H48C44.6863 169 42 166.314 42 163Z",
-        fill: "#ADACFF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M27.2844 193.906L25.9125 192.884C25.5875 192.644 25.1969 192.516 24.7937 192.516H20.9375C20.4187 192.516 20 192.934 20 193.453V204.547C20 205.066 20.4187 205.484 20.9375 205.484H35.0625C35.5813 205.484 36 205.066 36 204.547V195.216C36 194.697 35.5813 194.278 35.0625 194.278H28.4031C28 194.275 27.6094 194.147 27.2844 193.906Z",
-        fill: "url(#paint5_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M20 195.828H36V199.891H20V195.828Z",
-        fill: "url(#paint6_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "22.2188",
-        y: "195.178",
-        width: "12.1875",
-        height: "7.1875",
-        rx: "1",
-        fill: "url(#paint7_linear_251_2863)",
-        "fill-opacity": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("foreignObject", {
-        x: "11.5938",
-        y: "185.803",
-        width: "32.1875",
-        height: "27.1875",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-          xmlns: "http://www.w3.org/1999/xhtml",
-          style: {
-            backdropFilter: "blur(5px)",
-            clipPath: "url(#bgblur_2_251_2863_clip_path)",
-            height: "100%",
-            width: "100%"
-          }
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        "data-figma-bg-blur-radius": "10",
-        d: "M22.0625 195.803H33.3125C33.5719 195.803 33.7812 196.012 33.7812 196.272V202.522C33.7812 202.781 33.5719 202.991 33.3125 202.991H22.0625C21.8031 202.991 21.5938 202.781 21.5938 202.522V196.272C21.5938 196.012 21.8031 195.803 22.0625 195.803Z",
-        fill: "url(#paint8_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M20.9375 196.766H35.0625C35.5813 196.766 36 197.184 36 197.703V204.547C36 205.066 35.5813 205.484 35.0625 205.484H20.9375C20.4187 205.484 20 205.066 20 204.547V197.703C20 197.184 20.4187 196.766 20.9375 196.766Z",
-        fill: "url(#paint9_linear_251_2863)"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 199C42 195.686 44.6863 193 48 193H156C159.314 193 162 195.686 162 199C162 202.314 159.314 205 156 205H48C44.6863 205 42 202.314 42 199Z",
-        fill: "#323152",
-        "fill-opacity": "0.25"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("defs", {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "bgblur_1_251_2863_clip_path",
-        transform: "translate(-11.325 -150.116)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.7216 160.116H31.2408C31.4603 160.116 31.6375 160.325 31.6375 160.584V166.834C31.6375 167.094 31.4603 167.303 31.2408 167.303H21.7216C21.5021 167.303 21.325 167.094 21.325 166.834V160.584C21.325 160.325 21.5021 160.116 21.7216 160.116Z"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "bgblur_2_251_2863_clip_path",
-        transform: "translate(-11.5938 -185.803)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M22.0625 195.803H33.3125C33.5719 195.803 33.7812 196.012 33.7812 196.272V202.522C33.7812 202.781 33.5719 202.991 33.3125 202.991H22.0625C21.8031 202.991 21.5938 202.781 21.5938 202.522V196.272C21.5938 196.012 21.8031 195.803 22.0625 195.803Z"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint0_linear_251_2863",
-        x1: "20.5492",
-        y1: "157.033",
-        x2: "33.2503",
-        y2: "168.741",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "#F6C012"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "#F6C012"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint1_linear_251_2863",
-        x1: "26.7684",
-        y1: "168.929",
-        x2: "26.7684",
-        y2: "159.705",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-opacity": "0.25"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-opacity": "0"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint2_linear_251_2863",
-        x1: "22.3069",
-        y1: "159.5",
-        x2: "34.4566",
-        y2: "164.992",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "white",
-          "stop-opacity": "0.5"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "white"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint3_linear_251_2863",
-        x1: "21.4704",
-        y1: "160.125",
-        x2: "34.8304",
-        y2: "168.423",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "white",
-          "stop-opacity": "0.5"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "white"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint4_linear_251_2863",
-        x1: "10.2483",
-        y1: "146.49",
-        x2: "30.6283",
-        y2: "172.816",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "white"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "#FFC321"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint5_linear_251_2863",
-        x1: "20.5922",
-        y1: "192.473",
-        x2: "34.5274",
-        y2: "206.408",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "#F6C012"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "#F6C012"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint6_linear_251_2863",
-        x1: "28",
-        y1: "199.891",
-        x2: "28",
-        y2: "195.828",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-opacity": "0.25"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-opacity": "0"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint7_linear_251_2863",
-        x1: "22.6406",
-        y1: "195.187",
-        x2: "36.0938",
-        y2: "202.375",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "white",
-          "stop-opacity": "0.5"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "white"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint8_linear_251_2863",
-        x1: "21.7656",
-        y1: "195.812",
-        x2: "35.9844",
-        y2: "206.25",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "white",
-          "stop-opacity": "0.5"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "white"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("linearGradient", {
-        id: "paint9_linear_251_2863",
-        x1: "10.1563",
-        y1: "179.953",
-        x2: "33.9051",
-        y2: "207.03",
-        gradientUnits: "userSpaceOnUse",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          "stop-color": "white"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("stop", {
-          offset: "1",
-          "stop-color": "#FFC321"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "clip0_251_2863",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          width: "300",
-          height: "220",
-          fill: "white"
-        })
-      })]
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Bold);
-
-/***/ },
-
-/***/ "./source/assets/icons/themes/NinjaDefault.tsx"
-/*!*****************************************************!*\
-  !*** ./source/assets/icons/themes/NinjaDefault.tsx ***!
-  \*****************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-const Default = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-    width: "300",
-    height: "220",
-    viewBox: "0 0 300 220",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("g", {
-      "clip-path": "url(#clip0_251_2481)",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "220",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "900",
-        transform: "translate(0 -68)",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask0_251_2481",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "19",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "19",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask0_251_2481)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.75 34.8333V27.4615C21.75 27.223 21.8033 26.9971 21.91 26.7838C22.0168 26.5703 22.1643 26.3945 22.3525 26.2565L27.0963 22.6827C27.3594 22.4819 27.6603 22.3815 27.9988 22.3815C28.3372 22.3815 28.6389 22.4819 28.9037 22.6827L33.6475 26.2565C33.8357 26.3945 33.9832 26.5703 34.09 26.7838C34.1967 26.9971 34.25 27.223 34.25 27.4615V34.8333C34.25 35.1742 34.1269 35.4677 33.8806 35.714C33.6344 35.9602 33.3408 36.0833 33 36.0833H30.3398C30.1263 36.0833 29.9474 36.0111 29.8031 35.8667C29.6587 35.7224 29.5865 35.5435 29.5865 35.33V31.2596C29.5865 31.0463 29.5143 30.8674 29.37 30.7229C29.2257 30.5786 29.0468 30.5065 28.8333 30.5065H27.1667C26.9532 30.5065 26.7743 30.5786 26.63 30.7229C26.4857 30.8674 26.4135 31.0463 26.4135 31.2596V35.33C26.4135 35.5435 26.3413 35.7224 26.1969 35.8667C26.0526 36.0111 25.8737 36.0833 25.6602 36.0833H23C22.6592 36.0833 22.3656 35.9602 22.1194 35.714C21.8731 35.4677 21.75 35.1742 21.75 34.8333Z",
-          fill: "#4D49FC",
-          "fill-opacity": "0.37"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 29C42 25.6863 44.6863 23 48 23H95C98.3137 23 101 25.6863 101 29C101 32.3137 98.3137 35 95 35H48C44.6863 35 42 32.3137 42 29Z",
-        fill: "#4D49FC",
-        "fill-opacity": "0.37"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask1_251_2481",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "55",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "55",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask1_251_2481)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5898 71.25C21.1689 71.25 20.8125 71.1042 20.5209 70.8125C20.2292 70.5208 20.0834 70.1645 20.0834 69.7435V60.2565C20.0834 59.8355 20.2292 59.4792 20.5209 59.1875C20.8125 58.8958 21.1689 58.75 21.5898 58.75H26.165L27.8317 60.4167H34.4102C34.8312 60.4167 35.1875 60.5625 35.4792 60.8542C35.7709 61.1458 35.9167 61.5022 35.9167 61.9231V63.8077C35.9167 64.063 35.8016 64.2476 35.5713 64.3615C35.3412 64.4752 35.1166 64.4589 34.8975 64.3125C34.485 64.0839 34.0491 63.909 33.5898 63.7877C33.1304 63.6665 32.6571 63.6058 32.1698 63.6058C30.6229 63.6058 29.3075 64.1478 28.2236 65.2317C27.1397 66.3154 26.5977 67.6308 26.5977 69.1779C26.5977 69.3799 26.6063 69.581 26.6234 69.7813C26.6405 69.9815 26.6757 70.1784 26.7292 70.3719C26.7827 70.593 26.745 70.7946 26.6163 70.9767C26.4875 71.1589 26.3126 71.25 26.0915 71.25H21.5898ZM29.5113 71.8221C28.7816 71.0924 28.4167 70.2072 28.4167 69.1667C28.4167 68.1261 28.7816 67.241 29.5113 66.5113C30.241 65.7815 31.1262 65.4167 32.1667 65.4167C33.2073 65.4167 34.0924 65.7815 34.8221 66.5113C35.5518 67.241 35.9167 68.1261 35.9167 69.1667C35.9167 70.2072 35.5518 71.0924 34.8221 71.8221C34.0924 72.5518 33.2073 72.9167 32.1667 72.9167C31.1262 72.9167 30.241 72.5518 29.5113 71.8221ZM32.4263 71.3654C32.4989 71.2928 32.5352 71.2063 32.5352 71.1058V68.8942C32.5352 68.7938 32.4989 68.7072 32.4263 68.6346C32.3537 68.5619 32.2671 68.5256 32.1667 68.5256C32.0663 68.5256 31.9798 68.5619 31.9071 68.6346C31.8345 68.7072 31.7982 68.7938 31.7982 68.8942V71.1058C31.7982 71.2063 31.8345 71.2928 31.9071 71.3654C31.9798 71.4381 32.0663 71.4744 32.1667 71.4744C32.2671 71.4744 32.3537 71.4381 32.4263 71.3654ZM32.4584 67.5673C32.5417 67.484 32.5834 67.3867 32.5834 67.2756C32.5834 67.1645 32.5417 67.0673 32.4584 66.984C32.375 66.9006 32.2778 66.859 32.1667 66.859C32.0556 66.859 31.9584 66.9006 31.875 66.984C31.7917 67.0673 31.75 67.1645 31.75 67.2756C31.75 67.3867 31.7917 67.484 31.875 67.5673C31.9584 67.6506 32.0556 67.6923 32.1667 67.6923C32.2778 67.6923 32.375 67.6506 32.4584 67.5673Z",
-          fill: "#CCCBD4"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 65C42 61.6863 44.6863 59 48 59H156C159.314 59 162 61.6863 162 65C162 68.3137 159.314 71 156 71H48C44.6863 71 42 68.3137 42 65Z",
-        fill: "#CCCBD4"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 90H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask2_251_2481",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "104",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "104",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask2_251_2481)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.9327 117.013C24.5097 117.013 23.3045 116.519 22.3173 115.532C21.3302 114.545 20.8367 113.34 20.8367 111.917C20.8367 110.494 21.3302 109.289 22.3173 108.301C23.3045 107.314 24.5097 106.821 25.9327 106.821C27.3558 106.821 28.5609 107.314 29.5481 108.301C30.5352 109.289 31.0288 110.494 31.0288 111.917C31.0288 112.512 30.9289 113.08 30.7292 113.622C30.5293 114.164 30.2627 114.635 29.9294 115.035L34.7244 119.83C34.8398 119.946 34.8988 120.091 34.9015 120.265C34.9041 120.44 34.8451 120.588 34.7244 120.708C34.6037 120.829 34.4573 120.889 34.2852 120.889C34.1133 120.889 33.9669 120.829 33.8463 120.708L29.0513 115.913C28.6346 116.257 28.1554 116.527 27.6138 116.721C27.0721 116.916 26.5117 117.013 25.9327 117.013ZM25.9327 115.763C27.0065 115.763 27.9159 115.39 28.661 114.645C29.4063 113.9 29.779 112.99 29.779 111.917C29.779 110.843 29.4063 109.934 28.661 109.188C27.9159 108.443 27.0065 108.07 25.9327 108.07C24.859 108.07 23.9495 108.443 23.2044 109.188C22.4591 109.934 22.0865 110.843 22.0865 111.917C22.0865 112.99 22.4591 113.9 23.2044 114.645C23.9495 115.39 24.859 115.763 25.9327 115.763Z",
-          fill: "#CCCBD4"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 114C42 110.686 44.6863 108 48 108H99C102.314 108 105 110.686 105 114C105 117.314 102.314 120 99 120H48C44.6863 120 42 117.314 42 114Z",
-        fill: "#CCCBD4"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 138H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask3_251_2481",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "153",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "153",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask3_251_2481)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5417 169.25C21.1368 169.25 20.7925 169.108 20.5088 168.825C20.2252 168.541 20.0834 168.197 20.0834 167.792V158.256C20.0834 157.852 20.2332 157.499 20.533 157.2C20.8327 156.9 21.185 156.75 21.5898 156.75H25.5417C25.7425 156.75 25.9357 156.789 26.1211 156.867C26.3064 156.945 26.4674 157.052 26.6042 157.189L27.8317 158.417H35.2196C35.397 158.417 35.5455 158.477 35.665 158.596C35.7848 158.716 35.8446 158.864 35.8446 159.042C35.8446 159.219 35.7848 159.368 35.665 159.487C35.5455 159.607 35.397 159.667 35.2196 159.667H24.3734C23.555 159.667 22.8438 159.927 22.2396 160.447C21.6355 160.967 21.3334 161.625 21.3334 162.421V167.744C21.3334 167.802 21.3481 167.85 21.3775 167.888C21.4068 167.925 21.4455 167.957 21.4936 167.984L23.1155 162.569C23.2159 162.245 23.4007 161.985 23.6698 161.789C23.9391 161.592 24.2383 161.494 24.5673 161.494H35.2852C35.7959 161.494 36.2012 161.697 36.5009 162.102C36.8005 162.508 36.8792 162.951 36.7371 163.431L35.3013 168.215C35.2062 168.528 35.028 168.778 34.7669 168.967C34.5057 169.156 34.2159 169.25 33.8975 169.25H21.5417Z",
-          fill: "#4D49FC"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 163C42 159.686 44.6863 157 48 157H95C98.3137 157 101 159.686 101 163C101 166.314 98.3137 169 95 169H48C44.6863 169 42 166.314 42 163Z",
-        fill: "#ADACFF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask4_251_2481",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "189",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "189",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask4_251_2481)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5898 205.25C21.1689 205.25 20.8125 205.104 20.5209 204.812C20.2292 204.521 20.0834 204.165 20.0834 203.744V194.256C20.0834 193.835 20.2292 193.479 20.5209 193.188C20.8125 192.896 21.1689 192.75 21.5898 192.75H25.5417C25.7425 192.75 25.9357 192.789 26.1211 192.867C26.3064 192.945 26.4674 193.052 26.6042 193.189L27.8317 194.417H34.4102C34.8312 194.417 35.1875 194.562 35.4792 194.854C35.7709 195.146 35.9167 195.502 35.9167 195.923V203.744C35.9167 204.165 35.7709 204.521 35.4792 204.812C35.1875 205.104 34.8312 205.25 34.4102 205.25H21.5898Z",
-          fill: "#CCCBD4"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 199C42 195.686 44.6863 193 48 193H156C159.314 193 162 195.686 162 199C162 202.314 159.314 205 156 205H48C44.6863 205 42 202.314 42 199Z",
-        fill: "#CCCBD4"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("defs", {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "clip0_251_2481",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          width: "300",
-          height: "220",
-          fill: "white"
-        })
-      })
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Default);
-
-/***/ },
-
-/***/ "./source/assets/icons/themes/Plugininja.tsx"
-/*!***************************************************!*\
-  !*** ./source/assets/icons/themes/Plugininja.tsx ***!
-  \***************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-const Plugininja = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-    width: "300",
-    height: "220",
-    viewBox: "0 0 300 220",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("g", {
-      "clip-path": "url(#clip0_251_2672)",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "220",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        width: "300",
-        height: "900",
-        transform: "translate(0 -68)",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "14.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask0_251_2672",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "19",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "19",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask0_251_2672)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.75 34.8333V27.4615C21.75 27.223 21.8033 26.9971 21.91 26.7838C22.0168 26.5703 22.1643 26.3945 22.3525 26.2565L27.0963 22.6827C27.3594 22.4819 27.6603 22.3815 27.9988 22.3815C28.3372 22.3815 28.6389 22.4819 28.9037 22.6827L33.6475 26.2565C33.8357 26.3945 33.9832 26.5703 34.09 26.7838C34.1967 26.9971 34.25 27.223 34.25 27.4615V34.8333C34.25 35.1742 34.1269 35.4677 33.8806 35.714C33.6344 35.9602 33.3408 36.0833 33 36.0833H30.3398C30.1263 36.0833 29.9474 36.0111 29.8031 35.8667C29.6587 35.7224 29.5865 35.5435 29.5865 35.33V31.2596C29.5865 31.0463 29.5143 30.8674 29.37 30.7229C29.2257 30.5786 29.0468 30.5065 28.8333 30.5065H27.1667C26.9532 30.5065 26.7743 30.5786 26.63 30.7229C26.4857 30.8674 26.4135 31.0463 26.4135 31.2596V35.33C26.4135 35.5435 26.3413 35.7224 26.1969 35.8667C26.0526 36.0111 25.8737 36.0833 25.6602 36.0833H23C22.6592 36.0833 22.3656 35.9602 22.1194 35.714C21.8731 35.4677 21.75 35.1742 21.75 34.8333Z",
-          fill: "#ADACFF"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 29C42 25.6863 44.6863 23 48 23H95C98.3137 23 101 25.6863 101 29C101 32.3137 98.3137 35 95 35H48C44.6863 35 42 32.3137 42 29Z",
-        fill: "#ADACFF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 18.25H280C280.966 18.25 281.75 19.0335 281.75 20V38C281.75 38.9665 280.966 39.75 280 39.75H254C253.034 39.75 252.25 38.9665 252.25 38V20C252.25 19.0335 253.034 18.25 254 18.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask1_251_2672",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "55",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "55",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask1_251_2672)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5897 71.25C21.1687 71.25 20.8124 71.1042 20.5208 70.8125C20.2291 70.5208 20.0833 70.1645 20.0833 69.7435V60.2565C20.0833 59.8355 20.2291 59.4792 20.5208 59.1875C20.8124 58.8958 21.1687 58.75 21.5897 58.75H26.1649L27.8316 60.4167H34.4101C34.8311 60.4167 35.1874 60.5625 35.4791 60.8542C35.7708 61.1458 35.9166 61.5022 35.9166 61.9231V63.8077C35.9166 64.063 35.8014 64.2476 35.5712 64.3615C35.341 64.4752 35.1164 64.4589 34.8974 64.3125C34.4849 64.0839 34.049 63.909 33.5897 63.7877C33.1303 63.6665 32.6569 63.6058 32.1697 63.6058C30.6228 63.6058 29.3073 64.1478 28.2235 65.2317C27.1396 66.3154 26.5976 67.6308 26.5976 69.1779C26.5976 69.3799 26.6062 69.581 26.6233 69.7813C26.6403 69.9815 26.6756 70.1784 26.7291 70.3719C26.7826 70.593 26.7449 70.7946 26.6162 70.9767C26.4874 71.1589 26.3125 71.25 26.0914 71.25H21.5897ZM29.5112 71.8221C28.7814 71.0924 28.4166 70.2072 28.4166 69.1667C28.4166 68.1261 28.7814 67.241 29.5112 66.5113C30.2409 65.7815 31.126 65.4167 32.1666 65.4167C33.2071 65.4167 34.0923 65.7815 34.822 66.5113C35.5517 67.241 35.9166 68.1261 35.9166 69.1667C35.9166 70.2072 35.5517 71.0924 34.822 71.8221C34.0923 72.5518 33.2071 72.9167 32.1666 72.9167C31.126 72.9167 30.2409 72.5518 29.5112 71.8221ZM32.4262 71.3654C32.4988 71.2928 32.5351 71.2063 32.5351 71.1058V68.8942C32.5351 68.7938 32.4988 68.7072 32.4262 68.6346C32.3535 68.5619 32.267 68.5256 32.1666 68.5256C32.0662 68.5256 31.9796 68.5619 31.907 68.6346C31.8344 68.7072 31.798 68.7938 31.798 68.8942V71.1058C31.798 71.2063 31.8344 71.2928 31.907 71.3654C31.9796 71.4381 32.0662 71.4744 32.1666 71.4744C32.267 71.4744 32.3535 71.4381 32.4262 71.3654ZM32.4583 67.5673C32.5416 67.484 32.5833 67.3867 32.5833 67.2756C32.5833 67.1645 32.5416 67.0673 32.4583 66.984C32.3749 66.9006 32.2777 66.859 32.1666 66.859C32.0555 66.859 31.9583 66.9006 31.8749 66.984C31.7916 67.0673 31.7499 67.1645 31.7499 67.2756C31.7499 67.3867 31.7916 67.484 31.8749 67.5673C31.9583 67.6506 32.0555 67.6923 32.1666 67.6923C32.2777 67.6923 32.3749 67.6506 32.4583 67.5673Z",
-          fill: "#CCCBD4"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 65C42 61.6863 44.6863 59 48 59H156C159.314 59 162 61.6863 162 65C162 68.3137 159.314 71 156 71H48C44.6863 71 42 68.3137 42 65Z",
-        fill: "#CCCBD4"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M254 54.25H280C280.966 54.25 281.75 55.0335 281.75 56V74C281.75 74.9665 280.966 75.75 280 75.75H254C253.034 75.75 252.25 74.9665 252.25 74V56C252.25 55.0335 253.034 54.25 254 54.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 90H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "100.25",
-        width: "271.5",
-        height: "27.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask2_251_2672",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "104",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "104",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask2_251_2672)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M25.9327 117.013C24.5097 117.013 23.3045 116.519 22.3173 115.532C21.3302 114.545 20.8367 113.34 20.8367 111.917C20.8367 110.494 21.3302 109.289 22.3173 108.301C23.3045 107.314 24.5097 106.821 25.9327 106.821C27.3558 106.821 28.5609 107.314 29.5481 108.301C30.5352 109.289 31.0288 110.494 31.0288 111.917C31.0288 112.512 30.9289 113.08 30.7292 113.622C30.5293 114.164 30.2627 114.635 29.9294 115.035L34.7244 119.83C34.8398 119.946 34.8988 120.091 34.9015 120.265C34.9041 120.44 34.8451 120.588 34.7244 120.708C34.6037 120.829 34.4573 120.889 34.2852 120.889C34.1133 120.889 33.9669 120.829 33.8463 120.708L29.0513 115.913C28.6346 116.257 28.1554 116.527 27.6138 116.721C27.0721 116.916 26.5117 117.013 25.9327 117.013ZM25.9327 115.763C27.0065 115.763 27.9159 115.39 28.661 114.645C29.4063 113.9 29.779 112.99 29.779 111.917C29.779 110.843 29.4063 109.934 28.661 109.188C27.9159 108.443 27.0065 108.07 25.9327 108.07C24.859 108.07 23.9495 108.443 23.2044 109.188C22.4591 109.934 22.0865 110.843 22.0865 111.917C22.0865 112.99 22.4591 113.9 23.2044 114.645C23.9495 115.39 24.859 115.763 25.9327 115.763Z",
-          fill: "#CCCBD4"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 114C42 110.686 44.6863 108 48 108H99C102.314 108 105 110.686 105 114C105 117.314 102.314 120 99 120H48C44.6863 120 42 117.314 42 114Z",
-        fill: "#CCCBD4"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M14 138H286",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-        x: "14.25",
-        y: "148.25",
-        width: "271.5",
-        height: "29.5",
-        rx: "3.75",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask3_251_2672",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "153",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "153",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask3_251_2672)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5897 169.25C21.1687 169.25 20.8124 169.104 20.5208 168.812C20.2291 168.521 20.0833 168.165 20.0833 167.744V158.256C20.0833 157.835 20.2291 157.479 20.5208 157.188C20.8124 156.896 21.1687 156.75 21.5897 156.75H25.5416C25.7424 156.75 25.9355 156.789 26.121 156.867C26.3062 156.945 26.4673 157.052 26.6041 157.189L27.8316 158.417H34.4101C34.8311 158.417 35.1874 158.562 35.4791 158.854C35.7708 159.146 35.9166 159.502 35.9166 159.923V167.744C35.9166 168.165 35.7708 168.521 35.4791 168.812C35.1874 169.104 34.8311 169.25 34.4101 169.25H21.5897Z",
-          fill: "#ADACFF"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 163C42 159.686 44.6863 157 48 157H95C98.3137 157 101 159.686 101 163C101 166.314 98.3137 169 95 169H48C44.6863 169 42 166.314 42 163Z",
-        fill: "#ADACFF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        fill: "white"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M247 152.25H280C280.966 152.25 281.75 153.034 281.75 154V172C281.75 172.966 280.966 173.75 280 173.75H247C246.034 173.75 245.25 172.966 245.25 172V154C245.25 153.034 246.034 152.25 247 152.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("mask", {
-        id: "mask4_251_2672",
-        style: {
-          maskType: "alpha"
-        },
-        maskUnits: "userSpaceOnUse",
-        x: "18",
-        y: "189",
-        width: "20",
-        height: "20",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          x: "18",
-          y: "189",
-          width: "20",
-          height: "20",
-          fill: "#D9D9D9"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("g", {
-        mask: "url(#mask4_251_2672)",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "M21.5897 205.25C21.1687 205.25 20.8124 205.104 20.5208 204.812C20.2291 204.521 20.0833 204.165 20.0833 203.744V194.256C20.0833 193.835 20.2291 193.479 20.5208 193.188C20.8124 192.896 21.1687 192.75 21.5897 192.75H25.5416C25.7424 192.75 25.9355 192.789 26.121 192.867C26.3062 192.945 26.4673 193.052 26.6041 193.189L27.8316 194.417H34.4101C34.8311 194.417 35.1874 194.562 35.4791 194.854C35.7708 195.146 35.9166 195.502 35.9166 195.923V203.744C35.9166 204.165 35.7708 204.521 35.4791 204.812C35.1874 205.104 34.8311 205.25 34.4101 205.25H21.5897Z",
-          fill: "#CCCBD4"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M42 199C42 195.686 44.6863 193 48 193H156C159.314 193 162 195.686 162 199C162 202.314 159.314 205 156 205H48C44.6863 205 42 202.314 42 199Z",
-        fill: "#CCCBD4"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        fill: "#F9F9FF"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-        d: "M246 188.25H280C280.966 188.25 281.75 189.034 281.75 190V208C281.75 208.966 280.966 209.75 280 209.75H246C245.034 209.75 244.25 208.966 244.25 208V190C244.25 189.034 245.034 188.25 246 188.25Z",
-        stroke: "#DFDFFF",
-        "stroke-width": "0.5"
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("defs", {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("clipPath", {
-        id: "clip0_251_2672",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("rect", {
-          width: "300",
-          height: "220",
-          fill: "white"
-        })
-      })
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Plugininja);
 
 /***/ },
 
@@ -8681,7 +7552,7 @@ const Description = ({
   align = "left"
 }) => {
   const classes = (0,clsx__WEBPACK_IMPORTED_MODULE_0__["default"])(`text-${color}`, `text-${size}`, `font-${weight}`, `text-${textTransform}`, `text-${align}`, className);
-  const truncatedText = limit && text ? text.slice(0, limit) + (text.length > limit ? "..." : "") : text;
+  const truncatedText = limit && typeof text === "string" ? text.slice(0, limit) + (text.length > limit ? "..." : "") : text;
   const renderContent = content => {
     if (typeof content === "string") {
       const parts = content.split(/(\{.*?\})/g);
@@ -10602,7 +9473,9 @@ const SettingsField = ({
               size: titleSize,
               weight: "medium",
               children: title
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_status__WEBPACK_IMPORTED_MODULE_4__["default"].Pro, {})]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_status__WEBPACK_IMPORTED_MODULE_4__["default"].Pro, {
+              tooltipDisabled: true
+            })]
           }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_text__WEBPACK_IMPORTED_MODULE_7__["default"], {
             as: "h4",
             size: titleSize,
@@ -12140,6 +11013,7 @@ const Status = ({
   right = 10,
   tooltipPlacement = "left",
   tooltipDisabled = false,
+  proTooltipDisabled = false,
   size = "medium",
   widthFull = true,
   ignore = false,
@@ -12234,8 +11108,8 @@ const Status = ({
         left: parsePosition(left)
       };
   }
-  const classes = (0,clsx__WEBPACK_IMPORTED_MODULE_6__["default"])("pn-status", widthFull && "w-full", className);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+  const classes = (0,clsx__WEBPACK_IMPORTED_MODULE_6__["default"])("pn-status", widthFull && "w-full", !allowFeature && !proTooltipDisabled && "pn-status--locked", className);
+  const content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     id: id,
     style: {
       ...style
@@ -12253,7 +11127,10 @@ const Status = ({
         return;
       }
     },
-    children: [ownUi && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_inlineStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    children: [!allowFeature && !proTooltipDisabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+      className: "pn-status__pro-tooltip",
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("This feature is only available in the pro version", "ninja-media")
+    }), ownUi && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_inlineStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
       wrap: false,
       gap: size === "extrasmall" ? 5 : size === "small" ? 7 : size === "medium" ? 9 : size === "large" ? 11 : 13,
       style: positionStyles,
@@ -12299,9 +11176,11 @@ const Status = ({
       children: children
     })]
   });
+  return content;
 };
 Status.Pro = ({
-  title
+  title,
+  tooltipDisabled = false
 }) => {
   if ((0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.toBoolean)(pnpnm?.isPro)) {
     return null;
@@ -12310,6 +11189,7 @@ Status.Pro = ({
     title: title || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("This feature is only available in the pro version", "ninja-media"),
     arrow: true,
     wrap: "no-wrap",
+    disabled: tooltipDisabled,
     style: {
       display: "inline-flex",
       alignItems: "center",
@@ -12336,41 +11216,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _assets_icons_ProIcon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ~/assets/icons/ProIcon */ "./source/assets/icons/ProIcon.tsx");
-/* harmony import */ var _blockStack__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../blockStack */ "./source/components/blockStack/index.ts");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _constants_docs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ~/constants/docs */ "./source/constants/docs.ts");
-/* harmony import */ var _text__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../text */ "./source/components/text/index.ts");
-/* harmony import */ var _card__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../card */ "./source/components/card/index.ts");
-/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../icon */ "./source/components/icon/index.ts");
+/* harmony import */ var _blockStack__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../blockStack */ "./source/components/blockStack/index.ts");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _constants_docs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ~/constants/docs */ "./source/constants/docs.ts");
+/* harmony import */ var _text__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../text */ "./source/components/text/index.ts");
+/* harmony import */ var _card__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../card */ "./source/components/card/index.ts");
+/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../icon */ "./source/components/icon/index.ts");
+/* harmony import */ var _utils_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ~/utils/icons */ "./source/utils/icons.ts");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
 
 const Upgrade = () => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_blockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_blockStack__WEBPACK_IMPORTED_MODULE_0__["default"], {
     gap: 20,
     align: "center",
     inlineAlign: "center",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_blockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_blockStack__WEBPACK_IMPORTED_MODULE_0__["default"], {
       align: "center",
       inlineAlign: "center",
       style: {
         width: "150px",
         height: "150px"
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_assets_icons_ProIcon__WEBPACK_IMPORTED_MODULE_0__["default"], {})
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_text__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
+        src: _utils_icons__WEBPACK_IMPORTED_MODULE_6__.iconProIcon,
+        alt: "Upgrade to Pro",
+        style: {
+          width: "100%",
+          height: "100%"
+        }
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_text__WEBPACK_IMPORTED_MODULE_3__["default"], {
       size: "2xl",
       weight: "semibold",
       textTransform: "uppercase",
       align: "center",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Upgrade to Pro", "ninja-media")
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_text__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Upgrade to Pro", "ninja-media")
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_text__WEBPACK_IMPORTED_MODULE_3__["default"], {
       color: "descgray",
       align: "center",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Upgrade to the Pro version of Ninja Media to unlock all the features and get access to premium support.", "ninja-media")
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_card__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Upgrade to the Pro version of Ninja Media to unlock all the features and get access to premium support.", "ninja-media")
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_card__WEBPACK_IMPORTED_MODULE_4__["default"], {
       padding: "8px 13px",
       background: "primary",
       flex: true,
@@ -12380,15 +11267,15 @@ const Upgrade = () => {
         borderRadius: "6px",
         cursor: "pointer"
       },
-      onClick: () => window.open(_constants_docs__WEBPACK_IMPORTED_MODULE_3__["default"]?.pricingPage, "_blank", "noreferrer"),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_icon__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      onClick: () => window.open(_constants_docs__WEBPACK_IMPORTED_MODULE_2__["default"]?.pricingPage, "_blank", "noreferrer"),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
         color: "pure",
         name: "crown",
         fontSize: "lg"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_text__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_text__WEBPACK_IMPORTED_MODULE_3__["default"], {
         color: "pure",
         size: "sm",
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Upgrade to pro", "ninja-media")
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Upgrade to pro", "ninja-media")
       })]
     })]
   });
@@ -12408,6 +11295,53 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* reexport safe */ _Status__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
 /* harmony import */ var _Status__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Status */ "./source/components/status/Status.tsx");
+
+/***/ },
+
+/***/ "./source/components/svgIcon/SvgIcon.tsx"
+/*!***********************************************!*\
+  !*** ./source/components/svgIcon/SvgIcon.tsx ***!
+  \***********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+const cache = new Map();
+const SvgIcon = ({
+  src,
+  style,
+  className
+}) => {
+  const [svg, setSvg] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(cache.get(src) ?? "");
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (cache.has(src)) {
+      setSvg(cache.get(src));
+      return;
+    }
+    fetch(src).then(r => r.text()).then(content => {
+      cache.set(src, content);
+      setSvg(content);
+    });
+  }, [src]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+    className: className,
+    style: {
+      display: "inline-flex",
+      ...style
+    },
+    dangerouslySetInnerHTML: {
+      __html: svg
+    }
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SvgIcon);
 
 /***/ },
 
@@ -12474,7 +11408,9 @@ const Switcher = ({
         className: "cursor-pointer",
         onClick: () => handleChange(!checked),
         children: title
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_status__WEBPACK_IMPORTED_MODULE_1__["default"].Pro, {})]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_status__WEBPACK_IMPORTED_MODULE_1__["default"].Pro, {
+        tooltipDisabled: true
+      })]
     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_text__WEBPACK_IMPORTED_MODULE_2__["default"], {
       size: titleSize,
       weight: "medium",
@@ -13221,7 +12157,8 @@ const FileContext = ({
         } else if (item?.key === "get") {
           return true;
         } else if (item?.key === "edit") {
-          return pnpnm?.pagenow === "upload.php" ? true : false;
+          if (menu === "trash") return false;
+          return props?.attachments?.[0]?.type === "image";
         } else if (item?.key === "download") {
           return true;
         } else if (item?.key === "duplicate") {
@@ -13263,6 +12200,7 @@ const FileContext = ({
           children: [["trash", "delete"].includes(key) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_contextMenu_ContextMenu__WEBPACK_IMPORTED_MODULE_0__.Separator, {}), ["trash", "delete"].includes(key) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_components_card__WEBPACK_IMPORTED_MODULE_6__["default"], {
             statusProps: {
               isPro: key === "trash",
+              proTooltipDisabled: true,
               size: "extrasmall",
               top: 7.5,
               right: 7,
@@ -13302,6 +12240,7 @@ const FileContext = ({
             size: "extrasmall",
             placement: "right-center",
             right: 5,
+            proTooltipDisabled: true,
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_components_contextMenu_ContextMenu__WEBPACK_IMPORTED_MODULE_0__.Item, {
               className: className,
               onClick: () => onMenuClick({
@@ -13325,7 +12264,7 @@ const FILE_CONTEXT_MENU_LISTS = [{
   icon: "photo_library"
 }, {
   key: "edit",
-  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Edit", "ninja-media"),
+  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)("Image Editor", "ninja-media"),
   icon: "edit_document"
 }, {
   key: "get",
@@ -13578,6 +12517,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   useRestoreFileMutation: () => (/* binding */ useRestoreFileMutation),
 /* harmony export */   useToggleFavoriteMutation: () => (/* binding */ useToggleFavoriteMutation),
 /* harmony export */   useTrashFileMutation: () => (/* binding */ useTrashFileMutation),
+/* harmony export */   useUpdateFileMetadataMutation: () => (/* binding */ useUpdateFileMetadataMutation),
 /* harmony export */   useUpdateFolderMutation: () => (/* binding */ useUpdateFolderMutation)
 /* harmony export */ });
 /* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base */ "./source/redux/api/base.ts");
@@ -13790,6 +12730,17 @@ const media = _base__WEBPACK_IMPORTED_MODULE_0__.baseApi.injectEndpoints({
         };
       }
     }),
+    updateFileMetadata: builder.mutation({
+      query: ({
+        id,
+        ...body
+      }) => ({
+        url: `media-library/files/${id}/metadata`,
+        method: "PUT",
+        body
+      }),
+      invalidatesTags: ["Files"]
+    }),
   })
 });
 const {
@@ -13804,6 +12755,7 @@ const {
   useDeleteFolderMutation,
   useRestoreFileMutation,
   useDeleteFileMutation,
+  useUpdateFileMetadataMutation,
 } = media;
 
 /***/ },
@@ -14500,22 +13452,9 @@ const MainRoute = ({
   children
 }) => {
   const [theme, setTheme] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_1__.useLocalStorage)("pnpnm-theme-status", "light");
-  const isFirstLoad = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)(true);
   const dispatch = (0,_redux_hooks__WEBPACK_IMPORTED_MODULE_3__.useAppDispatch)();
   const defaultSettings = pnpnm?.defaultSettings || {};
   const settings = pnpnm?.settings || defaultSettings || {};
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    if (!isFirstLoad.current) {
-      return;
-    }
-    isFirstLoad.current = false;
-    const savedTheme = localStorage.getItem("pnpnm-theme-status");
-    if (savedTheme) {
-      return;
-    }
-    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setTheme(systemDark ? "dark" : "light");
-  }, [setTheme]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     const root = document?.documentElement;
     root?.setAttribute("pnpnm-theme-status", theme);
@@ -14565,16 +13504,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 
-const addCacheBuster = (url, timestamp) => {
-  try {
-    const u = new URL(url);
-    u.searchParams.set("_cb", String(timestamp));
-    return u.toString();
-  } catch {
-    return url;
-  }
-};
-const useReplaceMedia = () => {
+const useReplaceMedia = onSuccess => {
   const [loading, setLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
   const [replaceMedia] = (0,_redux_api_media__WEBPACK_IMPORTED_MODULE_0__.useReplaceMediaMutation)();
   const {
@@ -14598,7 +13528,18 @@ const useReplaceMedia = () => {
           id: attachmentId,
           formData
         }).unwrap();
-        refreshAttachmentPreview(attachmentId, result?.data);
+        const freshData = result?.data;
+        refreshAttachmentPreview(attachmentId, freshData);
+        if (onSuccess && freshData) {
+          const url = typeof freshData.url === "string" ? freshData.url : "";
+          const sizes = freshData.sizes;
+          const thumbnailUrl = sizes?.medium?.url || sizes?.thumbnail?.url || url;
+          onSuccess({
+            id: attachmentId,
+            url,
+            thumbnailUrl
+          });
+        }
         showAlert({
           toast: true,
           type: "success",
@@ -14632,36 +13573,25 @@ function refreshAttachmentPreview(attachmentId, freshData) {
   if (!wpMedia) return;
   const attachment = wpMedia.attachment(attachmentId);
   if (!attachment) return;
-  const ts = Date.now();
+  const newUrl = typeof freshData.url === "string" ? freshData.url : "";
   const patch = {};
-  if (typeof freshData.url === "string") {
-    patch.url = addCacheBuster(freshData.url, ts);
+  if (newUrl) {
+    patch.url = newUrl;
   }
   if (freshData.sizes && typeof freshData.sizes === "object") {
-    const bustedSizes = {};
-    for (const [key, sizeData] of Object.entries(freshData.sizes)) {
-      bustedSizes[key] = {
-        ...sizeData,
-        url: typeof sizeData.url === "string" ? addCacheBuster(sizeData.url, ts) : sizeData.url
-      };
-    }
-    patch.sizes = bustedSizes;
+    patch.sizes = freshData.sizes;
   }
   if (Object.keys(patch).length > 0) {
-    attachment.unset("url", {
-      silent: true
-    });
-    attachment.unset("sizes", {
-      silent: true
-    });
     attachment.set(patch);
   }
-  document.querySelectorAll(".attachment-details img, .attachment-preview img").forEach(img => {
-    if (!img.src) return;
-    const clean = img.src.replace(/([?&])_cb=[^&]*/g, "$1").replace(/[?&]$/, "");
-    img.src = addCacheBuster(clean, ts);
-  });
-  attachment.fetch();
+
+  // Directly update every preview <img> to the new URL so the display
+  // is instant regardless of whether Backbone triggers a re-render.
+  if (newUrl) {
+    document.querySelectorAll(".attachment-details img, .attachment-preview img, " + ".attachment-details .attachment-media-view img").forEach(img => {
+      img.src = newUrl;
+    });
+  }
 }
 
 /***/ },
@@ -14875,6 +13805,47 @@ const formatFileSize = bytes => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 };
+
+/***/ },
+
+/***/ "./source/utils/icons.ts"
+/*!*******************************!*\
+  !*** ./source/utils/icons.ts ***!
+  \*******************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   iconFolderAwesome: () => (/* binding */ iconFolderAwesome),
+/* harmony export */   iconFolderBold: () => (/* binding */ iconFolderBold),
+/* harmony export */   iconFolderBoldOpen: () => (/* binding */ iconFolderBoldOpen),
+/* harmony export */   iconFolderDefault: () => (/* binding */ iconFolderDefault),
+/* harmony export */   iconFolderDefaultOpen: () => (/* binding */ iconFolderDefaultOpen),
+/* harmony export */   iconFolderHome: () => (/* binding */ iconFolderHome),
+/* harmony export */   iconFolderUncategorized: () => (/* binding */ iconFolderUncategorized),
+/* harmony export */   iconNotFound: () => (/* binding */ iconNotFound),
+/* harmony export */   iconProIcon: () => (/* binding */ iconProIcon),
+/* harmony export */   iconThemeAwesome: () => (/* binding */ iconThemeAwesome),
+/* harmony export */   iconThemeBold: () => (/* binding */ iconThemeBold),
+/* harmony export */   iconThemeDefault: () => (/* binding */ iconThemeDefault),
+/* harmony export */   iconThemePlugininja: () => (/* binding */ iconThemePlugininja),
+/* harmony export */   iconUsers: () => (/* binding */ iconUsers)
+/* harmony export */ });
+const base = pnpnm.assetUrl + "/icons/";
+const iconProIcon = base + "IconProIcon.svg";
+const iconNotFound = base + "IconNotFound.svg";
+const iconUsers = base + "IconUsers.svg";
+const iconFolderAwesome = base + "IconFolderAwesome.svg";
+const iconFolderBold = base + "IconFolderBold.svg";
+const iconFolderBoldOpen = base + "IconFolderBoldOpen.svg";
+const iconFolderDefaultOpen = base + "IconFolderDefaultOpen.svg";
+const iconFolderHome = base + "IconFolderHome.svg";
+const iconFolderDefault = base + "IconFolderDefault.svg";
+const iconFolderUncategorized = base + "IconFolderUncategorized.svg";
+const iconThemeAwesome = base + "IconThemeAwesome.svg";
+const iconThemeBold = base + "IconThemeBold.svg";
+const iconThemeDefault = base + "IconThemeDefault.svg";
+const iconThemePlugininja = base + "IconThemePlugininja.svg";
 
 /***/ },
 

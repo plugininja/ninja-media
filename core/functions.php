@@ -2,10 +2,6 @@
 
 defined("ABSPATH") || exit("No direct script access allowed");
 
-function pnpnm_fs() {
-    return \Pninja\NM\pnpnm_fs();
-}
-
 if (!function_exists('pnpnmGetFolderTable')) {
     function pnpnmGetFolderTable(): array
     {
@@ -36,6 +32,10 @@ if (!function_exists('pnpnmGetFolderTable')) {
         ];
 
         $tables = array_merge($folders, pnpnmGetFolderRelationshipTable());
+
+        if (function_exists('pnpnmGetPostTypeFolderTables')) {
+            $tables = array_merge($tables, pnpnmGetPostTypeFolderTables());
+        }
 
         return $tables;
     }
@@ -100,6 +100,7 @@ if (!function_exists('pnpnmGetDefaultSettings')) {
                 'settings' => [
                     'perPage' => 80,
                     'breadcrumbNavigation' => true,
+                    'lightbox' => false,
 
                 ]
             ],
@@ -121,7 +122,9 @@ if (!function_exists('pnpnmGetDefaultSettings')) {
                 'imageProcessing' => [
                     'thumbnailGenerator' => false,
 
+                    'defaultFeaturedImage' => true,
                 ],
+
             ],
 
             'tools' => [
@@ -181,3 +184,4 @@ if (!function_exists('pnpnmMaxUploadFileSize')) {
         return max(1, (int) floor(wp_max_upload_size() / MB_IN_BYTES));
     }
 }
+

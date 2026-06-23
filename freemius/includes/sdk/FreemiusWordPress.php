@@ -525,6 +525,7 @@
 			return $decoded;
 		}
 
+
 		/**
 		 * Makes an HTTP request. This method can be overridden by subclasses if
 		 * developers want to do fancier things or use something other than wp_remote_request()

@@ -40,6 +40,7 @@
             'title'                         => true,
         );
 
+
         # region Singleton
 
 		/**

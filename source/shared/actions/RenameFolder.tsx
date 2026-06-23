@@ -1,5 +1,5 @@
-import DefaultOpen from "~/assets/icons/folder/DefaultOpen";
-import Default from "~/assets/icons/folder/NinjaDefault";
+import { iconFolderDefault, iconFolderDefaultOpen, iconFolderBold, iconFolderBoldOpen, iconFolderAwesome } from "~/utils/icons";
+import SvgIcon from "~/components/svgIcon/SvgIcon";
 import InlineStack from "~/components/inlineStack";
 import { Theme } from "~/types/settings/settings";
 import BlockStack from "~/components/blockStack";
@@ -31,11 +31,12 @@ const RenameFolder = ({
     onCancel?: () => void;
 }) => {
     const iconElement = useMemo(() => {
+        const resolvedColor = color || (active ? "var(--pnpnm-primary)" : "#697C8B");
         if (theme === "default")
             return open ? (
-                <DefaultOpen color={color} active={active ?? false} />
+                <SvgIcon src={iconFolderDefaultOpen} style={{ color: resolvedColor }} />
             ) : (
-                <Default color={color} active={active ?? false} />
+                <SvgIcon src={iconFolderDefault} style={{ color: resolvedColor }} />
             );
 
     }, [theme, open, color, active]);

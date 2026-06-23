@@ -24,7 +24,7 @@ const Description = ({
     );
 
     const truncatedText =
-        limit && text
+        limit && typeof text === "string"
             ? text.slice(0, limit) + (text.length > limit ? "..." : "")
             : text;
 

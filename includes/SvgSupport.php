@@ -9,12 +9,14 @@ namespace Pninja\NM;
 
 use Pninja\NM\Utils\Helpers;
 use Pninja\NM\Utils\Singleton;
+use Pninja\NM\Utils\WpFilesystem;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
 class SvgSupport
 {
     use Singleton;
+    use WpFilesystem;
 
     public function doHooks(): void
     {
@@ -23,18 +25,6 @@ class SvgSupport
         add_filter('wp_handle_upload_prefilter', [$this, 'sanitizeSvgUpload'], 5);
         add_filter('wp_generate_attachment_metadata', [$this, 'generateSvgMetadata'], 10, 2);
         add_filter('wp_prepare_attachment_for_js', [$this, 'prepareSvgForJs'], 10, 3);
-    }
-
-    private function fs(): \WP_Filesystem_Base
-    {
-        global $wp_filesystem;
-
-        if (empty($wp_filesystem)) {
-            require_once ABSPATH . 'wp-admin/includes/file.php';
-            WP_Filesystem();
-        }
-
-        return $wp_filesystem;
     }
 
     public function allowSvgUpload(array $mimes): array
@@ -150,7 +140,9 @@ class SvgSupport
         // Remove all <script> elements.
         $scriptNodes = iterator_to_array($xpath->query('//script') ?: new \DOMNodeList());
         foreach ($scriptNodes as $node) {
-            $node->parentNode?->removeChild($node);
+            if ($node->parentNode !== null) {
+                $node->parentNode->removeChild($node);
+            }
         }
 
         // Remove <use> elements that reference external resources.
@@ -159,7 +151,9 @@ class SvgSupport
             $href = $node->getAttributeNS('http://www.w3.org/1999/xlink', 'href')
                 ?: $node->getAttribute('href');
             if ($href && strpos(ltrim($href), '#') !== 0) {
-                $node->parentNode?->removeChild($node);
+                if ($node->parentNode !== null) {
+                    $node->parentNode->removeChild($node);
+                }
             }
         }
 
@@ -167,7 +161,9 @@ class SvgSupport
         $allElements = iterator_to_array($xpath->query('//*') ?: new \DOMNodeList());
         foreach ($allElements as $element) {
             if (!in_array(strtolower($element->localName), $allowedElements, true)) {
-                $element->parentNode?->removeChild($element);
+                if ($element->parentNode !== null) {
+                    $element->parentNode->removeChild($element);
+                }
             }
         }
 

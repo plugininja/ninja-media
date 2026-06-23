@@ -272,7 +272,8 @@ const FileLists = ({
                                                 placement: "right-center",
                                                 right: 1,
                                             }}
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                e.stopPropagation();
                                             }}
                                         >
                                             Trash
@@ -282,7 +283,10 @@ const FileLists = ({
                                             variant="error"
                                             size="supersmall"
                                             startIcon="delete"
-                                            onClick={() => openDeleteFile(ids)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                openDeleteFile(ids);
+                                            }}
                                         >
                                             Delete
                                         </Button>

@@ -2,6 +2,7 @@ import { Settings } from "./settings/settings";
 
 declare global {
     const pnpnm: {
+        assetUrl: string;
         restUrl: string;
         ajaxUrl: string;
         siteUrl: string;

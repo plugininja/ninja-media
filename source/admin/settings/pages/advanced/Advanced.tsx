@@ -4,8 +4,10 @@ import SettingsField from "~/components/settingsField";
 import useSettings from "~/hooks/useSettings";
 import Switcher from "~/components/switcher";
 import Field from "~/components/field";
+import Input from "~/components/input";
 import { __ } from "@wordpress/i18n";
 import DOCS from "~/constants/docs";
+import Status from "~/components/status";
 
 const Advanced = () => {
     const { data, setSettings } = useSettings();
@@ -17,7 +19,8 @@ const Advanced = () => {
     const { dynamicFolders, uncategorized, favorites, used, unused } =
         organization || {};
 
-    const { convertWebp, thumbnailGenerator } = imageProcessing || {};
+    const { convertWebp, thumbnailGenerator, defaultFeaturedImage } =
+        imageProcessing || {};
 
     return (
         <PageContainer>
@@ -255,6 +258,45 @@ const Advanced = () => {
                         secondaryAction={<ThumbnailGenerator />}
                     />
                 </SettingsField>
+
+                <SettingsField
+                    background="extralight"
+                    description={
+                        <>
+                            {__(
+                                "Show a fallback image on any post or page that has no featured image set. Choose the image in ",
+                                "ninja-media",
+                            )}
+                            <a
+                                href={pnpnm.ajaxUrl.replace(
+                                    "admin-ajax.php",
+                                    "options-media.php",
+                                )}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: "var(--pnpnm-primary)" }}
+                            >
+                                {__("WP Settings → Media", "ninja-media")}
+                            </a>
+                            {"."}
+                        </>
+                    }
+                    action={
+                        <Switcher
+                            title={__(
+                                "Default featured image",
+                                "ninja-media",
+                            )}
+                            checked={defaultFeaturedImage}
+                            onChange={() =>
+                                setSettings(
+                                    "advanced.imageProcessing.defaultFeaturedImage",
+                                    !defaultFeaturedImage,
+                                )
+                            }
+                        />
+                    }
+                />
             </Field>
         </PageContainer>
     );

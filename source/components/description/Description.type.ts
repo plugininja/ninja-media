@@ -12,7 +12,7 @@ export interface DescriptionProps {
     className?: string;
     as?: keyof JSX.IntrinsicElements;
     limit?: number;
-    text?: string;
+    text?: React.ReactNode;
     color?: TextColor;
     size?: FontSize;
     weight?: FontWeight;

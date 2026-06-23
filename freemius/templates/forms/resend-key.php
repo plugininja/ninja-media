@@ -93,6 +93,7 @@ HTML;
 			    moduleID         = '<?php echo $fs->get_id() ?>',
 			    isChild          = false;
 
+
 			$modal.appendTo($('body'));
 
 			function registerEventHandlers() {

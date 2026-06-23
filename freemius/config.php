@@ -91,6 +91,7 @@
         define( 'WP_FS__SKIP_EMAIL_ACTIVATION', false );
     }
 
+
     #--------------------------------------------------------------------------------
     #region Directories
     #--------------------------------------------------------------------------------
@@ -196,6 +197,7 @@
     if ( ! defined( 'WP_FS__ADDRESS' ) ) {
         define( 'WP_FS__ADDRESS', ( WP_FS__IS_PRODUCTION_MODE ? WP_FS__ADDRESS_PRODUCTION : WP_FS__ADDRESS_LOCALHOST ) );
     }
+
 
     #--------------------------------------------------------------------------------
     #region API

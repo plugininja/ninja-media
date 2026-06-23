@@ -149,11 +149,7 @@ const FolderTreeNode = ({
         setMedia("menu", "folder");
 
         window.pnpnmMedia?.initFilter([folder]);
-        window.pnpnmMedia
-            ?.getFrame()
-            ?.find("#pnpnm-media-folder-filter")
-            ?.val(String(id))
-            ?.trigger("change");
+        window.pnpnmMedia?.setFolderFilter(String(id));
 
         if (isExpanded) {
             setIsExpanded(false);

@@ -10,6 +10,7 @@
 		exit;
 	}
 
+
 	/**
 	 * - Each instance of Freemius class represents a single plugin
 	 * install by a single user (the installer of the plugin).

@@ -2,8 +2,6 @@
 
 namespace Pninja\NM;
 
-use Pninja\NM\Utils\Helpers;
-
 defined( 'ABSPATH' ) || exit( 'No direct script access allowed' );
 
 class Deactivation {
@@ -25,24 +23,8 @@ class Deactivation {
 
 	private static function deactivateSite(): void {
 		UsageScanner::clearScheduled();
-
-		if ( ! self::shouldDeleteData() ) {
-			return;
-		}
-
-		self::removeTables();
-		self::removePostMeta();
-		self::removeTransients();
-		self::removeOptions();
-
-		/**
-		 * Fires after all plugin data has been deleted on deactivation.
-		 */
-		do_action( 'pnpnm_after_deactivation_cleanup' );
-	}
-
-	private static function shouldDeleteData(): bool {
-		return (bool) Helpers::getSetting( 'tools.deleteOnUninstall', false );
+		// Data deletion is handled exclusively by uninstall.php (WP guideline #10).
+		// Deactivation is reversible — data must be preserved.
 	}
 
 	/**
@@ -77,10 +59,20 @@ class Deactivation {
 		$meta_keys = [
 			'_pnpnm_media_folder_id',
 			'_pnpnm_media_used',
+			'pnpnm_original_size',
+			'pnpnm_optimized_size',
+			'pnpnm_savings_percent',
+			'pnpnm_optimized_at',
+			'pnpnm_backup_path',
+			'pnpnm_webp_path',
+			'pnpnm_metadata_stripped',
+			'pnpnm_metadata_stripped_at',
+			'pnpnm_metadata_size_before',
+			'pnpnm_metadata_size_after',
 		];
 
 		foreach ( $meta_keys as $meta_key ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- bulk delete of plugin meta on user-initiated data deletion.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- bulk delete of plugin meta on site cleanup.
 			$wpdb->delete( $wpdb->postmeta, [ 'meta_key' => $meta_key ], [ '%s' ] );
 		}
 	}
@@ -110,8 +102,12 @@ class Deactivation {
 			'pnpnm_first_installed_version',
 			'pnpnm_encryption_key',
 			'pnpnm_notice',
+			'pnpnm_review_banner',
 			'pnpnm_delete_on_uninstall',
 			'pnpnm_usage_scan_offset',
+			'pnpnm_optimizer_settings',
+			'pnpnm_editor_settings',
+			'pnpnm_default_featured_image_id',
 			PNPNM_OPTIONS_NAME,
 		];
 

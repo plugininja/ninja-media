@@ -9,7 +9,7 @@ define('PNPNM_DB_VERSION', '1.0.0');
 define('PNPNM_OPTIONS_VERSION', '1.0.0');
 define('PNPNM_PLUGIN_BASE', plugin_basename(PNPNM_FILE));
 
-define('PNPNM_VERSION', '1.0.2');
+define('PNPNM_VERSION', '1.0.3');
 
 /**
  * Plugin URLs

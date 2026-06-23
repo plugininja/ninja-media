@@ -1,4 +1,5 @@
-import Default from "~/assets/icons/folder/NinjaDefault";
+import { iconFolderDefault, iconFolderBold, iconFolderAwesome } from "~/utils/icons";
+import SvgIcon from "~/components/svgIcon/SvgIcon";
 import InlineStack from "~/components/inlineStack";
 import { Theme } from "~/types/settings/settings";
 import BlockStack from "~/components/blockStack";
@@ -28,7 +29,7 @@ const CreateFolder = ({
     loading?: boolean;
 }) => {
     const iconElement = useMemo(() => {
-        if (theme === "default") return <Default active={false} />;
+        if (theme === "default") return <SvgIcon src={iconFolderDefault} style={{ color: "#697C8B" }} />;
 
     }, [theme]);
 

@@ -13,4 +13,15 @@ export type File = {
         name: string;
         url: string;
     }[];
+    alt?: string;
+    caption?: string;
+    description?: string;
+};
+
+export type FileMetadataPayload = {
+    id: string | number;
+    title?: string;
+    alt?: string;
+    caption?: string;
+    description?: string;
 };

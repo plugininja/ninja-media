@@ -41,16 +41,6 @@ class FolderRelationship extends BaseModel implements RelationModelInterface
             return $this->createDatabaseError($this->database->last_error);
         }
 
-        // Sync folder ID into attachment post meta for WP_Query filtering
-        $meta = get_post_meta($attachmentId, '_wp_attachment_metadata', true);
-
-        if (is_array($meta)) {
-            $meta['folderId'] = $folderId;
-        } else {
-            $meta = ['folderId' => $folderId];
-        }
-
-        update_post_meta($attachmentId, '_wp_attachment_metadata', $meta);
         update_post_meta($attachmentId, '_pnpnm_media_folder_id', $folderId);
 
         return $attachmentId;
@@ -164,13 +154,6 @@ class FolderRelationship extends BaseModel implements RelationModelInterface
                 $attachmentId = absint($rawId);
 
                 delete_post_meta($attachmentId, '_pnpnm_media_folder_id');
-
-                // Remove the denormalized folderId stored inside _wp_attachment_metadata.
-                $meta = get_post_meta($attachmentId, '_wp_attachment_metadata', true);
-                if (is_array($meta) && array_key_exists('folderId', $meta)) {
-                    unset($meta['folderId']);
-                    update_post_meta($attachmentId, '_wp_attachment_metadata', $meta);
-                }
 
                 if ($isMediaDelete) {
                     wp_delete_post($attachmentId, true);

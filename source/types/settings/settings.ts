@@ -39,6 +39,7 @@ export type Display = {
         perPage: number;
         detailsHover: boolean;
         breadcrumbNavigation: boolean;
+        lightbox: boolean;
     };
 };
 
@@ -59,7 +60,9 @@ export type Advanced = {
     imageProcessing: {
         convertWebp: boolean;
         thumbnailGenerator: boolean;
+        defaultFeaturedImage: boolean;
     };
+
 };
 
 export type Tools = {

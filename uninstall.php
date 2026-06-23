@@ -53,6 +53,9 @@ function pnpnm_uninstall_current_site($wpdb): void
         'pnpnm_delete_on_uninstall',
         'pnpnm_usage_scan_offset',
         'pnpnm_review_banner',
+        'pnpnm_optimizer_settings',
+        'pnpnm_editor_settings',
+        'pnpnm_default_featured_image_id',
     ];
 
     foreach ($pnpnm_options as $pnpnm_option) {
@@ -76,6 +79,16 @@ function pnpnm_uninstall_current_site($wpdb): void
     $pnpnm_meta_keys = [
         '_pnpnm_media_folder_id',
         '_pnpnm_media_used',
+        'pnpnm_original_size',
+        'pnpnm_optimized_size',
+        'pnpnm_savings_percent',
+        'pnpnm_optimized_at',
+        'pnpnm_backup_path',
+        'pnpnm_webp_path',
+        'pnpnm_metadata_stripped',
+        'pnpnm_metadata_stripped_at',
+        'pnpnm_metadata_size_before',
+        'pnpnm_metadata_size_after',
     ];
 
     foreach ($pnpnm_meta_keys as $pnpnm_meta_key) {

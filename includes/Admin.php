@@ -15,11 +15,24 @@ class Admin
     private function doHooks()
     {
         add_action('admin_menu', [$this, 'adminMenu']);
+        add_action('admin_init', [$this, 'maybeRedirectFileManager']);
+        add_filter('admin_body_class', [$this, 'adminBodyClass']);
 
         $showFolders = Helpers::getSetting('general.folder.showFolders', false);
         if ($showFolders) {
             add_action('admin_bar_menu', [$this, 'adminBarMenu'], 100);
         }
+    }
+
+    public function adminBodyClass(string $classes): string
+    {
+        $screen = get_current_screen();
+
+        if ($screen && 'upload' === $screen->base) {
+            $classes .= ' pnpnm-media-library';
+        }
+
+        return $classes;
     }
 
     private static function subMenuPages(): array {
@@ -59,11 +72,37 @@ class Admin
                 self::addSubMenuPage($page['menu'], $page['slug']);
             }
         }
+
+        add_submenu_page(
+            'upload.php',
+            __('File Manager', 'ninja-media'),
+            __('File Manager', 'ninja-media'),
+            'upload_files',
+            'pnpnm-file-manager',
+            [self::class, 'redirectToFileManager']
+        );
     }
 
     public static function adminPage()
     {
         echo '<div id="pnpnm-admin" class="pnpnm-admin pnpnm-top-level-wrapper"></div>';
+    }
+
+    public function maybeRedirectFileManager(): void
+    {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only page detection.
+        if ( ( $_GET['page'] ?? '' ) !== 'pnpnm-file-manager' ) {
+            return;
+        }
+        wp_safe_redirect( admin_url( 'admin.php?page=' . PNPNM_SLUG . '#/files/all' ) );
+        exit;
+    }
+
+    public static function redirectToFileManager(): void
+    {
+        // Intentionally empty — redirect is handled in admin_init before any
+        // HTML output so wp_safe_redirect works. WordPress requires a callable
+        // for add_submenu_page, but this callback is never reached in practice.
     }
 
     private static function addMenuPage($menu, $slug) {

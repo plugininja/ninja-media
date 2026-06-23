@@ -81,6 +81,7 @@
 
 		#endregion Properties
 
+
 		/**
 		 * @param object|bool $event
 		 */

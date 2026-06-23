@@ -97,6 +97,7 @@
 			return is_null( $this->licenses );
 		}
 
+
 		/**
 		 * Check if pricing has more than one billing cycle.
 		 *

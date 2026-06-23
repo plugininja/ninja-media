@@ -13,7 +13,7 @@ interface SettingsField {
     className?: string;
     title?: React.ReactNode;
     titleSize?: FontSize;
-    description?: string;
+    description?: React.ReactNode;
     docLink?: string;
     background?: BackgroundColor;
     border?: BorderColor;

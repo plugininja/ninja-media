@@ -17,7 +17,6 @@ import Topbar from "~/components/topbar";
 import Layout from "~/components/layout";
 import Tools from "./pages/tools/Tools";
 import Text from "~/components/text";
-
 const Settings = () => {
     const { data, isDataChanged, saveSettings } = useSettings();
     const [theme, setTheme] = useLocalStorage<"light" | "dark">(

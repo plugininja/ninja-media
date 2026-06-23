@@ -1,0 +1,299 @@
+/**
+ * pnpnm-editor.css
+ * Full-screen image editor modal — layout, toolbar, sidebar, panels.
+ */
+
+/* Overlay ------------------------------------------------------------------- */
+.pnpnm-editor-modal {
+	display: none;
+	position: fixed;
+	inset: 0;
+	z-index: 999999;
+	background: #1a1a1a;
+	flex-direction: column;
+}
+
+/* Inner layout -------------------------------------------------------------- */
+.pnpnm-editor-inner {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* Toolbar ------------------------------------------------------------------- */
+.pnpnm-editor-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 12px;
+	background: #2c2c2c;
+	border-bottom: 1px solid #3a3a3a;
+	flex-shrink: 0;
+}
+
+.pnpnm-tb-sep {
+	flex: 1;
+}
+
+.pnpnm-tb-btn {
+	padding: 5px 12px;
+	background: #3a3a3a;
+	color: #e0e0e0;
+	border: 1px solid #555;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 13px;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.pnpnm-tb-btn:hover,
+.pnpnm-tb-btn:focus {
+	background: #4a4a4a;
+	color: #fff;
+	outline: none;
+}
+
+.pnpnm-tb-btn--primary {
+	background: #2271b1;
+	border-color: #1a5f8a;
+	color: #fff;
+}
+
+.pnpnm-tb-btn--primary:hover,
+.pnpnm-tb-btn--primary:focus {
+	background: #135e96;
+	border-color: #0d4e7e;
+	color: #fff;
+}
+
+.pnpnm-tb-btn--close {
+	background: transparent;
+	border-color: transparent;
+	color: #999;
+	font-size: 18px;
+	padding: 2px 10px;
+	line-height: 1;
+}
+
+.pnpnm-tb-btn--close:hover,
+.pnpnm-tb-btn--close:focus {
+	background: #c0392b;
+	border-color: transparent;
+	color: #fff;
+}
+
+.pnpnm-tb-msg {
+	font-size: 12px;
+	color: #bbb;
+	padding: 0 8px;
+	min-width: 140px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pnpnm-tb-msg a {
+	color: #72aee6;
+	text-decoration: underline;
+}
+
+/* Body ---------------------------------------------------------------------- */
+.pnpnm-editor-body {
+	display: flex;
+	flex: 1;
+	overflow: hidden;
+}
+
+/* Sidebar ------------------------------------------------------------------- */
+.pnpnm-editor-sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 12px 8px;
+	background: #242424;
+	border-right: 1px solid #3a3a3a;
+	width: 140px;
+	flex-shrink: 0;
+	overflow-y: auto;
+}
+
+.pnpnm-tool-btn {
+	display: block;
+	width: 100%;
+	padding: 8px 10px;
+	background: #2e2e2e;
+	color: #ccc;
+	border: 1px solid transparent;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 12px;
+	text-align: left;
+}
+
+.pnpnm-tool-btn:hover,
+.pnpnm-tool-btn:focus {
+	background: #3a3a3a;
+	color: #fff;
+	outline: none;
+}
+
+.pnpnm-tool-btn--active {
+	background: #2271b1;
+	color: #fff;
+	border-color: #135e96;
+}
+
+.pnpnm-tool-btn--active:hover,
+.pnpnm-tool-btn--active:focus {
+	background: #135e96;
+	color: #fff;
+}
+
+/* Canvas area --------------------------------------------------------------- */
+.pnpnm-editor-canvas-wrap {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	position: relative;
+	background: #111;
+}
+
+#pnpnm-canvas {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
+	box-shadow: 0 0 24px rgba(0, 0, 0, .7);
+}
+
+/* Right panel --------------------------------------------------------------- */
+.pnpnm-editor-panel {
+	width: 210px;
+	flex-shrink: 0;
+	background: #242424;
+	border-left: 1px solid #3a3a3a;
+	padding: 14px 12px;
+	overflow-y: auto;
+	color: #ccc;
+}
+
+.pnpnm-panel-title {
+	font-size: 13px;
+	font-weight: 600;
+	color: #e0e0e0;
+	margin: 0 0 10px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #3a3a3a;
+}
+
+.pnpnm-panel-hint {
+	font-size: 12px;
+	color: #888;
+	margin: 0 0 10px;
+	line-height: 1.5;
+}
+
+.pnpnm-dim-display {
+	font-size: 12px;
+	color: #aaa;
+	margin: 0 0 10px;
+	font-family: monospace;
+}
+
+.pnpnm-panel-btn {
+	display: block;
+	width: 100%;
+	margin-top: 10px;
+	text-align: center;
+}
+
+/* Rotate / Flip group ------------------------------------------------------- */
+.pnpnm-btn-group {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.pnpnm-btn-group .pnpnm-panel-btn {
+	margin-top: 0;
+}
+
+/* Resize panel -------------------------------------------------------------- */
+.pnpnm-field-label {
+	display: block;
+	font-size: 12px;
+	color: #ccc;
+	margin-bottom: 10px;
+	line-height: 1.5;
+}
+
+.pnpnm-field-label input[type="number"] {
+	display: block;
+	width: 100%;
+	margin-top: 4px;
+	box-sizing: border-box;
+}
+
+.pnpnm-field-label input[type="checkbox"] {
+	margin-right: 6px;
+	vertical-align: middle;
+}
+
+/* Adjustments panel --------------------------------------------------------- */
+.pnpnm-slider-label {
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	color: #ccc;
+	margin-bottom: 4px;
+}
+
+.pnpnm-slider {
+	display: block;
+	width: 100%;
+	margin-bottom: 14px;
+	accent-color: #2271b1;
+	cursor: pointer;
+}
+
+/* Filters panel ------------------------------------------------------------- */
+.pnpnm-filter-btns {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.pnpnm-filter-btn {
+	padding: 5px 10px;
+	background: #2e2e2e;
+	color: #ccc;
+	border: 1px solid #444;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.pnpnm-filter-btn:hover,
+.pnpnm-filter-btn:focus {
+	background: #3a3a3a;
+	color: #fff;
+	outline: none;
+}
+
+.pnpnm-filter-btn--active {
+	background: #2271b1;
+	color: #fff;
+	border-color: #135e96;
+}
+
+/* Open-editor button on attachment edit screen ------------------------------ */
+.pnpnm-editor-open-wrap {
+	margin-top: 8px;
+}
+
+.pnpnm-editor-open-btn {
+	width: 100%;
+}

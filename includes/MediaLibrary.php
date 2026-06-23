@@ -20,17 +20,18 @@ class MediaLibrary
     public function doHooks()
     {
         add_filter('pnpnm_localize_data', [$this, 'localizeData'], 10, 2);
-        add_filter('wp_prepare_attachment_for_js', [$this, 'prepareAttachmentForJs'], 99, 3);
-        add_filter('wp_calculate_image_srcset', [$this, 'calculateImageSrcset'], 10, 5);
         add_filter('upload_size_limit', [$this, 'filterUploadSizeLimit']);
         add_filter('wp_handle_upload_prefilter', [$this, 'enforceUploadSizeLimit']);
         add_filter('plupload_default_settings', [$this, 'filterPluploadSettings']);
         add_filter('big_image_size_threshold', [$this, 'filterBigImageThreshold']);
+        add_filter('ajax_query_attachments_args', [$this, 'filterAttachmentsPerPage']);
         add_action('wp_handle_upload', [$this, 'boostMemoryForImageUpload']);
-        add_action('save_post', [$this, 'syncUsageFlagsOnPostSave'], 20, 1);
-        add_action('deleted_post', [$this, 'syncUsageFlagsOnPostSave'], 20, 1);
-
         add_action('pre_get_posts', [$this, 'filterGridAttachments']);
+        add_action('save_post', [$this, 'markAttachmentsUsedOnPostSave'], 20, 1);
+
+        if (!get_option('pnpnm_repaired_attachment_folder_meta')) {
+            add_action('admin_init', [$this, 'repairAttachmentFolderMeta']);
+        }
     }
 
     public function filterBigImageThreshold(int $threshold): int
@@ -104,14 +105,28 @@ class MediaLibrary
     }
 
     /**
-     * Re-syncs _pnpnm_media_used flags for all attachments referenced in the saved/deleted post.
-     * Covers featured image, inline wp-image-{id} class, and file path/URL occurrences.
+     * Marks attachments referenced in the saved post as used.
+     * Only sets the flag — never clears it, keeping this O(attachments-in-post).
      */
-    public function syncUsageFlagsOnPostSave(int $postId): void
+    public function markAttachmentsUsedOnPostSave(int $postId): void
     {
+        // Skip on regular frontend page renders. Some plugins (view counters, stock
+        // updates) call wp_update_post() during page loads, firing save_post without
+        // an actual editorial save. Tracking attachment usage there is unnecessary
+        // and adds memory pressure from update_post_meta + wp_cache_set per attachment.
+        if (!is_admin() && !wp_doing_ajax() && !wp_doing_cron() && !(defined('REST_REQUEST') && REST_REQUEST)) {
+            return;
+        }
+
         $post = get_post($postId);
 
         if (!$post || $post->post_type === 'attachment' || $post->post_type === 'revision') {
+            return;
+        }
+
+        // Skip post types that cannot embed images — avoids overhead during WooCommerce
+        // order/analytics imports which trigger save_post thousands of times.
+        if (!post_type_supports($post->post_type, 'thumbnail') && !post_type_supports($post->post_type, 'editor')) {
             return;
         }
 
@@ -127,43 +142,20 @@ class MediaLibrary
             $attachment_ids[] = $id;
         }
 
-        preg_match_all('/"([^"]+)"/', $post->post_content ?? '', $url_matches);
-        foreach ($url_matches[1] ?? [] as $candidate) {
-            $id = attachment_url_to_postid($candidate);
-            if ($id > 0) {
-                $attachment_ids[] = $id;
-            }
-        }
-
         foreach (array_unique(array_filter($attachment_ids)) as $attachment_id) {
-            BaseModel::syncUsageFlag($attachment_id);
+            update_post_meta($attachment_id, '_pnpnm_media_used', '1');
         }
     }
 
-    public function calculateImageSrcset($sources, $size_array, $image_src, $image_meta, $attachment_id)
+    public function filterAttachmentsPerPage(array $query): array
     {
-        if (empty($image_meta['pnpnm_media']) || empty($sources)) {
-            return $sources;
+        $per_page = (int) Helpers::getSetting('display.settings.perPage', 80);
+
+        if ($per_page > 0) {
+            $query['posts_per_page'] = $per_page;
         }
 
-        $image_basename = basename($image_src);
-        $new_sources    = [];
-
-        foreach ($sources as $size => $source) {
-            if (empty($source['url'])) {
-                continue;
-            }
-
-            $srcset_basename = basename($source['url']);
-
-            $new_sources[$size] = [
-                'url'        => str_replace($image_basename, $srcset_basename, $image_src),
-                'descriptor' => $source['descriptor'],
-                'value'      => $source['value'],
-            ];
-        }
-
-        return $new_sources ?: $sources;
+        return $query;
     }
 
     public function filterGridAttachments($query)
@@ -258,16 +250,57 @@ class MediaLibrary
         ]);
     }
 
-    public function prepareAttachmentForJs($response, $attachment, $meta)
+    /**
+     * One-time repair: removes the stale `folderId` key that was incorrectly written
+     * into `_wp_attachment_metadata` by an earlier version of the plugin. For attachments
+     * whose metadata was fully replaced with only `['folderId' => x]`, the metadata is
+     * regenerated from the original file so width/height/sizes are restored.
+     */
+    public function repairAttachmentFolderMeta(): void
     {
-            if (empty($meta['folderId'])) {
-                return $response;
+        global $wpdb;
+
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time repair, no cache needed
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT post_id, meta_value FROM {$wpdb->postmeta}
+                 WHERE meta_key = %s AND meta_value LIKE %s",
+                '_wp_attachment_metadata',
+                '%' . $wpdb->esc_like('folderId') . '%'
+            )
+        );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
+        if (!empty($rows)) {
+            if (!function_exists('wp_generate_attachment_metadata')) {
+                require_once ABSPATH . 'wp-admin/includes/image.php';
             }
-    
-            $response['pnpnm_media'] = $meta['folderId'];
-    
-            return $response;
-        
+
+            foreach ($rows as $row) {
+                $meta = maybe_unserialize($row->meta_value);
+
+                if (!is_array($meta) || !isset($meta['folderId'])) {
+                    continue;
+                }
+
+                unset($meta['folderId']);
+
+                if (empty($meta)) {
+                    $file = get_attached_file((int) $row->post_id);
+                    if ($file && file_exists($file)) {
+                        $regenerated = wp_generate_attachment_metadata((int) $row->post_id, $file);
+                        if (!empty($regenerated)) {
+                            wp_update_attachment_metadata((int) $row->post_id, $regenerated);
+                            continue;
+                        }
+                    }
+                }
+
+                update_post_meta((int) $row->post_id, '_wp_attachment_metadata', $meta);
+            }
+        }
+
+        update_option('pnpnm_repaired_attachment_folder_meta', '1');
     }
 
     public function localizeData(array $data, $script): array

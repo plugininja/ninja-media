@@ -77,7 +77,7 @@ const SettingsField: SettingsFieldProps = ({
                                         {title}
                                     </Text>
 
-                                    <Status.Pro />
+                                    <Status.Pro tooltipDisabled />
                                 </InlineStack>
                             ) : (
                                 <Text as="h4" size={titleSize} weight="medium">

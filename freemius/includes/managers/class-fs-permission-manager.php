@@ -579,6 +579,7 @@
 
         #endregion
 
+
         /**
          * @param string $permission
          *

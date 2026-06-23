@@ -1,16 +1,14 @@
 import { StatusProps } from "~/components/status/Status.type";
-import Plugininja from "~/assets/icons/themes/Plugininja";
+import { iconThemePlugininja, iconThemeAwesome, iconThemeDefault, iconThemeBold } from "~/utils/icons";
+import SvgIcon from "~/components/svgIcon/SvgIcon";
 import { useEffect, useState } from "@wordpress/element";
 import SettingsField from "~/components/settingsField";
 import PageContainer from "~/components/pageContainer";
-import Awesome from "~/assets/icons/themes/Awesome";
-import Default from "~/assets/icons/themes/NinjaDefault";
 import InlineStack from "~/components/inlineStack";
 import ColorPicker from "~/components/colorPicker";
 import Description from "~/components/description";
 import BlockStack from "~/components/blockStack";
 import useDebounce from "~/hooks/useDebounce";
-import Bold from "~/assets/icons/themes/Bold";
 import useSettings from "~/hooks/useSettings";
 import Switcher from "~/components/switcher";
 import Status from "~/components/status";
@@ -29,7 +27,8 @@ const Display = () => {
 
     const { theme, color: colorValue, firstTime } = themeValue || {};
 
-    const { perPage, detailsHover, breadcrumbNavigation } = settings || {};
+    const { perPage, detailsHover, breadcrumbNavigation, lightbox } =
+        settings || {};
 
     const [color, setColor] = useState<string>(colorValue || "#4D49FC");
 
@@ -142,7 +141,7 @@ const Display = () => {
                                             {title}
                                         </Text>
 
-                                        {statusProps?.isPro && <Status.Pro />}
+                                        {statusProps?.isPro && <Status.Pro tooltipDisabled />}
                                     </InlineStack>
                                 </Card>
                             ),
@@ -274,6 +273,26 @@ const Display = () => {
                         />
                     }
                 />
+
+                <SettingsField
+                    background="extralight"
+                    description={__(
+                        "Open images in a full-screen lightbox viewer with prev/next navigation and keyboard support.",
+                        "ninja-media",
+                    )}
+                    action={
+                        <Switcher
+                            title={__("Lightbox", "ninja-media")}
+                            checked={lightbox ?? false}
+                            onChange={() =>
+                                setSettings(
+                                    "display.settings.lightbox",
+                                    !(lightbox ?? false),
+                                )
+                            }
+                        />
+                    }
+                />
             </Field>
         </PageContainer>
     );
@@ -290,12 +309,12 @@ const THEMES: {
     {
         key: "default",
         title: __("Default", "ninja-media"),
-        icon: <Default />,
+        icon: <SvgIcon src={iconThemeDefault} />,
     },
     {
         key: "bold",
         title: __("Bold", "ninja-media"),
-        icon: <Bold />,
+        icon: <SvgIcon src={iconThemeBold} />,
         statusProps: {
             isPro: true,
         },
@@ -303,7 +322,7 @@ const THEMES: {
     {
         key: "plugininja",
         title: __("Plugininja", "ninja-media"),
-        icon: <Plugininja />,
+        icon: <SvgIcon src={iconThemePlugininja} />,
         statusProps: {
             isPro: true,
         },
@@ -311,7 +330,7 @@ const THEMES: {
     {
         key: "awesome",
         title: __("Awesome", "ninja-media"),
-        icon: <Awesome />,
+        icon: <SvgIcon src={iconThemeAwesome} />,
         statusProps: {
             isPro: true,
         },

@@ -215,13 +215,10 @@ const useMediaActions = () => {
     };
 
     const openMediaEdit = (id: number) => {
-        const currentUrl = new URL(window.location.href);
-
-        currentUrl.searchParams.set("item", String(id));
-
-        window.history.pushState({}, "", currentUrl.toString());
-
-        window.dispatchEvent(new PopStateEvent("popstate"));
+        window.open(
+            `${pnpnm?.siteUrl}/wp-admin/post.php?post=${id}&action=edit&open_pnpnm_editor=${id}`,
+            "_blank",
+        );
     };
 
     const getFileLink = (attachment: any) => {

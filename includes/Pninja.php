@@ -4,6 +4,12 @@ namespace Pninja\NM;
 
 defined('ABSPATH') || exit('No direct script access allowed');
 
+use Pninja\NM\Modules\ImageEditor\EditorAdmin;
+use Pninja\NM\Modules\ImageEditor\EditorREST;
+use Pninja\NM\Modules\ImageOptimizer\Optimizer;
+use Pninja\NM\Modules\ImageOptimizer\OptimizerAdmin;
+use Pninja\NM\Modules\ImageOptimizer\OptimizerREST;
+use Pninja\NM\Modules\ImageToolsAdmin;
 use Pninja\NM\API\ApiRegistry;
 use Pninja\NM\Utils\Singleton;
 
@@ -18,8 +24,6 @@ class Pninja
 
     private function init()
     {
-        register_activation_hook(PNPNM_FILE, [Activation::class, 'init']);
-        register_deactivation_hook(PNPNM_FILE, [Deactivation::class, 'init']);
 
         if (is_multisite()) {
             add_action('wp_initialize_site', [ $this, 'onNewSite' ], 99);
@@ -33,9 +37,15 @@ class Pninja
         ApiRegistry::getInstance();
         ImageProcessor::getInstance();
         MediaEventListener::getInstance();
-        UsageScanner::getInstance();
         ReviewBanner::getInstance();
+        Abilities::getInstance();
 
+        // Image Tools modules — constructors register all hooks.
+        new ImageToolsAdmin();
+        new OptimizerAdmin();
+        new EditorAdmin();
+        new OptimizerREST( new Optimizer() );
+        new EditorREST();
         add_filter('plugin_action_links_' . plugin_basename(PNPNM_FILE), [$this, 'actionLinks']);
 
     }

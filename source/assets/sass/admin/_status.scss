@@ -1,5 +1,44 @@
 @use "../utilities/variable" as *;
 
+.pn-status {
+    &--locked {
+        position: relative;
+
+        &:hover .pn-status__pro-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+    &__pro-tooltip {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+        background: $secondaryblack;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 99999999;
+        pointer-events: none;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: $secondaryblack;
+        }
+    }
+}
+
 .pnpnm-top-level-wrapper {
     .pn-status {
         position: relative;

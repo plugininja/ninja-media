@@ -1,7 +1,10 @@
-import DefaultOpen from "~/assets/icons/folder/DefaultOpen";
-import Default from "~/assets/icons/folder/NinjaDefault";
+import { iconFolderDefault, iconFolderDefaultOpen, iconFolderBold, iconFolderBoldOpen, iconFolderAwesome } from "~/utils/icons";
+import SvgIcon from "~/components/svgIcon/SvgIcon";
 import { Theme } from "~/types/settings/settings";
 import { useMemo } from "@wordpress/element";
+
+const ACTIVE_COLOR = "var(--pnpnm-primary)";
+const DEFAULT_COLOR = "#697C8B";
 
 const ThemeIcon = ({
     theme,
@@ -17,11 +20,15 @@ const ThemeIcon = ({
     drop?: boolean;
 }) => {
     const iconElement = useMemo(() => {
-        if (drop) return <DefaultOpen color={color} active={active ?? false} />;
+        const resolvedColor = color || (active ? ACTIVE_COLOR : DEFAULT_COLOR);
+        const defaultStyle = { color: resolvedColor };
+        const customStyle = color ? { color } : undefined;
+
+        if (drop) return <SvgIcon src={iconFolderDefaultOpen} style={defaultStyle} />;
         return open ? (
-            <DefaultOpen color={color} active={active ?? false} />
+            <SvgIcon src={iconFolderDefaultOpen} style={defaultStyle} />
         ) : (
-            <Default color={color} active={active ?? false} />
+            <SvgIcon src={iconFolderDefault} style={defaultStyle} />
         );
     }, [theme, open, color, active, drop]);
 

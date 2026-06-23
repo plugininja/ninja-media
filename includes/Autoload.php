@@ -38,8 +38,11 @@ class Autoload
     private static function getAutoloadPaths()
     {
         return [
-            'Pninja\\NM\\Models\\'                           => [PNPNM_MODELS],
-            'Pninja\\NM\\'                                   => [PNPNM_INCLUDES],
+            'Pninja\\NM\\Models\\'   => [PNPNM_MODELS],
+            // Explicit mapping for the modules sub-namespace so Linux (case-sensitive)
+            // resolves includes/modules/ (lowercase) rather than includes/Modules/.
+            'Pninja\\NM\\Modules\\' => [PNPNM_INCLUDES . DIRECTORY_SEPARATOR . 'modules'],
+            'Pninja\\NM\\'          => [PNPNM_INCLUDES],
         ];
     }
 }

@@ -1231,6 +1231,7 @@
                     }
                 }
 
+
                 if ( ( $connections + $skips > 0 ) ) {
                     if ( $ignores > 0 ) {
                         /**
@@ -2727,6 +2728,7 @@
             $is_snoozed = ( ! is_multisite() || fs_is_network_admin() ) ?
                 get_transient( 'fs_snooze_period' ) :
                 get_site_transient( 'fs_snooze_period' );
+
 
             return ( 'true' === $is_snoozed );
         }
@@ -6437,6 +6439,7 @@
         #region Daily Sync Cron
         #----------------------------------------------------------------------------------
 
+
         /**
          * @author Vova Feldman (@svovaf)
          * @since  2.0.0
@@ -7486,6 +7489,7 @@
                 if ( $is_premium_version_activation ) {
                     $this->reconnect_locally();
                 }
+
 
                 // Schedule re-activation event and sync.
 //				$this->sync_install( array(), true );
@@ -9161,6 +9165,7 @@
                 'version'    => $this->get_plugin_version(),
                 'is_premium' => $this->is_premium(),
             ), $override );
+
 
             $is_common_diff_for_any_site = false;
             $common_diff_union           = array();
@@ -10932,6 +10937,7 @@
 
             return is_array( $addons ) && ( 0 < count( $addons ) );
         }
+
 
         /**
          * Get add-on by ID (from local data).
@@ -14548,6 +14554,7 @@
             return $this->affiliate;
         }
 
+
         /**
          * @author Leo Fajardo (@leorw)
          * @since  1.2.3
@@ -15062,6 +15069,7 @@
             if ( ! self::is_ajax() ) {
                 return false;
             }
+
 
             if ( ! empty( $module_id ) ) {
                 // Verify the call is relevant for the plugin.
@@ -17645,6 +17653,31 @@
         /**
          * Install plugin with new user.
          *
+         * You can use this method to sync activation with the Freemius WP SDK where the activation happened outside of the regular opt-in flow, for example if you're using an external licensing server with our api:
+         *
+         * https://docs.freemius.com/api/licenses/activate
+         *
+         * In that case you can call this method like following:
+         *
+         * ```
+         *
+         * my_fs()->install_with_new_user(
+         *     $result['user_id'],
+         *     $result['user_public_key'],
+         *     $result['user_secret_key'],
+         *     $result['is_marketing_allowed'],
+         *     null,
+         *     true,
+         *     $result['install_id'],
+         *     $result['install_public_key'],
+         *     $result['install_secret_key'],
+         *     false
+         * );
+         *
+         * ```
+         *
+         * Here `$result` represents the object returned by the API endpoint.
+         *
          * @author Vova Feldman (@svovaf)
          * @since  1.1.7.4
          *
@@ -17662,7 +17695,7 @@
          *
          * @return string If redirect is `false`, returns the next page the user should be redirected to.
          */
-        private function install_with_new_user(
+        public function install_with_new_user(
             $user_id,
             $user_public_key,
             $user_secret_key,
@@ -17946,6 +17979,7 @@
                 $this->install_with_current_user( $license_key );
             }
         }
+
 
         /**
          * @author Vova Feldman (@svovaf)
@@ -21613,6 +21647,7 @@
                 }
             }
 
+
             /**
              * If the premium license is already associated with the install, just
              * update the license reference (activation is not required).
@@ -23349,6 +23384,7 @@
             echo $this->apply_filters( "/forms/affiliation.php", fs_get_template( '/forms/affiliation.php', $vars ) );
         }
 
+
         /**
          * Render account page.
          *
@@ -24064,6 +24100,7 @@
             $cc_string = $require_payment ?
                 sprintf( $this->get_text_inline( 'No commitment for %s days - cancel anytime!', 'no-commitment-for-x-days' ), $trial_period ) :
                 $this->get_text_inline( 'No credit card required', 'no-cc-required' ) . '!';
+
 
             // Start trial button.
             $button = ' ' . sprintf(

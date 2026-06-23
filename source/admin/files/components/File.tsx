@@ -1,4 +1,5 @@
 import { useContextMenu } from "~/components/contextMenu/ContextMenu";
+
 import { formatFileSize } from "~/utils/functions";
 import InlineStack from "~/components/inlineStack";
 import BlockStack from "~/components/blockStack";
@@ -12,7 +13,8 @@ import Icon from "~/components/icon";
 import Text from "~/components/text";
 
 const File = ({ file }: { file: FileType }) => {
-    const { setFile, selectedFiles, hiddenFileIds, bulkSelect } = useFile();
+    const { setFile, selectedFiles, hiddenFileIds, bulkSelect } =
+        useFile();
 
     const { openViewDetails } = useViewDetails();
 

@@ -24,6 +24,7 @@ const Status = ({
     right = 10,
     tooltipPlacement = "left",
     tooltipDisabled = false,
+    proTooltipDisabled = false,
     size = "medium",
     widthFull = true,
     ignore = false,
@@ -139,9 +140,14 @@ const Status = ({
             };
     }
 
-    const classes = clsx("pn-status", widthFull && "w-full", className);
+    const classes = clsx(
+        "pn-status",
+        widthFull && "w-full",
+        !allowFeature && !proTooltipDisabled && "pn-status--locked",
+        className,
+    );
 
-    return (
+    const content = (
         <div
             id={id}
             style={{ ...style }}
@@ -160,6 +166,15 @@ const Status = ({
                 }
             }}
         >
+            {!allowFeature && !proTooltipDisabled && (
+                <div className="pn-status__pro-tooltip">
+                    {__(
+                        "This feature is only available in the pro version",
+                        "ninja-media",
+                    )}
+                </div>
+            )}
+
             {ownUi && (
                 <InlineStack
                     wrap={false}
@@ -230,9 +245,17 @@ const Status = ({
             </div>
         </div>
     );
+
+    return content;
 };
 
-Status.Pro = ({ title }: { title?: string }) => {
+Status.Pro = ({
+    title,
+    tooltipDisabled = false,
+}: {
+    title?: string;
+    tooltipDisabled?: boolean;
+}) => {
     if (toBoolean(pnpnm?.isPro)) {
         return null;
     }
@@ -248,6 +271,7 @@ Status.Pro = ({ title }: { title?: string }) => {
             }
             arrow
             wrap="no-wrap"
+            disabled={tooltipDisabled}
             style={{
                 display: "inline-flex",
                 alignItems: "center",

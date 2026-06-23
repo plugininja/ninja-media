@@ -82,11 +82,7 @@ const Breadcrumb = () => {
         window.pnpnmMedia?.initFilter([
             currentFolder ?? (folder as Folder) ?? null,
         ]);
-        window.pnpnmMedia
-            ?.getFrame()
-            ?.find("#pnpnm-media-folder-filter")
-            ?.val(String(folder?.id))
-            ?.trigger("change");
+        window.pnpnmMedia?.setFolderFilter(String(folder?.id));
 
         scrollToFolder(String(folder?.id));
     };
@@ -101,11 +97,7 @@ const Breadcrumb = () => {
         setMedia("activeFolder", child as any);
 
         window.pnpnmMedia?.initFilter([child]);
-        window.pnpnmMedia
-            ?.getFrame()
-            ?.find("#pnpnm-media-folder-filter")
-            ?.val(String(child?.id))
-            ?.trigger("change");
+        window.pnpnmMedia?.setFolderFilter(String(child?.id));
 
         setMedia("expandedFolderIds", [
             ...breadcrumbs.map((b) => String(b.id)),

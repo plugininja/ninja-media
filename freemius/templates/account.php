@@ -103,6 +103,7 @@
         $show_billing = ( is_array( $payments ) && 0 < count( $payments ) );
     }
 
+
     $has_tabs = $fs->_add_tabs_before_content();
 
 	// Aliases.
@@ -1062,6 +1063,7 @@
                 var installID = $(this).parents('.fs-site-details').attr('data-install-id');
                 $sitesSection.find('.fs-install-details[data-install-id=' + installID + ']').toggle();
             });
+
 
             var adjustColumnWidth = function($table) {
                 var $headerColumns = $table.find('.fs-table-head td'),

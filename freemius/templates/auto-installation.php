@@ -60,6 +60,7 @@
 		array( 'auto_install' => 'true' )
 	);
 
+
 	ob_start();
 
 	$method = ''; // Leave blank so WP_Filesystem can populate it as necessary.

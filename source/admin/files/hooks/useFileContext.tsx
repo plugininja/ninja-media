@@ -1,9 +1,15 @@
 import { useViewDetails } from "../components/FileDetails";
+import { useCustomAlert } from "~/components/alert/Alert";
 import { useDeleteFile } from "../components/Delete";
 import { FileContextMenu } from "~/types/file/file";
 import useFileActions from "./useFileActions";
+import { __ } from "@wordpress/i18n";
 import { File } from "~/types/file";
 import useFile from "./useFile";
+import { useAppDispatch } from "~/redux/hooks";
+import { updateFile } from "~/redux/features/file/file";
+
+declare const wp: any;
 
 type HandleFileContextParams = {
     key: FileContextMenu;
@@ -11,7 +17,8 @@ type HandleFileContextParams = {
 };
 
 const useFileContext = () => {
-    const { setFile } = useFile();
+    const { setFile, detailsFile } = useFile();
+    const dispatch = useAppDispatch();
 
     const {
         getFileLink,
@@ -19,6 +26,7 @@ const useFileContext = () => {
     } = useFileActions();
 
     const { openViewDetails } = useViewDetails();
+    const { showAlert } = useCustomAlert();
 
     const { openDeleteFile } = useDeleteFile();
 
@@ -40,6 +48,10 @@ const useFileContext = () => {
                 getFileLink(files[0]);
                 return;
             case "edit":
+                window.open(
+                    `${pnpnm?.siteUrl}/wp-admin/post.php?post=${ids[0]}&action=edit&open_pnpnm_editor=${ids[0]}`,
+                    "_blank",
+                );
                 return;
             case "download":
                 return;

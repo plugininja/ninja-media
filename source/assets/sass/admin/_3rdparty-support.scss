@@ -1,0 +1,8 @@
+@use "../utilities/variable" as *;
+
+body.upload-php.pnpnm-media-library {
+
+    .fb-sidebar-widget {
+        display: none !important;
+    }
+}

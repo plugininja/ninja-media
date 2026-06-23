@@ -11,7 +11,7 @@ import { PAGE_OPTIONS } from "~/constants/files";
 import BlockStack from "~/components/blockStack";
 import { File as FileType } from "~/types/file";
 import { useAppDispatch } from "~/redux/hooks";
-import NotFound from "~/assets/icons/NotFound";
+import { iconNotFound } from "~/utils/icons";
 import SelectBox from "~/components/selectBox";
 import GridStack from "~/components/gridStack";
 import { useParams } from "react-router-dom";
@@ -208,7 +208,7 @@ const FilesContainer = () => {
                             marginTop: "50px",
                         }}
                     >
-                        <NotFound />
+                        <img src={iconNotFound} alt="" />
 
                         <Text size="xl" weight="semibold" align="center">
                             No media found

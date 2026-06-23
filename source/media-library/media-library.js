@@ -10,6 +10,7 @@ class PNPNMMedia {
     constructor() {
         this.$ = jQuery;
         this._pausedFilter = null;
+        this._activeFolderId = null;
         this._roots = new Map();
     }
 
@@ -66,12 +67,7 @@ class PNPNMMedia {
                             $this.addAttachmentClass();
                         }
 
-                        if (pnpnm.perPage && this.collection?.props) {
-                            this.collection.props.set(
-                                "posts_per_page",
-                                pnpnm.perPage,
-                            );
-                        }
+                        $this.initLoadMore(this.collection, this.$el);
                     },
                 );
             }
@@ -159,6 +155,50 @@ class PNPNMMedia {
             : this.$(".upload-php .media-frame").first();
     }
 
+    setFolderFilter(folderId) {
+        this._activeFolderId = folderId || null;
+
+        const applyFilter = (library) => {
+            if (!library?.props) return false;
+            try {
+                // Non-silent set: this triggers the natural change → _requery chain,
+                // which properly mirrors a new Query and resets the grid.
+                if (folderId && folderId !== "all") {
+                    library.props.set({ folderId: String(folderId), paged: 1 });
+                } else {
+                    library.props.unset("folderId");
+                    library.props.set({ paged: 1 });
+                }
+                return true;
+            } catch (e) {}
+            return false;
+        };
+
+        // Primary: wp.media.frame.state().get('library') — same path WordPress uses internally
+        try {
+            const library = wp?.media?.frame?.state()?.get("library");
+            if (applyFilter(library)) return;
+        } catch (e) {}
+
+        // Fallback 1: attachmentsBrowser.collection
+        try {
+            if (applyFilter(this.attachmentsBrowser?.collection)) return;
+        } catch (e) {}
+
+        // Fallback 2: .attachments-browser DOM element backboneView
+        try {
+            const $browser = this.getFrame()?.find(".attachments-browser");
+            const view = $browser?.length ? $browser.data("backboneView") : null;
+            if (applyFilter(view?.collection)) return;
+        } catch (e) {}
+
+        // Fallback 3: wp.media.frame content view collection
+        try {
+            const content = wp?.media?.frame?.content?.get();
+            applyFilter(content?.collection);
+        } catch (e) {}
+    }
+
     filterByFolder(itemIds) {
         const frame = wp?.media?.frame;
 
@@ -236,6 +276,10 @@ class PNPNMMedia {
                 }
             } else {
                 this.getTreeElement(frame).show();
+
+                if (this._activeFolderId) {
+                    this.setFolderFilter(this._activeFolderId);
+                }
             }
             return;
         }
@@ -427,6 +471,14 @@ class PNPNMMedia {
                     createToolbar() {
                         this.$el.data("backboneView", this);
 
+                        if (this.collection?.props) {
+                            const propsToSet = { paged: 1 };
+                            if (pnpnm.perPage) {
+                                propsToSet.posts_per_page = pnpnm.perPage;
+                            }
+                            this.collection.props.set(propsToSet, { silent: true });
+                        }
+
                         AttachmentsBrowser.prototype.createToolbar.apply(
                             this,
                             arguments,
@@ -459,6 +511,55 @@ class PNPNMMedia {
     }
 
     addAttachmentClass() {}
+
+    initLoadMore(collection, $container) {
+        if (!collection || collection._pnpnmLoadMoreInit) return;
+        collection._pnpnmLoadMoreInit = true;
+
+        const $wrap = this.$(
+            '<div class="pnpnm-load-more-wrap">' +
+                '<button class="pnpnm-load-more-btn button">' +
+                    wp.i18n.__("Load More", "ninja-media") +
+                "</button>" +
+                '<span class="pnpnm-load-more-spinner spinner"></span>' +
+            "</div>",
+        );
+
+        $container.append($wrap);
+
+        const $btn = $wrap.find(".pnpnm-load-more-btn");
+        const $spinner = $wrap.find(".pnpnm-load-more-spinner");
+
+        const setLoading = (loading) => {
+            $btn.prop("disabled", loading);
+            $spinner.toggleClass("is-active", loading);
+        };
+
+        const updateVisibility = () => {
+            $container.toggleClass("pnpnm-has-more", !!collection.hasMore());
+        };
+
+        $btn.on("click", () => {
+            setLoading(true);
+            const promise = collection.more();
+            if (promise && typeof promise.always === "function") {
+                promise.always(() => {
+                    setLoading(false);
+                    updateVisibility();
+                });
+            } else {
+                setLoading(false);
+                updateVisibility();
+            }
+        });
+
+        collection.on("reset", () => {
+            setTimeout(updateVisibility, 0);
+        });
+        collection.on("add", updateVisibility);
+
+        setTimeout(updateVisibility, 0);
+    }
 
     onModalOpen() {
         const OriginalModal = wp?.media?.view?.Modal;

@@ -115,19 +115,25 @@ class Attachment extends BaseModel
 			$type = 'all';
 		}
 
-		$args    = self::build_query_args( $type, $ids );
-		$results = get_posts( $args );
-		$results = apply_filters( 'pnpnm_get_attachments', $results, $type, $ids );
-
 		if ( $count ) {
-			return count( $results );
+			return self::count( $type, $ids );
 		}
 
-		return $results;
+		$args    = self::build_query_args( $type, $ids );
+		$results = get_posts( $args );
+
+		return apply_filters( 'pnpnm_get_attachments', $results, $type, $ids );
 	}
 
 	public static function count( string $type = 'all', array $ids = [] ): int {
-		return self::get( $type, true, $ids );
+		$args                   = self::build_query_args( $type, $ids );
+		$args['posts_per_page'] = 1;
+		$args['no_found_rows']  = false;
+		unset( $args['orderby'], $args['order'] );
+
+		$query = new \WP_Query( $args );
+
+		return (int) $query->found_posts;
 	}
 
 	public function query_paginated( array $args = [] ): array {
@@ -281,60 +287,6 @@ class Attachment extends BaseModel
 			default:
 				return '';
 		}
-	}
-
-	private static function getReferencedAttachmentIds(): array
-	{
-		global $wpdb;
-
-		$cache_key = 'referenced_ids:' . wp_cache_get_last_changed( 'pnpnm' );
-		$cached    = wp_cache_get( $cache_key, 'pnpnm' );
-		if ( false !== $cached ) {
-			return $cached;
-		}
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- results are merged and cached as a set below.
-		$thumbnail_ids = (array) $wpdb->get_col(
-			"SELECT DISTINCT CAST(meta_value AS UNSIGNED)
-			 FROM {$wpdb->postmeta}
-			 WHERE meta_key = '_thumbnail_id'
-			   AND meta_value REGEXP '^[0-9]+$'"
-		);
-
-		$raw_contents = (array) $wpdb->get_col(
-			"SELECT post_content
-			 FROM {$wpdb->posts}
-			 WHERE post_content LIKE '%wp-image-%'
-			   AND post_status NOT IN ('trash', 'auto-draft')
-			   AND post_type  NOT IN ('attachment', 'revision', 'nav_menu_item')"
-		);
-
-		$class_ids = [];
-		if ( ! empty( $raw_contents ) ) {
-			preg_match_all( '/\bwp-image-(\d+)\b/', implode( ' ', $raw_contents ), $matches );
-			$class_ids = ! empty( $matches[1] ) ? array_map( 'absint', $matches[1] ) : [];
-		}
-
-		$path_ids = (array) $wpdb->get_col(
-			"SELECT DISTINCT pm.post_id
-			 FROM {$wpdb->postmeta} pm
-			 INNER JOIN {$wpdb->posts} pc
-			     ON  pc.post_status NOT IN ('trash', 'auto-draft')
-			     AND pc.post_type  NOT IN ('attachment', 'revision', 'nav_menu_item')
-			     AND pc.post_content LIKE CONCAT('%', pm.meta_value, '%')
-			 WHERE pm.meta_key   = '_wp_attached_file'
-			   AND pm.meta_value != ''"
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-
-		$result = array_values( array_unique( array_filter( array_map(
-			'absint',
-			array_merge( $thumbnail_ids, $class_ids, $path_ids )
-		) ) ) );
-
-		wp_cache_set( $cache_key, $result, 'pnpnm' );
-
-		return $result;
 	}
 
     public static function exists( int|array $ids ): bool

@@ -1,20 +1,20 @@
-=== Ninja Media - Media Library Folders ===
+=== Ninja Media – Media Library Folders & File Manager ===
 Contributors: plugininja, abdullaharham
-Tags: media library, media folders, file manager, media organizer, svg support
+Tags: media library folders, media folder, media library, file manager, media organizer
 Requires at least: 6.2
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Organize your WordPress media library with folders, drag-and-drop, SVG support, and bulk file management.
+Media library folders for WordPress — create unlimited folders, drag & drop, bulk manage, SVG upload, and media organizer for any site.
 
 == Description ==
 
-Ninja Media is a Media Library Folder Management Plugin. It gives you the power to create an unlimited folder tree, drag and drop files to organize them, search and paginate through thousands of files, and manage everything from your traditional media library, not need to jump anywhere.
+Ninja Media is a Media Library Folder Management Plugin. Organize your media library into unlimited folders, drag and drop files, and manage thousands of attachments — all from your familiar WordPress media screen.
 
-**Folder Management**
+**Media Library Folder Management**
 
 🔗 Official Website Link: [Official Website](https://plugininja.com/ninja-media)
 🔗 Join Our FB Community: [Plugininja Facebook Group](https://www.facebook.com/groups/plugininja)
@@ -26,14 +26,14 @@ Ninja Media is a Media Library Folder Management Plugin. It gives you the power 
 * Visual tree with breadcrumb navigation and expand/collapse
 * The Uncategorized view collects all files not yet assigned to a folder
 
-**Media Browser**
+**Media Library Browser & File Manager**
 
 * Browse media organized by folder with pagination (up to 200 files per page)
 * Search media and folders by name
 * Bulk-select files for batch operations
 * Context menu -- right-click any file or folder for quick actions
 
-**SVG Support**
+**Media Library SVG Support**
 
 * SVG upload support
 * Automatic sanitization strips potentially harmful markup before saving
@@ -217,10 +217,17 @@ Contributions, bug reports, and feature suggestions are welcome on GitHub: https
 
 == Changelog ==
 
+= 1.0.3 - 2026-06-15 =
+* Added: Frontend image lightbox -- click any image on your site to open a full-screen viewer.
+* Added: In-browser image editor -- crop, rotate, flip, and resize attachments directly from the media library.
+* Added: Default Featured Image -- set a site-wide fallback image for posts that have no featured image set; outputs Open Graph and Twitter card meta tags automatically.
+* Added: WordPress Abilities API integration -- exposes folder and file operations to MCP clients for AI-assisted media management.
+* Fixed: Image processor reliability improvements and WP Filesystem compliance.
+
 = 1.0.2 - 2026-05-18 =
-* Fixed: Gutenberg and Classic editor sidebar issue
-* Fixed: Tutor LMS sidebar issue
-* Fixed: Elementor Sidebar responsive issue
+* Fixed: Gutenberg and Classic editor sidebar issue.
+* Fixed: Tutor LMS sidebar issue.
+* Fixed: Elementor sidebar responsive issue.
 
 = 1.0.1 - 2026-05-17 =
 * Fixes a post-type library container timing issue. Update recommended for all Pro users using Post-Type Folders.
@@ -251,6 +258,9 @@ Contributions, bug reports, and feature suggestions are welcome on GitHub: https
 * Settings panel with export/import and auto-save.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Adds frontend lightbox, in-browser image editor, default featured image fallback, and WP Abilities API support. Update recommended for all users.
 
 = 1.0.2 =
 Fixes Gutenberg, Classic editor, Elementor sidebar, and Tutor LMS sidebar issues. Update recommended for all users.

@@ -3,9 +3,11 @@ import { useLocalStorage } from "~/hooks/useLocalStorage";
 import useMedia from "~/media-library/hooks/useMedia";
 import InlineStack from "~/components/inlineStack";
 import IconButton from "~/components/iconButton";
+import DOCS from "~/constants/docs";
 import Card from "~/components/card";
 import Icon from "~/components/icon";
 import Text from "~/components/text";
+import { __ } from "@wordpress/i18n";
 import clsx from "clsx";
 
 const COLLAPSED_WIDTH = 25;
@@ -180,6 +182,39 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 className={clsx("pnpnm-sidebar__content")}
             >
                 <div className="pnpnm-sidebar__inner">{children}</div>
+
+                {!pnpnm?.isPro && (
+                    <div style={{ padding: "10px 20px 20px" }}>
+                        <Card
+                            padding={10}
+                            background="pro"
+                            rounded="md"
+                            flex
+                            align="center"
+                            blockAlign="center"
+                            gap={10}
+                            style={{
+                                cursor: "pointer",
+                                userSelect: "none",
+                                justifyContent: "center",
+                                width: "100%",
+                            }}
+                            onClick={() =>
+                                window.open(
+                                    DOCS?.pricingPage,
+                                    "_blank",
+                                    "noopener noreferrer",
+                                )
+                            }
+                        >
+                            <Icon name="upgrade" color="dark" fontSize="xl" />
+
+                            <Text color="dark" size="sm">
+                                {__("Upgrade to Pro", "ninja-media")}
+                            </Text>
+                        </Card>
+                    </div>
+                )}
 
                 <div className="pnpnm-sidebar__trash-wrapper">
                     <Card

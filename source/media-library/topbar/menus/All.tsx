@@ -1,5 +1,6 @@
 import { MenuItem } from "~/types/media/media";
-import Home from "~/assets/icons/folder/Home";
+import { iconFolderHome } from "~/utils/icons";
+import SvgIcon from "~/components/svgIcon/SvgIcon";
 import Folder from "~/shared/folder/Folder";
 
 const All = ({ menu, showCount, count, onMenu }: MenuItem) => {
@@ -7,7 +8,7 @@ const All = ({ menu, showCount, count, onMenu }: MenuItem) => {
         <Folder
             name="All Files"
             count={showCount ? count : undefined}
-            icon={<Home active={menu === "all"} />}
+            icon={<SvgIcon src={iconFolderHome} style={{ color: menu === "all" ? "var(--pnpnm-primary)" : "#697C8B" }} />}
             active={menu === "all"}
             onClick={() => onMenu("all")}
         />

@@ -42,9 +42,8 @@ const FileContext = ({
                         } else if (item?.key === "get") {
                             return true;
                         } else if (item?.key === "edit") {
-                            return pnpnm?.pagenow === "upload.php"
-                                ? true
-                                : false;
+                            if (menu === "trash") return false;
+                            return props?.attachments?.[0]?.type === "image";
                         } else if (item?.key === "download") {
                             return true;
                         } else if (item?.key === "duplicate") {
@@ -97,6 +96,7 @@ const FileContext = ({
                                     <Card
                                         statusProps={{
                                             isPro: key === "trash",
+                                            proTooltipDisabled: true,
                                             size: "extrasmall",
                                             top: 7.5,
                                             right: 7,
@@ -151,6 +151,7 @@ const FileContext = ({
                                         size="extrasmall"
                                         placement="right-center"
                                         right={5}
+                                        proTooltipDisabled
                                     >
                                         <Item
                                             className={className}
@@ -193,7 +194,7 @@ export const FILE_CONTEXT_MENU_LISTS: {
     },
     {
         key: "edit",
-        title: __("Edit", "ninja-media"),
+        title: __("Image Editor", "ninja-media"),
         icon: "edit_document",
     },
     {

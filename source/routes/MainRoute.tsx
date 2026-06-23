@@ -1,6 +1,6 @@
 import { settingsInit } from "~/redux/features/settings/settings";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
-import { useEffect, useRef } from "@wordpress/element";
+import { useEffect } from "@wordpress/element";
 import { useAppDispatch } from "~/redux/hooks";
 
 const MainRoute = ({ children }: { children: React.ReactNode }) => {
@@ -9,33 +9,11 @@ const MainRoute = ({ children }: { children: React.ReactNode }) => {
         "light",
     );
 
-    const isFirstLoad = useRef(true);
-
     const dispatch = useAppDispatch();
 
     const defaultSettings = pnpnm?.defaultSettings || {};
 
     const settings = pnpnm?.settings || defaultSettings || {};
-
-    useEffect(() => {
-        if (!isFirstLoad.current) {
-            return;
-        }
-
-        isFirstLoad.current = false;
-
-        const savedTheme = localStorage.getItem("pnpnm-theme-status");
-
-        if (savedTheme) {
-            return;
-        }
-
-        const systemDark = window.matchMedia(
-            "(prefers-color-scheme: dark)",
-        ).matches;
-
-        setTheme(systemDark ? "dark" : "light");
-    }, [setTheme]);
 
     useEffect(() => {
         const root = document?.documentElement;

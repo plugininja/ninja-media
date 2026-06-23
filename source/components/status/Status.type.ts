@@ -23,6 +23,7 @@ export interface StatusProps {
     right?: number | string;
     tooltipPlacement?: "top" | "bottom" | "left" | "right" | "auto";
     tooltipDisabled?: boolean;
+    proTooltipDisabled?: boolean;
     size?: Size;
     widthFull?: boolean;
     ignore?: boolean;

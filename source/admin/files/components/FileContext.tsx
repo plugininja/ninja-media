@@ -47,7 +47,9 @@ const FileContext = ({
                         } else if (item?.key === "get") {
                             return bulkSelect ? false : true;
                         } else if (item?.key === "edit") {
-                            return false;
+                            if (menuKey === "trash" || bulkSelect) return false;
+                            const ext = (props?.files?.[0]?.extension || "").toLowerCase();
+                            return ["jpg", "jpeg", "png", "gif", "webp"].includes(ext);
                         } else if (item?.key === "download") {
                             return bulkSelect ? false : true;
                         } else if (item?.key === "duplicate") {

@@ -236,6 +236,7 @@
 			return $this->_is_override_exact;
 		}
 
+
         /**
          * Get the path of the page the user should be forwarded to after first activation.
          *

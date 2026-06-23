@@ -57,6 +57,7 @@ const FileLocations = ({
         >
             <Tooltip
                 arrow
+                placement="bottom"
                 background="white"
                 shadow
                 style={{

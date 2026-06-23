@@ -1,0 +1,126 @@
+@use "../utilities/variable" as *;
+
+.pnpnm-lightbox__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000000;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pnpnm-lightbox-fade-in 0.2s ease-out;
+}
+
+.pnpnm-lightbox__modal {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 92vw;
+    max-width: 1200px;
+    height: 90vh;
+    background: $white;
+    border-radius: $rounded-md;
+    overflow: hidden;
+    animation: pnpnm-lightbox-scale-in 0.2s ease-out;
+}
+
+.pnpnm-lightbox__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--pnpnm-secondary);
+    flex-shrink: 0;
+    background: $white;
+}
+
+.pnpnm-lightbox__counter {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.pnpnm-lightbox__stage {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--pnpnm-extralight);
+}
+
+.pnpnm-lightbox__image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+    animation: pnpnm-lightbox-img-in 0.18s ease-out;
+}
+
+.pnpnm-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: $rounded-full;
+    background: rgba(0, 0, 0, 0.45);
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+    transition: background 0.15s ease;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    .material-symbols-outlined {
+        font-size: 28px;
+        line-height: 1;
+    }
+
+    &--prev {
+        left: 12px;
+    }
+
+    &--next {
+        right: 12px;
+    }
+}
+
+@keyframes pnpnm-lightbox-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pnpnm-lightbox-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pnpnm-lightbox-img-in {
+    from {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

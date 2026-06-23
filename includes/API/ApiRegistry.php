@@ -7,8 +7,6 @@ use Pninja\NM\API\Controllers\MediaLibrary;
 use Pninja\NM\API\Controllers\Tools;
 use Pninja\NM\Utils\Singleton;
 
-use function Pninja\NM\pnpnm_fs;
-
 defined('ABSPATH') || exit('No direct script access allowed');
 
 class ApiRegistry

@@ -69,7 +69,8 @@ class Tools extends BaseController
 				'post_type'      => 'attachment',
 				'post_mime_type' => ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
 				'post_status'    => 'inherit',
-				'posts_per_page' => -1,
+				'posts_per_page' => 1,
+				'no_found_rows'  => false,
 				'fields'         => 'ids',
 			]);
 
